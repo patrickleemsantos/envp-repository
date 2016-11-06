@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="theme-color" content="#2196f3">
+    <title>Envyp</title>
+    <link rel="stylesheet" href="css/framework7.material.css">
+    <link rel="stylesheet" href="css/framework7.material.colors.css">
+    <link href="http://fonts.googleapis.com/css?family=Roboto:400,300,500,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="css/envyp.css">
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="icon" href="img/icon.png">
+  </head>
+  <body>
+  <div class="panel-overlay"></div>
+  <div class="panel panel-right panel-cover">
+     <div class="pages navbar-fixed">
+      <div data-page="panel-right1" class="page">
+        <div class="navbar">
+          <div class="navbar-inner">
+            <div class="left">
+              <a href="#" id="close-right-panel" class="link icon-only"><i class="icon icon-back"></i></a>
+            </div>
+            <div class="center">Settings</div>
+          </div>
+        </div>
+        <div class="page-content">
+          <div class="content-block-title">Participants</div>
+          <div class="list-block media-list">
+            <ul id="list-view-participants">
+            </ul>
+          </div>
+          <div class="content-block-title" style="padding-top:0px">Administrators</div>
+          <div class="list-block media-list">
+            <ul id="list-view-administrator">
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <div class="views">
+        <div class="view view-main">
+            <div class="pages">
+              <div class="page blue_bg" data-page="login">
+                <div class="page-content center-outer">
+                  <div class="center-inner">
+                    <div class="login-screen-title">
+                        <img src="img/envyp_logo.png" class="img-responsive img-center" >
+                    </div>
+                    <div class="content-block">
+                      <p><a href="#" class="button button-big button-fill button-raised color-indigo">Facebook</a></p>
+                    </div>
+                    <div class="list-block inset inputs-list" style="width:100%;margin-left:auto;margin-right:auto;">
+                      <ul>
+                        <li>
+                          <div class="item-content">
+                            <div class="item-inner"> 
+                              <div class="input-account-form">
+                                <input id="txt-log-email-add" type="email" placeholder="Email"/>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        <li>
+                          <div class="item-content">
+                            <div class="item-inner"> 
+                              <div class="input-account-form">
+                                <input id="txt-log-email-pass" type="password" placeholder="Password"/>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="content-block">
+                      <p><a href="#" id="btn-email-login" class="button button-big button-fill button-raised color-teal">Log in with Email</a></p>
+                      <p><a href="#" id="btn-signup-page" class="button button-big button-fill button-raised color-teal">Sign up with Email</a></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/framework7.js"></script>
+    <script type="text/javascript" src="js/envyp.js"></script>
+  </body>
+</html>
