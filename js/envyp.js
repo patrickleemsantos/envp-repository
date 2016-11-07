@@ -668,6 +668,49 @@ myApp.onPageInit('tournament-add', function (page) {
     });
 });
 
+/* =====Administrator List Page ===== */
+myApp.onPageInit('tournament-list', function (page) {
+    if (checkInternetConnection() == true ) {
+        var items = [];
+        $.getJSON(ENVYP_API_URL + "get_tournament_list.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
+            $.each(result, function(i, field) {
+                if (field.status == 'empty') {
+                     myApp.alert('No roster yet :(');
+                } else {
+                    var tournament_image = (field.image_url == '' || field.image_url == null ? "img/icon-basketball.png" : field.image_url);
+                    items.push({
+                        opponent: field.opponent,
+                        tournament_date: field.tournament_date
+                    });
+                }
+            });
+
+            var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
+                items: items,
+                searchAll: function (query, items) {
+                    var found = [];
+                    for (var i = 0; i < items.length; i++) {
+                        if (items[i].roster_name.indexOf(query) >= 0 || query.trim() === '') found.push(i);
+                    }
+                    return found; 
+                },
+                template: '<li>' +
+                            '<a href="#" class="item-link item-content">' +
+                            '<div class="item-media"><img src="{{tournament_image}}" style="width:44px; height:44px;"/></div>' +
+                            '<div class="item-inner">' +
+                              '<div class="item-title-row">' +
+                                '<div class="item-title"><b>{{opponent}}</b></div>' +
+                              '</div>' +
+                              '<div class="item-subtitle">{{tournament_date}}</div>' +
+                            '</div></a></li>',
+                height: 73,
+            });
+        });
+    } else {
+        myApp.alert(NO_INTERNET_ALERT);
+    }
+});
+
 function getTeamPassword(team_id, team_admin, team_name, team_password) {
     if (team_admin != localStorage.getItem('account_id')) {
         isAccountInvited(team_id, function(response) {
