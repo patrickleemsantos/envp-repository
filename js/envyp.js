@@ -14,8 +14,8 @@ var mainView = myApp.addView('.view-main', {
     dynamicNavbar: false
 });
 
-const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
-// const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
+// const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
+const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
 const NO_INTERNET_ALERT = 'Please check your internet connection';
 const ERROR_ALERT = 'An error occured, please try again.';
 
@@ -646,27 +646,108 @@ myApp.onPageInit('tournament-add', function (page) {
                 return false;
             }
 
-            $$.ajax({
-                type: "POST",
-                url: ENVYP_API_URL + "add_tournament.php",
-                data: "account_id=" + localStorage.getItem('account_id') + "&team_id=" + localStorage.getItem('selectedTeamID') + "&opponent=" + opponent_name + "&tournament_date=" + tournament_date + "&tournament_desc=" + tournament_desc,
-                dataType: "json",
-                success: function(msg, string, jqXHR) {
-                    if (msg.status == '0') {
-                        clearTournamentDetails();
-                        mainView.router.loadPage('tournament_list.html');
-                    }
-                    myApp.alert(msg.message);
-                    $$('#btn-add-tournament').removeAttr("disabled");
-                },
-                error: function(msg, string, jqXHR) { 
-                    myApp.alert(ERROR_ALERT);
-                    $$('#btn-add-tournament').removeAttr("disabled");
-                }
-            });
+            // $$.ajax({
+            //     type: "POST",
+            //     url: ENVYP_API_URL + "add_tournament.php",
+            //     data: "account_id=" + localStorage.getItem('account_id') + "&team_id=" + localStorage.getItem('selectedTeamID') + "&opponent=" + opponent_name + "&tournament_date=" + tournament_date + "&tournament_desc=" + tournament_desc,
+            //     dataType: "json",
+            //     success: function(msg, string, jqXHR) {
+            //         if (msg.status == '0') {
+            //             clearTournamentDetails();
+            //             mainView.router.loadPage('tournament_list.html');
+            //         }
+            //         myApp.alert(msg.message);
+            //         $$('#btn-add-tournament').removeAttr("disabled");
+            //     },
+            //     error: function(msg, string, jqXHR) { 
+            //         myApp.alert(ERROR_ALERT);
+            //         $$('#btn-add-tournament').removeAttr("disabled");
+            //     }
+            // });
+
+            var options = new FileUploadOptions();
+            options.fileKey = "file";
+            options.fileName = imgfile.substr(imgfile.lastIndexOf('/') + 1);
+            options.mimeType = "image/jpeg";
+            options.chunkedMode = false;
+
+            var params = new Object();
+            params.account_id = localStorage.getItem('account_id');
+            params.team_id = localStorage.getItem('selectedTeamID');
+            params.opponent = opponent_name;
+            params.tournament_date = tournament_date;
+            params.tournament_desc = tournament_desc;
+
+            options.params = params;
+
+            var ft = new FileTransfer();
+            ft.upload(imgfile, ENVYP_API_URL + "add_tournament.php", win, fail, options);
+
+            clearTournamentDetails();
         }
     });
 });
+
+function getTournamentImage() {
+    myApp.modal({
+        title:  'Choose Tournament Image',
+        verticalButtons: true,
+        buttons: [
+          {
+            text: 'Take new picture',
+            onClick: function() {
+                navigator.camera.getPicture(attachTournamentImage, function(message) {
+                    myApp.alert('No image selected');
+                }, {
+                    quality: 100,
+                    destinationType: navigator.camera.DestinationType.FILE_URI,
+                    sourceType: navigator.camera.PictureSourceType.CAMERA,
+                    targetWidth: 400,
+                    targetHeight: 400,
+                    correctOrientation: true
+                });
+            }
+          },
+          {
+            text: 'Select from gallery',
+            onClick: function() {
+                navigator.camera.getPicture(attachTournamentImage, function(message) {
+                    myApp.alert('No image selected');
+                }, {
+                    quality: 100,
+                    destinationType: navigator.camera.DestinationType.FILE_URI,
+                    sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
+                    targetWidth: 400,
+                    targetHeight: 400,
+                    correctOrientation: true
+                });
+            }
+          },
+          {
+            text: 'Cancel',
+            onClick: function() {
+            }
+          }
+        ]
+    });
+}
+
+function attachTournamentImage(imageURI) {
+    imgfile = imageURI
+    $$("#tournament-image").attr("src", imgfile);
+} 
+
+function win(r) {
+    console.log("Code = " + r.responseCode);
+    console.log("Response = " + r.response);
+    console.log("Sent = " + r.bytesSent);
+}
+
+function fail(error) {
+    myApp.alert("An error has occurred: Code = " + error.code);
+    console.log("upload error source " + error.source);
+    console.log("upload error target " + error.target);
+}
 
 /* =====Administrator List Page ===== */
 myApp.onPageInit('tournament-list', function (page) {
@@ -907,6 +988,7 @@ function clearTournamentDetails() {
     $("#txt-tournament-date").val(new Date().toJSON().slice(0,16));
     $$('#txt-opponent-name').val('');
     $$('#txt-tournament-description').val('');
+    imgfile = '';
 }
 
 function validateEmail(sEmail) {
