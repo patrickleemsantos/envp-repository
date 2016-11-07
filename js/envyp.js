@@ -14,8 +14,8 @@ var mainView = myApp.addView('.view-main', {
     dynamicNavbar: false
 });
 
-// const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
-const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
+const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
+// const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
 const NO_INTERNET_ALERT = 'Please check your internet connection';
 const ERROR_ALERT = 'An error occured, please try again.';
 
@@ -315,6 +315,7 @@ myApp.onPageInit('team-add', function(page) {
 /* ===== Team List Page ===== */
 myApp.onPageInit('team-list', function (page) {
     if (checkInternetConnection() == true ) {
+        myApp.showIndicator();
         var items = [];
         $.getJSON(ENVYP_API_URL + "get_team_list.php?sport_id=" + localStorage.getItem('selectedSportID'), function(result) {
             $.each(result, function(i, field) {
@@ -352,6 +353,8 @@ myApp.onPageInit('team-list', function (page) {
                           '</li>',
                 height: 73,
             });
+
+            myApp.hideIndicator();
         });
     } else {
         myApp.alert(NO_INTERNET_ALERT);
@@ -366,6 +369,10 @@ myApp.onPageInit('team-management', function(page) {
 
     $$('#btn-roster').on('click', function() {
         mainView.router.loadPage('roster_list.html');
+    });
+
+    $$('#btn-tournament').on('click', function() {
+        mainView.router.loadPage('tournament_list.html');
     });
 
     $$('#open-right-panel').on('click', function (e) {
@@ -620,6 +627,11 @@ myApp.onPageInit('administrator-list', function (page) {
 
         myApp.openPanel('right');
     });
+});
+
+/* =====Tournament Add Page ===== */
+myApp.onPageInit('tournament-add', function (page) {
+    $("#txt-tournament-date").val(new Date().toJSON().slice(0,16));
 });
 
 function getTeamPassword(team_id, team_admin, team_name, team_password) {
