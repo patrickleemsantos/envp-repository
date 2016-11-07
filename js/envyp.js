@@ -632,6 +632,40 @@ myApp.onPageInit('administrator-list', function (page) {
 /* =====Tournament Add Page ===== */
 myApp.onPageInit('tournament-add', function (page) {
     $("#txt-tournament-date").val(new Date().toJSON().slice(0,16));
+
+    $$('#btn-add-tournament').on('click', function() {
+        if (checkInternetConnection() == true ) {
+            $$('#btn-add-tournament').attr('disabled', true);
+            var opponent_name = $$('#txt-opponent-name').val();
+            var tournament_date = $$('#txt-tournament-date').val();
+            var tournament_desc = $$('#txt-tournament-description').val();
+
+            if (opponent_name == '' || opponent_name == null) {
+                myApp.alert('Please enter opponent name!');
+                $$('#btn-add-tournament').removeAttr("disabled");
+                return false;
+            }
+
+            $$.ajax({
+                type: "POST",
+                url: ENVYP_API_URL + "add_tournament.php",
+                data: "account_id=" + localStorage.getItem('account_id') + "&team_id=" + localStorage.getItem('selectedTeamID') + "&opponent=" + opponent_name + "&tournament_date=" + tournament_date + "&tournament_desc=" + tournament_desc,
+                dataType: "json",
+                success: function(msg, string, jqXHR) {
+                    if (msg.status == '0') {
+                        clearTournamentDetails();
+                        mainView.router.loadPage('tournament_list.html');
+                    }
+                    myApp.alert(msg.message);
+                    $$('#btn-add-tournament').removeAttr("disabled");
+                },
+                error: function(msg, string, jqXHR) { 
+                    myApp.alert(ERROR_ALERT);
+                    $$('#btn-add-tournament').removeAttr("disabled");
+                }
+            });
+        }
+    });
 });
 
 function getTeamPassword(team_id, team_admin, team_name, team_password) {
@@ -824,6 +858,12 @@ function clearTeamDetails() {
 function clearRosterDetails() {
     $$('#txt-roster-name').val('');
     $$('#txt-roster-position').val('');
+}
+
+function clearTournamentDetails() {
+    $("#txt-tournament-date").val(new Date().toJSON().slice(0,16));
+    $$('#txt-opponent-name').val('');
+    $$('#txt-tournament-description').val('');
 }
 
 function validateEmail(sEmail) {
