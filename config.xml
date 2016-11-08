@@ -30,7 +30,7 @@
 	
 	<plugin name="cordova-plugin-whitelist" version="1" />
 	<plugin name="cordova-plugin-inappbrowser" source="npm"/>
-	<plugin name="cordova-plugin-camera" source="npm" />
+	<plugin name="org.apache.cordova.camera" spec="0.3.6" source="npm" />
 	<plugin name="cordova-plugin-media" source="npm" />
 	<plugin name="org.apache.cordova.media-capture" spec="0.3.6" source="npm" />
 	<plugin name="org.apache.cordova.geolocation" spec="0.3.12" source="npm" />
