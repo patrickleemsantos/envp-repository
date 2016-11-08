@@ -696,31 +696,39 @@ function getTournamentImage() {
           {
             text: 'Take new picture',
             onClick: function() {
-                navigator.camera.getPicture(attachTournamentImage, function(message) {
-                    myApp.alert('No image selected');
-                }, {
-                    quality: 100,
-                    destinationType: navigator.camera.DestinationType.FILE_URI,
-                    sourceType: navigator.camera.PictureSourceType.CAMERA,
-                    targetWidth: 400,
-                    targetHeight: 400,
-                    correctOrientation: true
-                });
+                try {
+                    navigator.camera.getPicture(attachTournamentImage, function(message) {
+                        myApp.alert('No image selected');
+                    }, {
+                        quality: 100,
+                        destinationType: navigator.camera.DestinationType.FILE_URI,
+                        sourceType: navigator.camera.PictureSourceType.CAMERA,
+                        targetWidth: 400,
+                        targetHeight: 400,
+                        correctOrientation: true
+                    });
+                } catch(err) {
+                    myApp.alert('camera error: ' + err.message);
+                }
             }
           },
           {
             text: 'Select from gallery',
             onClick: function() {
-                navigator.camera.getPicture(attachTournamentImage, function(message) {
-                    myApp.alert('No image selected');
-                }, {
-                    quality: 100,
-                    destinationType: navigator.camera.DestinationType.FILE_URI,
-                    sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
-                    targetWidth: 400,
-                    targetHeight: 400,
-                    correctOrientation: true
-                });
+                try {
+                    navigator.camera.getPicture(attachTournamentImage, function(message) {
+                        myApp.alert('No image selected');
+                    }, {
+                        quality: 100,
+                        destinationType: navigator.camera.DestinationType.FILE_URI,
+                        sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
+                        targetWidth: 400,
+                        targetHeight: 400,
+                        correctOrientation: true
+                    });
+                } catch(err) {
+                    myApp.alert('camera error: ' + err.message);
+                }
             }
           },
           {
