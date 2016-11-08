@@ -20,22 +20,28 @@
 	<preference name="android-windowSoftInputMode" value="stateVisible" />
 	<access origin="*" subdomains="true" />
 	<access uri="*" subdomains="true" />
+	
+	<access origin="*" />
+    <plugin name="cordova-plugin-whitelist" version="1" />
 	<allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
+    <allow-navigation href="http://www.facebook.com/*" />
+    <allow-navigation href="http://go-fish.dk/*" />
+    <allow-navigation href="http://connect.facebook.net/en_US/*" />
 
+	<access origin="*"/> <!-- allow all pages, use for development -->
 	<feature name="http://api.phonegap.com/1.0/network"/>
 	<feature name="http://api.phonegap.com/1.0/camera"/>
 	<feature name="http://api.phonegap.com/1.0/file"/>
 	<feature name="http://api.phonegap.com/1.0/geolocation"/>
 	
-	<plugin name="cordova-plugin-whitelist" version="1" />
-	<plugin name="cordova-plugin-inappbrowser" source="npm"/>
-	<plugin name="cordova-plugin-camera"  source="npm"/>
+	<plugin name="cordova-plugin-inappbrowser"/>
+	<plugin name="org.apache.cordova.camera" spec="0.3.6" source="npm" />
 	<plugin name="cordova-plugin-media" source="npm" />
 	<plugin name="org.apache.cordova.media-capture" spec="0.3.6" source="npm" />
 	<plugin name="org.apache.cordova.geolocation" spec="0.3.12" source="npm" />
-	<plugin name="cordova-plugin-file" source="npm" />
-	<plugin name="cordova-plugin-file-transfer" source="npm" />
+	<plugin name="org.apache.cordova.file" spec="1.3.3" source="npm" />
+	<plugin name="org.apache.cordova.file-transfer" spec="0.5.0" source="npm" />
 	<plugin name="org.apache.cordova.network-information" source="npm" />
 	<!-- <gap:plugin name="de.appplant.cordova.plugin.local-notification" version="0.8.1" /> -->
 	<!-- <gap:plugin name="com.telerik.plugins.nativepagetransitions" version="0.2.2" /> -->
@@ -46,9 +52,5 @@
 	<gap:config-file platform="android" parent="/manifest/application">
         android:windowSoftInputMode="stateVisible"
 	</gap:config-file> 
-
-	<gap:config-file platform="android" parent="/manifest">
-	     <application android:debuggable="true" />
-	</gap:config-file>
-
+	
 </widget>
