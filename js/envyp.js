@@ -764,7 +764,7 @@ myApp.onPageInit('tournament-list', function (page) {
         $.getJSON(ENVYP_API_URL + "get_tournament_list.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
             $.each(result, function(i, field) {
                 if (field.status == 'empty') {
-                     myApp.alert('No roster yet :(');
+                     myApp.alert('No tournament yet :(');
                 } else {
                     var tournament_image = (field.image_url == '' || field.image_url == null ? "img/icon-basketball.png" : field.image_url);
                     items.push({
