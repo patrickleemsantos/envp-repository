@@ -35,6 +35,8 @@
 	<feature name="http://api.phonegap.com/1.0/file"/>
 	<feature name="http://api.phonegap.com/1.0/geolocation"/>
 	
+	<plugin name="cordova-plugin-file" source="npm" />
+	<plugin name="cordova-plugin-file-transfer" source="npm" />
 	<plugin name="cordova-plugin-inappbrowser"/>
 	<plugin name="org.apache.cordova.camera" spec="0.3.6" source="npm" />
 	<plugin name="cordova-plugin-media" source="npm" />
@@ -42,8 +44,6 @@
 	<plugin name="org.apache.cordova.geolocation" spec="0.3.12" source="npm" />
 	<!-- <plugin name="org.apache.cordova.file" source="npm" />
 	<plugin name="org.apache.cordova.file-transfer" source="npm" /> -->
-	<plugin name="cordova-plugin-file" source="npm" />
-	<plugin name="cordova-plugin-file-transfer" source="npm" />
 	<plugin name="org.apache.cordova.network-information" source="npm" />
 	<!-- <gap:plugin name="de.appplant.cordova.plugin.local-notification" version="0.8.1" /> -->
 	<!-- <gap:plugin name="com.telerik.plugins.nativepagetransitions" version="0.2.2" /> -->
