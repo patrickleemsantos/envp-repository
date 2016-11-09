@@ -21,6 +21,11 @@ const ERROR_ALERT = 'An error occured, please try again.';
 
 var imgfile = '';
 
+document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady() {
+    console.log(FileTransfer);
+}
+
 // Show/hide preloader for remote ajax loaded pages
 // Probably should be removed on a production/local app
 $$(document).on('ajaxStart', function (e) {
