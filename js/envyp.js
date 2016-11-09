@@ -651,44 +651,50 @@ myApp.onPageInit('tournament-add', function (page) {
                 return false;
             }
 
-            // $$.ajax({
-            //     type: "POST",
-            //     url: ENVYP_API_URL + "add_tournament.php",
-            //     data: "account_id=" + localStorage.getItem('account_id') + "&team_id=" + localStorage.getItem('selectedTeamID') + "&opponent=" + opponent_name + "&tournament_date=" + tournament_date + "&tournament_desc=" + tournament_desc,
-            //     dataType: "json",
-            //     success: function(msg, string, jqXHR) {
-            //         if (msg.status == '0') {
-            //             clearTournamentDetails();
-            //             mainView.router.loadPage('tournament_list.html');
-            //         }
-            //         myApp.alert(msg.message);
-            //         $$('#btn-add-tournament').removeAttr("disabled");
-            //     },
-            //     error: function(msg, string, jqXHR) { 
-            //         myApp.alert(ERROR_ALERT);
-            //         $$('#btn-add-tournament').removeAttr("disabled");
-            //     }
-            // });
+            if (imgfile == '') {
+                 $$.ajax({
+                    type: "POST",
+                    url: ENVYP_API_URL + "add_tournament.php",
+                    data: "account_id=" + localStorage.getItem('account_id') + "&team_id=" + localStorage.getItem('selectedTeamID') + "&opponent=" + opponent_name + "&tournament_date=" + tournament_date + "&tournament_desc=" + tournament_desc,
+                    dataType: "json",
+                    success: function(msg, string, jqXHR) {
+                        if (msg.status == '0') {
+                            clearTournamentDetails();
+                            mainView.router.loadPage('tournament_list.html');
+                        }
+                        myApp.alert(msg.message);
+                        $$('#btn-add-tournament').removeAttr("disabled");
+                    },
+                    error: function(msg, string, jqXHR) { 
+                        myApp.alert(ERROR_ALERT);
+                        $$('#btn-add-tournament').removeAttr("disabled");
+                    }
+                });
+            } else {
+                var options = new FileUploadOptions();
+                options.fileKey = "file";
+                options.fileName = imgfile.substr(imgfile.lastIndexOf('/') + 1);
+                options.mimeType = "image/jpeg";
+                options.chunkedMode = false;
 
-            var options = new FileUploadOptions();
-            options.fileKey = "file";
-            options.fileName = imgfile.substr(imgfile.lastIndexOf('/') + 1);
-            options.mimeType = "image/jpeg";
-            options.chunkedMode = false;
+                var params = new Object();
+                params.account_id = localStorage.getItem('account_id');
+                params.team_id = localStorage.getItem('selectedTeamID');
+                params.opponent = opponent_name;
+                params.tournament_date = tournament_date;
+                params.tournament_desc = tournament_desc;
 
-            var params = new Object();
-            params.account_id = localStorage.getItem('account_id');
-            params.team_id = localStorage.getItem('selectedTeamID');
-            params.opponent = opponent_name;
-            params.tournament_date = tournament_date;
-            params.tournament_desc = tournament_desc;
+                options.params = params;
 
-            options.params = params;
+                var ft = new FileTransfer();
+                response = ft.upload(imgfile, ENVYP_API_URL + "add_tournament.php", win, fail, options);
 
-            var ft = new FileTransfer();
-            ft.upload(imgfile, ENVYP_API_URL + "add_tournament.php", win, fail, options);
-
-            clearTournamentDetails();
+                myApp.alert(response);
+                clearTournamentDetails();
+                $$('#btn-add-tournament').removeAttr("disabled");
+                mainView.router.loadPage('tournament_list.html');
+            }
+            
         }
     });
 });
