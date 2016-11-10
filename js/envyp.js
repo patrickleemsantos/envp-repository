@@ -14,12 +14,14 @@ var mainView = myApp.addView('.view-main', {
     dynamicNavbar: false
 });
 
-// const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
-const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
+const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
+// const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
 const NO_INTERNET_ALERT = 'Please check your internet connection';
 const ERROR_ALERT = 'An error occured, please try again.';
 
 var imgfile = '';
+var latitude = '';
+var longitude = '';
 
 document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
@@ -636,6 +638,15 @@ myApp.onPageInit('administrator-list', function (page) {
 
 /* =====Tournament Add Page ===== */
 myApp.onPageInit('tournament-add', function (page) {
+    var places = new google.maps.places.Autocomplete(document.getElementById('txt-tournament-location'));
+    google.maps.event.addListener(places, 'place_changed', function() {
+        place = places.getPlace();
+        address = place.formatted_address;
+        latitude = place.geometry.location.lat();
+        longitude = place.geometry.location.lng();
+        alert('longitude: ' + longitude + '; latitude: ' + latitude);
+    });
+
     $("#txt-tournament-date").val(new Date().toJSON().slice(0,16));
 
     $$('#btn-add-tournament').on('click', function() {
