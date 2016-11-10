@@ -706,16 +706,10 @@ function attachTournamentImage(imageURI) {
 function winAddTournament(r) {
     var resp = JSON.parse(r.response);
     myApp.alert(resp.message);
-    console.log("tournament upload code = " + r.responseCode);
-    console.log("tournament upload response = " + r.response);
-    console.log("tournament upload sent = " + r.bytesSent);
 }
 
 function failAddTournament(error) {
     myApp.alert("An error has occurred with error code " + error.code + ", please try again.");
-    console.log("tournament upload error code " + error.code);
-    console.log("tournament upload error source " + error.source);
-    console.log("tournament upload error target " + error.target);
 }
 
 /* =====Tournament List Page ===== */
