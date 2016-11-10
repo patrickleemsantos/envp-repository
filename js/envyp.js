@@ -704,7 +704,8 @@ function attachTournamentImage(imageURI) {
 } 
 
 function winAddTournament(r) {
-    myApp.alert(r.response.message);
+    var resp = JSON.parse(r.response);
+    myApp.alert(resp.message);
     console.log("tournament upload code = " + r.responseCode);
     console.log("tournament upload response = " + r.response);
     console.log("tournament upload sent = " + r.bytesSent);
