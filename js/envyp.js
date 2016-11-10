@@ -687,9 +687,8 @@ myApp.onPageInit('tournament-add', function (page) {
                 options.params = params;
 
                 var ft = new FileTransfer();
-                response = ft.upload(imgfile, ENVYP_API_URL + "add_tournament.php", win, fail, options);
+                ft.upload(imgfile, ENVYP_API_URL + "add_tournament.php", winAddTournament, failAddTournament, options);
 
-                myApp.alert(response);
                 clearTournamentDetails();
                 $$('#btn-add-tournament').removeAttr("disabled");
                 mainView.router.loadPage('tournament_list.html');
@@ -697,6 +696,69 @@ myApp.onPageInit('tournament-add', function (page) {
             
         }
     });
+});
+
+function attachTournamentImage(imageURI) {
+    imgfile = imageURI
+    $$("#tournament-image").attr("src", imgfile);
+} 
+
+function winAddTournament(r) {
+    myApp.alert(r.response.message);
+    console.log("tournament upload code = " + r.responseCode);
+    console.log("tournament upload response = " + r.response);
+    console.log("tournament upload sent = " + r.bytesSent);
+}
+
+function failAddTournament(error) {
+    myApp.alert("An error has occurred with error code " + error.code + ", please try again.");
+    console.log("tournament upload error code " + error.code);
+    console.log("tournament upload error source " + error.source);
+    console.log("tournament upload error target " + error.target);
+}
+
+/* =====Tournament List Page ===== */
+myApp.onPageInit('tournament-list', function (page) {
+    if (checkInternetConnection() == true ) {
+        var items = [];
+        $.getJSON(ENVYP_API_URL + "get_tournament_list.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
+            $.each(result, function(i, field) {
+                if (field.status == 'empty') {
+                     myApp.alert('No tournament yet :(');
+                } else {
+                    var tournament_image = (field.image_url == '' || field.image_url == null ? "img/icon-basketball.png" : field.image_url);
+                    items.push({
+                        opponent: field.opponent,
+                        tournament_date: field.tournament_date,
+                        tournament_image: tournament_image
+                    });
+                }
+            });
+
+            var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
+                items: items,
+                searchAll: function (query, items) {
+                    var found = [];
+                    for (var i = 0; i < items.length; i++) {
+                        if (items[i].roster_name.indexOf(query) >= 0 || query.trim() === '') found.push(i);
+                    }
+                    return found; 
+                },
+                template: '<li>' +
+                            '<a href="#" class="item-link item-content">' +
+                            '<div class="item-media"><img src="{{tournament_image}}" style="width:44px; height:44px;"/></div>' +
+                            '<div class="item-inner">' +
+                              '<div class="item-title-row">' +
+                                '<div class="item-title"><b>{{opponent}}</b></div>' +
+                              '</div>' +
+                              '<div class="item-subtitle">{{tournament_date}}</div>' +
+                            '</div></a></li>',
+                height: 73,
+            });
+        });
+    } else {
+        myApp.alert(NO_INTERNET_ALERT);
+    }
 });
 
 function getTournamentImage() {
@@ -750,66 +812,6 @@ function getTournamentImage() {
         ]
     });
 }
-
-function attachTournamentImage(imageURI) {
-    imgfile = imageURI
-    $$("#tournament-image").attr("src", imgfile);
-} 
-
-function win(r) {
-    console.log("Code = " + r.responseCode);
-    console.log("Response = " + r.response);
-    console.log("Sent = " + r.bytesSent);
-}
-
-function fail(error) {
-    myApp.alert("An error has occurred: Code = " + error.code);
-    console.log("upload error source " + error.source);
-    console.log("upload error target " + error.target);
-}
-
-/* =====Administrator List Page ===== */
-myApp.onPageInit('tournament-list', function (page) {
-    if (checkInternetConnection() == true ) {
-        var items = [];
-        $.getJSON(ENVYP_API_URL + "get_tournament_list.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
-            $.each(result, function(i, field) {
-                if (field.status == 'empty') {
-                     myApp.alert('No tournament yet :(');
-                } else {
-                    var tournament_image = (field.image_url == '' || field.image_url == null ? "img/icon-basketball.png" : field.image_url);
-                    items.push({
-                        opponent: field.opponent,
-                        tournament_date: field.tournament_date
-                    });
-                }
-            });
-
-            var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
-                items: items,
-                searchAll: function (query, items) {
-                    var found = [];
-                    for (var i = 0; i < items.length; i++) {
-                        if (items[i].roster_name.indexOf(query) >= 0 || query.trim() === '') found.push(i);
-                    }
-                    return found; 
-                },
-                template: '<li>' +
-                            '<a href="#" class="item-link item-content">' +
-                            '<div class="item-media"><img src="{{tournament_image}}" style="width:44px; height:44px;"/></div>' +
-                            '<div class="item-inner">' +
-                              '<div class="item-title-row">' +
-                                '<div class="item-title"><b>{{opponent}}</b></div>' +
-                              '</div>' +
-                              '<div class="item-subtitle">{{tournament_date}}</div>' +
-                            '</div></a></li>',
-                height: 73,
-            });
-        });
-    } else {
-        myApp.alert(NO_INTERNET_ALERT);
-    }
-});
 
 function getTeamPassword(team_id, team_admin, team_name, team_password) {
     if (team_admin != localStorage.getItem('account_id')) {
