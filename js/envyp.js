@@ -11,8 +11,8 @@ var mainView = myApp.addView('.view-main', {
     dynamicNavbar: false
 });
 
-// const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
-const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
+const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
+// const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
 const NO_INTERNET_ALERT = 'Please check your internet connection';
 const ERROR_ALERT = 'An error occured, please try again.';
 
@@ -657,9 +657,16 @@ myApp.onPageInit('tournament-add', function (page) {
             var opponent_name = $$('#txt-opponent-name').val();
             var tournament_date = $$('#txt-tournament-date').val();
             var tournament_desc = $$('#txt-tournament-description').val();
+            var tournament_location =  $$('#txt-tournament-location').val();
 
             if (opponent_name == '' || opponent_name == null) {
                 myApp.alert('Please enter opponent name!');
+                $$('#btn-add-tournament').removeAttr("disabled");
+                return false;
+            }
+
+            if (longitude == '' || longitude == null) {
+                myApp.alert('Please enter a valid location!');
                 $$('#btn-add-tournament').removeAttr("disabled");
                 return false;
             }
@@ -668,7 +675,7 @@ myApp.onPageInit('tournament-add', function (page) {
                  $$.ajax({
                     type: "POST",
                     url: ENVYP_API_URL + "add_tournament.php",
-                    data: "account_id=" + localStorage.getItem('account_id') + "&team_id=" + localStorage.getItem('selectedTeamID') + "&opponent=" + opponent_name + "&tournament_date=" + tournament_date + "&tournament_desc=" + tournament_desc,
+                    data: "account_id=" + localStorage.getItem('account_id') + "&team_id=" + localStorage.getItem('selectedTeamID') + "&opponent=" + opponent_name + "&tournament_date=" + tournament_date + "&tournament_desc=" + tournament_desc + "&tournament_location=" + tournament_location + "&longitude=" + longitude + "&latitude=" + latitude,
                     dataType: "json",
                     success: function(msg, string, jqXHR) {
                         if (msg.status == '0') {
@@ -696,6 +703,9 @@ myApp.onPageInit('tournament-add', function (page) {
                 params.opponent = opponent_name;
                 params.tournament_date = tournament_date;
                 params.tournament_desc = tournament_desc;
+                params.tournament_location = tournament_location;
+                params.longitude = longitude;
+                params.latitude = latitude;
 
                 options.params = params;
 
