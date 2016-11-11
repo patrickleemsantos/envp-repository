@@ -1,13 +1,10 @@
-// Init App
 var myApp = new Framework7({
     modalTitle: 'Envyp',
-    // Enable Material theme
     material: true,
     preloadPreviousPage: false,
     fastClicks: true
 });
 
-// Expose Internal DOM library
 var $$ = Dom7;
 
 var mainView = myApp.addView('.view-main', {
@@ -23,10 +20,16 @@ var imgfile = '';
 var latitude = '';
 var longitude = '';
 
-document.addEventListener("deviceready", onDeviceReady, false);
-function onDeviceReady() {
-    console.log(FileTransfer);
-}
+$(document).on({
+    'DOMNodeInserted': function() {
+        $('.pac-item, .pac-item span', this).addClass('no-fastclick');
+    }
+}, '.pac-container');
+
+// document.addEventListener("deviceready", onDeviceReady, false);
+// function onDeviceReady() {
+//     console.log(FileTransfer);
+// }
 
 // Show/hide preloader for remote ajax loaded pages
 // Probably should be removed on a production/local app
@@ -644,7 +647,6 @@ myApp.onPageInit('tournament-add', function (page) {
         address = place.formatted_address;
         latitude = place.geometry.location.lat();
         longitude = place.geometry.location.lng();
-        alert('longitude: ' + longitude + '; latitude: ' + latitude);
     });
 
     $("#txt-tournament-date").val(new Date().toJSON().slice(0,16));
