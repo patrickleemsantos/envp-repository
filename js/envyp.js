@@ -49,7 +49,8 @@ $$(document).on('ajaxComplete', function (e) {
 });
 
 if (localStorage.getItem('account_id') != null) {
-    mainView.router.loadPage('choose_sports.html');
+    // mainView.router.loadPage('choose_sports.html');
+    mainView.router.loadPage('tournament_detail.html');
 }
 
 /* ===== Login Page ===== */
