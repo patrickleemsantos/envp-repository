@@ -3,71 +3,130 @@
     <div class="navbar" style="height:200px; background-image: url('img/exg.jpg'); background-size: 100% 100%; -webkit-filter: grayscale(0.5);">
       <div class="navbar-inner">
         <div class="left" style="padding-bottom:150px;"><a href="#" class="back link icon-only"><i class="icon icon-back"></i></a></div>
-        <div class="center" style="padding-top:150px;padding-left:5px;">Tournament detail</div>
+        <div id="tournament-name" class="center" style="padding-top:150px;padding-left:5px;"></div>
         <div class="right"></div>
       </div>
     </div>
     <div class="toolbar tabbar theme-indigo" style="padding-top:190px;">
       <div class="toolbar-inner">
-        <a href="#tab-1" style="padding-top:145px;" class="tab-link active">Detail</a>
-        <a href="#tab-2" style="padding-top:145px;" class="tab-link">Roster</a>
-        <a href="#tab-3" style="padding-top:145px;" class="tab-link">Stats</a>
+        <a href="#detail" style="padding-top:145px;" class="tab-link active">Detail</a>
+        <a href="#roster" style="padding-top:145px;" class="tab-link">Roster</a>
+        <a href="#stats" style="padding-top:145px;" class="tab-link">Stats</a>
       </div>
     </div>
-    <div class="page-content" style="padding-top:270px;">
-        <div class="content-block-title" style="padding-top:0px;">Details</div>
-        <div class="list-block inputs-list">
-          <ul>
-            <li>
-              <div class="item-content">
-                <div class="item-media"><i class="fa fa-futbol-o" aria-hidden="true"></i></div>
-                <div class="item-inner"> 
-                  <div class="item-title label">Opponent</div>
-                  <div class="item-input">
-                    <textarea id="txt-opponent-name" class="resizable" placeholder="Opponent" required="required" ></textarea>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li>
+    <div class="tabs-swipeable-wrap">
+      <div class="tabs">
+        <div id="detail" class="page-content tab active" style="padding-top:250px;">
+          <div class="content-block-title" style="padding-top:0px;">Details</div>
+          <div class="list-block inputs-list">
+            <ul>
+             <li>
                 <div class="item-content">
-                  <div class="item-media"><i class="fa fa-map-marker" aria-hidden="true"></i></div>
-                   <div class="item-inner">
-                      <div class="item-title label">Location</div>
-                      <div class="item-input">
-                         <textarea id="txt-tournament-location" class="resizable" placeholder="Location" required="required" ></textarea>
-                         <!-- <input id="txt-tournament-location" type="text" placeholder="Location" required="required" /> -->
+                  <div class="item-media"><i class="fa fa-futbol-o" aria-hidden="true"></i></div>
+                  <div class="item-inner"> 
+                    <div class="item-title label">Opponent</div>
+                    <div class="item-input">
+                      <textarea id="txt-opponent-name" class="resizable" disabled></textarea>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                  <div class="item-content">
+                    <div class="item-media"><i class="fa fa-map-marker" aria-hidden="true"></i></div>
+                     <div class="item-inner">
+                        <div class="item-title label">Location</div>
+                        <div class="item-input">
+                           <textarea id="txt-tournament-location" class="resizable" disabled ></textarea>
+                        </div>
+                     </div>
+                  </div>
+               </li>
+              <li>
+                <div class="item-content">
+                  <div class="item-media"><i class="fa fa-calendar" aria-hidden="true"></i></div>
+                  <div class="item-inner"> 
+                    <div class="item-title label">Date</div>
+                    <div class="item-input">
+                      <textarea id="txt-tournament-date" class="resizable" disabled></textarea>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="item-content">
+                  <div class="item-media"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></div>
+                  <div class="item-inner"> 
+                    <div class="item-title label">Description</div>
+                    <div class="item-input">
+                      <textarea id="txt-tournament-description" class="resizable" disabled></textarea>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="content-block">
+            <p><a href="#" id="btn-edit-tournament" class="button button-big button-fill button-raised color-teal">Edit</a></p>
+          </div>
+        </div>
+        <div id="roster" class="page-content tab" style="padding-top:250px;">
+          <div class="content-block">
+            <div class="list-block media-list">
+              <ul id="roster_list">
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div id="stats" class="page-content tab" style="padding-top:220px;">
+        <div class="ks-grid">
+            <div class="content-block">
+               <div class="row">
+                  <div class="col-100">
+                    <div class="row">
+                      <div class="col-40">
+                        <p id="team-name"></p>
                       </div>
-                   </div>
-                </div>
-             </li>
-            <li>
-              <div class="item-content">
-                <div class="item-media"><i class="fa fa-calendar" aria-hidden="true"></i></div>
-                <div class="item-inner"> 
-                  <div class="item-title label">Date</div>
-                  <div class="item-input">
-                    <input id="txt-tournament-date" type="datetime-local" placeholder="Date"/>
+                      <div class="col-20">
+                        <p><b>vs</b></p>
+                      </div>
+                      <div class="col-40">
+                        <p id="opponent-name"></p>
+                      </div>
+                      <div class="col-40">
+                        <p id="team-points"></p>
+                      </div>
+                      <div class="col-20">
+                        <p><b>Score</b></p>
+                      </div>
+                      <div class="col-40">
+                        <p id="opponent-points"></p>
+                      </div>
+                      <div class="col-40">
+                        <p id="team-assists"></p>
+                      </div>
+                      <div class="col-20">
+                        <p><b>Assist</b></p>
+                      </div>
+                      <div class="col-40">
+                        <p id="opponent-assists"></p>
+                      </div>
+                      <div class="col-40">
+                        <p id="team-fouls"></p>
+                      </div>
+                      <div class="col-20">
+                        <p><b>Fouls</b></p>
+                      </div>
+                      <div class="col-40">
+                        <p id="opponent-fouls"></p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </li>
-            <li>
-              <div class="item-content">
-                <div class="item-media"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></div>
-                <div class="item-inner"> 
-                  <div class="item-title label">Description</div>
-                  <div class="item-input">
-                    <textarea id="txt-tournament-description" class="resizable" placeholder="Description"></textarea>
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ul>
+            </div>
+          </div>
         </div>
-        <div class="content-block">
-          <p><a href="#" id="btn-add-tournament" class="button button-big button-fill button-raised color-teal">Continue</a></p>
-        </div>
+      </div>
     </div>
     </div>
   </div>
