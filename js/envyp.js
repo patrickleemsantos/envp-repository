@@ -713,7 +713,7 @@ function attachTournamentImage(imageURI) {
     $$("#tournament-image").attr("src", imgfile);
 } 
 
-function editTournamentImage(imageURI) {
+function attachEditTournamentImage(imageURI) {
     imgfile = imageURI
     $$("#edit-tournament-image").attr("src", imgfile);
 } 
@@ -774,6 +774,7 @@ myApp.onPageInit('tournament-list', function (page) {
 
 /* =====Tournament Detail Page ===== */
 myApp.onPageInit('tournament-detail', function (page) {
+    myApp.showIndicator();
     var tournament_id = 0;
     var tournament_opponent = '';
     var tournament_location = '';
@@ -804,6 +805,8 @@ myApp.onPageInit('tournament-detail', function (page) {
         $$('#txt-tournament-location').prepend(tournament_location);
         $$('#txt-tournament-date').prepend(tournament_date);
         $$('#txt-tournament-description').prepend(tournament_description);
+        
+        myApp.hideIndicator();
     });
 
     $("#txt-tournament-location").height( $("#txt-tournament-location")[0].scrollHeight);
@@ -1239,7 +1242,7 @@ function editTournamentImage() {
             text: 'Take new picture',
             onClick: function() {
                 try {
-                    navigator.camera.getPicture(editTournamentImage, function(message) {
+                    navigator.camera.getPicture(attachEditTournamentImage, function(message) {
                         myApp.alert('No image selected');
                     }, {
                         quality: 100,
@@ -1258,7 +1261,7 @@ function editTournamentImage() {
             text: 'Select from gallery',
             onClick: function() {
                 try {
-                    navigator.camera.getPicture(editTournamentImage, function(message) {
+                    navigator.camera.getPicture(attachEditTournamentImage, function(message) {
                         myApp.alert('No image selected');
                     }, {
                         quality: 100,
