@@ -28,11 +28,6 @@ $(document).on({
     }
 }, '.pac-container');
 
-// document.addEventListener("deviceready", onDeviceReady, false);
-// function onDeviceReady() {
-//     console.log(FileTransfer);
-// }
-
 if (localStorage.getItem('account_id') != null) {
     mainView.router.loadPage('choose_sports.html');
     // mainView.router.loadPage('edit_tournament_stats.html');
@@ -51,12 +46,14 @@ $$('#btn-email-login').on('click', function () {
             $$('#btn-email-login').removeAttr("disabled");
             $$('#btn-signup-page').removeAttr("disabled");
         } else {
+            myApp.showIndicator();
             $$.ajax({
                 type: "POST",
                 url: ENVYP_API_URL + "login.php",
                 data: "account=" + txt_username + "&password=" + txt_password,
                 dataType: "json",
                 success: function(msg, string, jqXHR) {
+                    myApp.hideIndicator();
                     if (msg.status == '0') {
                         localStorage.setItem('account_id', msg.account_id);
                         localStorage.setItem('email', msg.email);
@@ -73,6 +70,7 @@ $$('#btn-email-login').on('click', function () {
                     $$('#btn-signup-page').removeAttr("disabled");
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
+                    myApp.hideIndicator();
                     myApp.alert(ERROR_ALERT);
                     $$('#btn-email-login').removeAttr("disabled");
                     $$('#btn-signup-page').removeAttr("disabled");
@@ -163,13 +161,14 @@ myApp.onPageInit('signup', function(page) {
             //     $$('#btn-signup').removeAttr("disabled");
             //     return false;
             // } else {
+                myApp.showIndicator();
                 $$.ajax({
                     type: "POST",
                     url: ENVYP_API_URL + "add_user.php",
                     data: "account=" + txt_email_add + "&password=" + txt_password +"&account_type=1",
                     dataType: "json",
                     success: function(msg, string, jqXHR) {
-                        console.log(msg);
+                        myApp.hideIndicator();
                         if (msg.status == '0') {
                             localStorage.setItem('account_id', msg.account_id);
                             mainView.router.loadPage('profile_add.html');         
@@ -181,6 +180,7 @@ myApp.onPageInit('signup', function(page) {
                         $$('#btn-signup').removeAttr("disabled");
                     },
                     error: function(msg, string, jqXHR) { 
+                        myApp.hideIndicator();
                         myApp.alert(ERROR_ALERT);
                         $$('#btn-signup').removeAttr("disabled");
                     }
@@ -220,12 +220,14 @@ myApp.onPageInit('profile-add', function(page) {
                 return false;
             }
 
+            myApp.showIndicator();
             $$.ajax({
                 type: "POST",
                 url: ENVYP_API_URL + "update_user.php",
                 data: "account_id=" + localStorage.getItem('account_id') + "&first_name=" + first_name + "&last_name=" + last_name + "&age=" + age + "&description=" + description,
                 dataType: "json",
                 success: function(msg, string, jqXHR) {
+                    myApp.hideIndicator();
                     if (msg.status == '0') {
                         localStorage.setItem('first_name', first_name);
                         localStorage.setItem('last_name', last_name);
@@ -244,6 +246,7 @@ myApp.onPageInit('profile-add', function(page) {
                     $$('#btn-continue').removeAttr("disabled");
                 },
                 error: function(msg, string, jqXHR) { 
+                    myApp.hideIndicator();
                     myApp.alert(ERROR_ALERT);
                     $$('#btn-continue').removeAttr("disabled");
                 }
@@ -286,12 +289,14 @@ myApp.onPageInit('team-add', function(page) {
                 return false;
             }
 
+            myApp.showIndicator();
             $$.ajax({
                 type: "POST",
                 url: ENVYP_API_URL + "add_team.php",
                 data: "account_id=" + localStorage.getItem('account_id') + "&sport_id=" + localStorage.getItem('selectedSportID') + "&team_name=" + team_name + "&team_description=" + team_description + "&team_password=" + team_password,
                 dataType: "json",
                 success: function(msg, string, jqXHR) {
+                    myApp.hideIndicator();
                     if (msg.status == '0') {
                         clearTeamDetails();
                         mainView.router.loadPage('team_management.html?team_id='+msg.team_id+'&team_name=' + team_name);  
@@ -300,6 +305,7 @@ myApp.onPageInit('team-add', function(page) {
                     $$('#btn-add-team').removeAttr("disabled");
                 },
                 error: function(msg, string, jqXHR) { 
+                    myApp.hideIndicator();
                     myApp.alert(ERROR_ALERT);
                     $$('#btn-add-team').removeAttr("disabled");
                 }
@@ -391,6 +397,7 @@ myApp.onPageInit('roster-list', function (page) {
 
     if (checkInternetConnection() == true ) {
         var items = [];
+        myApp.showIndicator();
         $.getJSON(ENVYP_API_URL + "get_roster_list.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
             $.each(result, function(i, field) {
                 if (field.status == 'empty') {
@@ -426,6 +433,7 @@ myApp.onPageInit('roster-list', function (page) {
                             '</div></a></li>',
                 height: 62,
             });
+            myApp.hideIndicator();
         });
     } else {
         myApp.alert(NO_INTERNET_ALERT);
@@ -446,12 +454,14 @@ myApp.onPageInit('roster-add', function (page) {
                 return false;
             }
 
+            myApp.showIndicator();
             $$.ajax({
                 type: "POST",
                 url: ENVYP_API_URL + "add_roster.php",
                 data: "account_id=" + localStorage.getItem('account_id') + "&team_id=" + localStorage.getItem('selectedTeamID') + "&roster_name=" + roster_name + "&roster_position=" + roster_position,
                 dataType: "json",
                 success: function(msg, string, jqXHR) {
+                    myApp.hideIndicator();
                     if (msg.status == '0') {
                         clearRosterDetails();
                         mainView.router.loadPage('roster_list.html');
@@ -460,6 +470,7 @@ myApp.onPageInit('roster-add', function (page) {
                     $$('#btn-add-roster').removeAttr("disabled");
                 },
                 error: function(msg, string, jqXHR) { 
+                    myApp.hideIndicator();
                     myApp.alert(ERROR_ALERT);
                     $$('#btn-add-roster').removeAttr("disabled");
                 }
@@ -475,6 +486,7 @@ myApp.onPageInit('account-list', function (page) {
 
     if (checkInternetConnection() == true ) {
         var items = [];
+        myApp.showIndicator();
         $.getJSON(ENVYP_API_URL + "get_account_list.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
             $.each(result, function(i, field) {
                 if (field.status == 'empty') {
@@ -514,6 +526,7 @@ myApp.onPageInit('account-list', function (page) {
                             '</li>',
                 height: 73,
             });
+            myApp.hideIndicator();
         });
     } else {
         myApp.alert(NO_INTERNET_ALERT);
@@ -525,12 +538,14 @@ myApp.onPageInit('account-list', function (page) {
         });
 
         if (selectedParticipants.length != 0) {
+            myApp.showIndicator();
             $$.ajax({
                 type: "POST",
                 url: ENVYP_API_URL + "add_participant.php",
                 data: "account_ids=" + selectedParticipants + "&team_id=" + localStorage.getItem('selectedTeamID'),
                 dataType: "json",
                 success: function(msg, string, jqXHR) {
+                    myApp.hideIndicator();
                     if (msg.status == 0) {
                         getParticipantList();
                     } else {
@@ -538,6 +553,7 @@ myApp.onPageInit('account-list', function (page) {
                     }
                 },
                 error: function(msg, string, jqXHR) { 
+                    myApp.hideIndicator();
                     myApp.alert(ERROR_ALERT);
                 }
             });
@@ -554,6 +570,7 @@ myApp.onPageInit('administrator-list', function (page) {
 
     if (checkInternetConnection() == true ) {
         var items = [];
+        myApp.showIndicator();
         $.getJSON(ENVYP_API_URL + "get_team_participant_list.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
             $.each(result, function(i, field) {
                 if (field.status == 'empty') {
@@ -593,6 +610,7 @@ myApp.onPageInit('administrator-list', function (page) {
                             '</li>',
                 height: 73,
             });
+            myApp.hideIndicator();
         });
     } else {
         myApp.alert(NO_INTERNET_ALERT);
@@ -604,12 +622,14 @@ myApp.onPageInit('administrator-list', function (page) {
         });
 
         if (selectedAdministrator.length != 0) {
+            myApp.showIndicator();
             $$.ajax({
                 type: "POST",
                 url: ENVYP_API_URL + "add_team_administrator.php",
                 data: "account_ids=" + selectedAdministrator + "&team_id=" + localStorage.getItem('selectedTeamID'),
                 dataType: "json",
                 success: function(msg, string, jqXHR) {
+                    myApp.hideIndicator();
                     if (msg.status == 0) {
                         getTeamAdministratorList();
                     } else {
@@ -617,6 +637,7 @@ myApp.onPageInit('administrator-list', function (page) {
                     }
                 },
                 error: function(msg, string, jqXHR) { 
+                    myApp.hideIndicator();
                     myApp.alert(ERROR_ALERT);
                 }
             });
@@ -659,12 +680,14 @@ myApp.onPageInit('tournament-add', function (page) {
             }
 
             if (imgfile == '') {
+                myApp.showIndicator();
                  $$.ajax({
                     type: "POST",
                     url: ENVYP_API_URL + "add_tournament.php",
                     data: "account_id=" + localStorage.getItem('account_id') + "&team_id=" + localStorage.getItem('selectedTeamID') + "&opponent=" + opponent_name + "&tournament_date=" + tournament_date + "&tournament_desc=" + tournament_desc + "&tournament_location=" + tournament_location + "&longitude=" + longitude + "&latitude=" + latitude,
                     dataType: "json",
                     success: function(msg, string, jqXHR) {
+                        myApp.hideIndicator();
                         if (msg.status == '0') {
                             clearTournamentDetails();
                             mainView.router.loadPage('tournament_list.html');
@@ -673,11 +696,13 @@ myApp.onPageInit('tournament-add', function (page) {
                         $$('#btn-add-tournament').removeAttr("disabled");
                     },
                     error: function(msg, string, jqXHR) { 
+                        myApp.hideIndicator();
                         myApp.alert(ERROR_ALERT);
                         $$('#btn-add-tournament').removeAttr("disabled");
                     }
                 });
             } else {
+                myApp.showIndicator();
                 var options = new FileUploadOptions();
                 options.fileKey = "file";
                 options.fileName = imgfile.substr(imgfile.lastIndexOf('/') + 1);
@@ -700,6 +725,7 @@ myApp.onPageInit('tournament-add', function (page) {
                 ft.upload(imgfile, ENVYP_API_URL + "add_tournament.php", winAddTournament, failAddTournament, options);
 
                 clearTournamentDetails();
+                myApp.hideIndicator();
                 $$('#btn-add-tournament').removeAttr("disabled");
                 mainView.router.loadPage('tournament_list.html');
             }
@@ -731,6 +757,7 @@ function failAddTournament(error) {
 myApp.onPageInit('tournament-list', function (page) {
     if (checkInternetConnection() == true ) {
         var items = [];
+        myApp.showIndicator();
         $.getJSON(ENVYP_API_URL + "get_tournament_list.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
             $.each(result, function(i, field) {
                 if (field.status == 'empty') {
@@ -766,6 +793,7 @@ myApp.onPageInit('tournament-list', function (page) {
                             '</div></a></li>',
                 height: 73,
             });
+            myApp.hideIndicator();
         });
     } else {
         myApp.alert(NO_INTERNET_ALERT);
@@ -774,7 +802,6 @@ myApp.onPageInit('tournament-list', function (page) {
 
 /* =====Tournament Detail Page ===== */
 myApp.onPageInit('tournament-detail', function (page) {
-    myApp.showIndicator();
     var tournament_id = 0;
     var tournament_opponent = '';
     var tournament_location = '';
@@ -786,6 +813,8 @@ myApp.onPageInit('tournament-detail', function (page) {
     var tournament_formatted_date = '';
 
     localStorage.setItem('selectedTournamentId', page.query.tournament_id);
+    
+    myApp.showIndicator();
     $.getJSON(ENVYP_API_URL + "get_tournament_detail.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
         $.each(result, function(i, field) {
             tournament_opponent = field.opponent;
@@ -805,7 +834,7 @@ myApp.onPageInit('tournament-detail', function (page) {
         $$('#txt-tournament-location').prepend(tournament_location);
         $$('#txt-tournament-date').prepend(tournament_date);
         $$('#txt-tournament-description').prepend(tournament_description);
-        
+
         myApp.hideIndicator();
     });
 
@@ -847,8 +876,6 @@ myApp.onPageInit('tournament-detail', function (page) {
     });
 
     $$('#stats').on('show', function () {
-        myApp.showIndicator();
-
         var team_name = '';
         var team_points = 0;
         var team_assists = 0;
@@ -867,6 +894,7 @@ myApp.onPageInit('tournament-detail', function (page) {
         $('#team-fouls').empty();
         $('#opponent-fouls').empty();
 
+        myApp.showIndicator();
         $.getJSON(ENVYP_API_URL + "get_tournament_stats.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
             $.each(result, function(i, field) {
                 team_name = localStorage.getItem('selectedTeamName');
@@ -944,6 +972,7 @@ myApp.onPageInit('tournament-edit', function (page) {
             }
 
             if (imgfile == '') {
+                myApp.showIndicator();
                  $$.ajax({
                     type: "POST",
                     url: ENVYP_API_URL + "update_tournament.php",
@@ -958,6 +987,7 @@ myApp.onPageInit('tournament-edit', function (page) {
                             "&tournament_image=" + page.query.image_url,
                     dataType: "json",
                     success: function(msg, string, jqXHR) {
+                        myApp.hideIndicator();
                         if (msg.status == '0') {
                             clearEditTournamentDetails();
                             mainView.router.loadPage('tournament_detail.html?tournament_id=' + localStorage.getItem('selectedTournamentId'));
@@ -966,11 +996,13 @@ myApp.onPageInit('tournament-edit', function (page) {
                         $$('#btn-update-tournament').removeAttr("disabled");
                     },
                     error: function(msg, string, jqXHR) { 
+                        myApp.hideIndicator();
                         myApp.alert(ERROR_ALERT);
                         $$('#btn-update-tournament').removeAttr("disabled");
                     }
                 });
             } else {
+                myApp.showIndicator();
                 var options = new FileUploadOptions();
                 options.fileKey = "file";
                 options.fileName = imgfile.substr(imgfile.lastIndexOf('/') + 1);
@@ -993,6 +1025,7 @@ myApp.onPageInit('tournament-edit', function (page) {
                 ft.upload(imgfile, ENVYP_API_URL + "update_tournament.php", winAddTournament, failAddTournament, options);
 
                 clearTournamentDetails();
+                myApp.hideIndicator();
                 $$('#btn-update_tournament-tournament').removeAttr("disabled");
                 mainView.router.loadPage('tournament_detail.html?tournament_id=' + localStorage.getItem('selectedTournamentId'));
             }
@@ -1075,12 +1108,14 @@ myApp.onPageInit('edit-roster-tournament-stats', function (page) {
                 return false;
             }
 
+            myApp.showIndicator();
             $$.ajax({
                 type: "POST",
                 url: ENVYP_API_URL + "update_roster_tournament_stats.php",
                 data: "account_id=" + localStorage.getItem('account_id') + "&tournament_id=" + localStorage.getItem('selectedTournamentId') + "&roster_id=" + page.query.roster_id + "&points=" + roster_points + "&assists=" + roster_assists + "&fouls=" + roster_fouls,
                 dataType: "json",
                 success: function(msg, string, jqXHR) {
+                    myApp.hideIndicator();
                     if (msg.status == '0') {
                         mainView.router.loadPage('tournament_detail.html?tournament_id=' + localStorage.getItem('selectedTournamentId'));
                     }
@@ -1088,6 +1123,7 @@ myApp.onPageInit('edit-roster-tournament-stats', function (page) {
                     $$('#btn-update-roster-stats').removeAttr("disabled");
                 },
                 error: function(msg, string, jqXHR) { 
+                    myApp.hideIndicator();
                     myApp.alert(ERROR_ALERT);
                     $$('#btn-update-roster-stats').removeAttr("disabled");
                 }
@@ -1153,6 +1189,7 @@ myApp.onPageInit('edit-tournament-stats', function (page) {
                 return false;
             }
 
+            myApp.showIndicator();
             $$.ajax({
                 type: "POST",
                 url: ENVYP_API_URL + "update_tournament_stats.php",
@@ -1166,6 +1203,7 @@ myApp.onPageInit('edit-tournament-stats', function (page) {
                         "&opponent_fouls=" + opponent_fouls,
                 dataType: "json",
                 success: function(msg, string, jqXHR) {
+                    myApp.hideIndicator();
                     if (msg.status == '0') {
                         mainView.router.loadPage('tournament_detail.html?tournament_id=' + localStorage.getItem('selectedTournamentId'));
                     }
@@ -1173,6 +1211,7 @@ myApp.onPageInit('edit-tournament-stats', function (page) {
                     $$('#btn-update-tournament-stats').removeAttr("disabled");
                 },
                 error: function(msg, string, jqXHR) { 
+                    myApp.hideIndicator();
                     myApp.alert(ERROR_ALERT);
                     $$('#btn-update-tournament-stats').removeAttr("disabled");
                 }
@@ -1307,15 +1346,18 @@ function getTeamPassword(team_id, team_admin, team_name, team_password) {
 }
 
 function isAccountInvited(team_id, callback) {
+    myApp.showIndicator();
     $$.ajax({
         type: "POST",
         url: ENVYP_API_URL + "check_if_account_invited.php",
         data: "account_id=" + localStorage.getItem('account_id') + "&team_id=" + team_id,
         dataType: "json",
         success: function(msg, string, jqXHR) {
+            myApp.hideIndicator();
             callback(msg);
         },
         error: function(msg, string, jqXHR) { 
+            myApp.hideIndicator();
         }
     }); 
 } 
@@ -1334,6 +1376,7 @@ function getParticipantList() {
     }
 
     var items = [];
+    myApp.showIndicator();
     $.getJSON(ENVYP_API_URL + "get_participant_list.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
         $.each(result, function(i, field) {
             if (field.status == 'empty') {
@@ -1364,6 +1407,7 @@ function getParticipantList() {
                 $('.link-remove-participant').hide();    
             } 
         });
+        myApp.hideIndicator();
     });
 }
 
@@ -1381,6 +1425,7 @@ function getTeamAdministratorList() {
     }
 
     var items = [];
+    myApp.showIndicator();
     $.getJSON(ENVYP_API_URL + "get_team_administrator_list.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
         $.each(result, function(i, field) {
             if (field.status == 'empty') {
@@ -1411,16 +1456,19 @@ function getTeamAdministratorList() {
                 $('.link-remove-administrator').hide();    
             } 
         });
+        myApp.hideIndicator();
     });
 }
 
 function removeParticipant(account_id) {
+    myApp.showIndicator();
     $$.ajax({
         type: "POST",
         url: ENVYP_API_URL + "delete_participant.php",
         data: "account_id=" + account_id,
         dataType: "json",
         success: function(msg, string, jqXHR) {
+            myApp.hideIndicator();
             if (msg.status == 0) {
                 getParticipantList();
                 getTeamAdministratorList();
@@ -1429,18 +1477,21 @@ function removeParticipant(account_id) {
             }
         },
         error: function(msg, string, jqXHR) { 
+            myApp.hideIndicator();
             myApp.alert(ERROR_ALERT);
         }
     });
 }
 
 function removeAsAdministrator(account_id) {
+    myApp.showIndicator();
     $$.ajax({
         type: "POST",
         url: ENVYP_API_URL + "delete_administrator.php",
         data: "account_id=" + account_id + "&team_id=" + localStorage.getItem('selectedTeamID'),
         dataType: "json",
         success: function(msg, string, jqXHR) {
+            myApp.hideIndicator();
             if (msg.status == 0) {
                 getParticipantList();
                 getTeamAdministratorList();
@@ -1449,6 +1500,7 @@ function removeAsAdministrator(account_id) {
             }
         },
         error: function(msg, string, jqXHR) { 
+            myApp.hideIndicator();
             myApp.alert(ERROR_ALERT);
         }
     });
