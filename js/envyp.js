@@ -490,8 +490,8 @@ myApp.onPageInit('roster-add', function (page) {
                 var params = new Object();
                 params.account_id = localStorage.getItem('account_id');
                 params.team_id = localStorage.getItem('selectedTeamID');
-                params.roster_name = opponent_name;
-                params.roster_position = tournament_date;
+                params.roster_name = roster_name;
+                params.roster_position = roster_position;
 
                 options.params = params;
 
