@@ -11,8 +11,8 @@ var mainView = myApp.addView('.view-main', {
     dynamicNavbar: false
 });
 
-// const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
-const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
+const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
+// const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
 const NO_INTERNET_ALERT = 'Please check your internet connection';
 const ERROR_ALERT = 'An error occured, please try again.';
 
@@ -403,7 +403,7 @@ myApp.onPageInit('roster-list', function (page) {
                 if (field.status == 'empty') {
                      myApp.alert('No roster yet :(');
                 } else {
-                    var roster_image = (field.image_url == '' || field.image_url == null ? "img/icon-basketball.png" : field.image_url);
+                    var roster_image = (field.image_url == '' || field.image_url == null ? "img/profile.jpg" : field.image_url);
                     items.push({
                         roster_id: field.roster_id,
                         roster_name: field.name,
@@ -423,7 +423,7 @@ myApp.onPageInit('roster-list', function (page) {
                     return found; 
                 },
                 template: '<li>' +
-                            '<a href="#" class="item-link item-content">' +
+                            '<a href="roster_detail.html?roster_id={{roster_id}}&roster_name={{roster_name}}&roster_position={{roster_position}}&roster_image={{roster_image}}" class="item-link item-content">' +
                             '<div class="item-media"><img src="{{roster_image}}" style="width:44px; height:44px;"/></div>' +
                             '<div class="item-inner">' +
                               '<div class="item-title-row">' +
@@ -454,27 +454,153 @@ myApp.onPageInit('roster-add', function (page) {
                 return false;
             }
 
-            myApp.showIndicator();
-            $$.ajax({
-                type: "POST",
-                url: ENVYP_API_URL + "add_roster.php",
-                data: "account_id=" + localStorage.getItem('account_id') + "&team_id=" + localStorage.getItem('selectedTeamID') + "&roster_name=" + roster_name + "&roster_position=" + roster_position,
-                dataType: "json",
-                success: function(msg, string, jqXHR) {
-                    myApp.hideIndicator();
-                    if (msg.status == '0') {
-                        clearRosterDetails();
-                        mainView.router.loadPage('roster_list.html');
+            if (imgfile == '') {
+                myApp.showIndicator();
+                $$.ajax({
+                    type: "POST",
+                    url: ENVYP_API_URL + "add_roster.php",
+                    data: "account_id=" + localStorage.getItem('account_id') + 
+                            "&team_id=" + localStorage.getItem('selectedTeamID') + 
+                            "&roster_name=" + roster_name + 
+                            "&roster_position=" + roster_position,
+                    dataType: "json",
+                    success: function(msg, string, jqXHR) {
+                        myApp.hideIndicator();
+                        if (msg.status == '0') {
+                            clearRosterDetails();
+                            mainView.router.loadPage('roster_list.html');
+                        }
+                        myApp.alert(msg.message);
+                        $$('#btn-add-roster').removeAttr("disabled");
+                    },
+                    error: function(msg, string, jqXHR) { 
+                        myApp.hideIndicator();
+                        myApp.alert(ERROR_ALERT);
+                        $$('#btn-add-roster').removeAttr("disabled");
                     }
-                    myApp.alert(msg.message);
-                    $$('#btn-add-roster').removeAttr("disabled");
-                },
-                error: function(msg, string, jqXHR) { 
-                    myApp.hideIndicator();
-                    myApp.alert(ERROR_ALERT);
-                    $$('#btn-add-roster').removeAttr("disabled");
-                }
-            });
+                });
+            } else {
+                myApp.showIndicator();
+                var options = new FileUploadOptions();
+                options.fileKey = "file";
+                options.fileName = imgfile.substr(imgfile.lastIndexOf('/') + 1);
+                options.mimeType = "image/jpeg";
+                options.chunkedMode = false;
+
+                var params = new Object();
+                params.account_id = localStorage.getItem('account_id');
+                params.team_id = localStorage.getItem('selectedTeamID');
+                params.roster_name = opponent_name;
+                params.roster_position = tournament_date;
+
+                options.params = params;
+
+                var ft = new FileTransfer();
+                ft.upload(imgfile, ENVYP_API_URL + "add_roster.php", win, fail, options);
+
+                clearRosterDetails();
+                myApp.hideIndicator();
+                $$('#btn-add-roster').removeAttr("disabled");
+                mainView.router.loadPage('roster_list.html');
+            }
+        }
+    });
+});
+
+/* ===== Roster Detail Page ===== */
+myApp.onPageInit('roster-detail', function (page) {
+    $$('#roster-detail-name').prepend(page.query.roster_name);
+    $$('#roster-detail-position').prepend(page.query.roster_position);
+
+    $$("#roster-detail-image").attr("data-src",(page.query.roster_image == '' || page.query.roster_image == null ? "img/profile.jpg" : page.query.roster_image));
+    $$("#roster-detail-image").addClass('lazy lazy-fadein');
+    myApp.initImagesLazyLoad(page.container);
+
+    myApp.showIndicator();
+    $.getJSON(ENVYP_API_URL + "get_roster_average_stats.php?roster_id=" + page.query.roster_id, function(result) {
+        $.each(result, function(i, field) {
+            $('#roster-ppg').prepend(field.ppg);
+            $('#roster-apg').prepend(field.apg);
+            $('#roster-fpg').prepend(field.fpg);
+        }); 
+        myApp.hideIndicator();    
+    });
+
+    $$('#btn-edit-roster-detail').on('click', function() {
+        mainView.router.loadPage('roster_edit.html?roster_id='+page.query.roster_id+'&roster_name='+page.query.roster_name+'&roster_position='+page.query.roster_position+'&roster_image='+page.query.roster_image); 
+    });
+});
+
+/* ===== Roster Edit Page ===== */
+myApp.onPageInit('roster-edit', function (page) {
+    $$('#edit-txt-roster-name').attr('value',page.query.roster_name);
+    $$('#edit-txt-roster-position').attr('value',page.query.roster_position);
+    $$("#edit-roster-image").attr("data-src",(page.query.roster_image == '' || page.query.roster_image == null ? "img/profile.jpg" : page.query.roster_image));
+    $$("#edit-roster-image").addClass('lazy lazy-fadein');
+    myApp.initImagesLazyLoad(page.container);
+
+    $$('#btn-update-roster').on('click', function() {
+        if (checkInternetConnection() == true ) {
+            $$('#btn-update-roster').attr('disabled', true);
+            var roster_name = $$('#edit-txt-roster-name').val();
+            var roster_position = $$('#edit-txt-roster-position').val();
+
+            if (roster_name == '' || roster_name == null) {
+                myApp.alert('Please enter roster name!');
+                $$('#btn-update-roster').removeAttr("disabled");
+                return false;
+            }
+
+            if (imgfile == '') {
+                myApp.showIndicator();
+                $$.ajax({
+                    type: "POST",
+                    url: ENVYP_API_URL + "update_roster.php",
+                    data: "account_id=" + localStorage.getItem('account_id') + 
+                            "&roster_id=" + page.query.roster_id + 
+                            "&roster_name=" + $$('#edit-txt-roster-name').val() + 
+                            "&roster_position=" + $$('#edit-txt-roster-position').val() +
+                            "&roster_image=" + page.query.roster_image,
+                    dataType: "json",
+                    success: function(msg, string, jqXHR) {
+                        myApp.hideIndicator();
+                        if (msg.status == '0') {
+                            clearRosterDetails();
+                            mainView.router.loadPage('roster_list.html');
+                        }
+                        myApp.alert(msg.message);
+                        $$('#btn-update-roster').removeAttr("disabled");
+                    },
+                    error: function(msg, string, jqXHR) { 
+                        myApp.hideIndicator();
+                        myApp.alert(ERROR_ALERT);
+                        $$('#btn-update-roster').removeAttr("disabled");
+                    }
+                });
+            } else {
+                myApp.showIndicator();
+                var options = new FileUploadOptions();
+                options.fileKey = "file";
+                options.fileName = imgfile.substr(imgfile.lastIndexOf('/') + 1);
+                options.mimeType = "image/jpeg";
+                options.chunkedMode = false;
+
+                var params = new Object();
+                params.account_id = localStorage.getItem('account_id');
+                params.roster_id = page.query.roster_id;
+                params.roster_name = $$('#edit-txt-roster-name').val();
+                params.roster_position = $$('#edit-txt-roster-position').val();
+
+                options.params = params;
+
+                var ft = new FileTransfer();
+                ft.upload(imgfile, ENVYP_API_URL + "update_roster.php", win, fail, options);
+
+                clearRosterDetails();
+                myApp.hideIndicator();
+                $$('#btn-update-roster').removeAttr("disabled");
+                mainView.router.loadPage('roster_list.html');
+            }
         }
     });
 });
@@ -722,7 +848,7 @@ myApp.onPageInit('tournament-add', function (page) {
                 options.params = params;
 
                 var ft = new FileTransfer();
-                ft.upload(imgfile, ENVYP_API_URL + "add_tournament.php", winAddTournament, failAddTournament, options);
+                ft.upload(imgfile, ENVYP_API_URL + "add_tournament.php", win, fail, options);
 
                 clearTournamentDetails();
                 myApp.hideIndicator();
@@ -733,25 +859,6 @@ myApp.onPageInit('tournament-add', function (page) {
         }
     });
 });
-
-function attachTournamentImage(imageURI) {
-    imgfile = imageURI
-    $$("#tournament-image").attr("src", imgfile);
-} 
-
-function attachEditTournamentImage(imageURI) {
-    imgfile = imageURI
-    $$("#edit-tournament-image").attr("src", imgfile);
-} 
-
-function winAddTournament(r) {
-    var resp = JSON.parse(r.response);
-    myApp.alert(resp.message);
-}
-
-function failAddTournament(error) {
-    myApp.alert("An error has occurred with error code " + error.code + ", please try again.");
-}
 
 /* =====Tournament List Page ===== */
 myApp.onPageInit('tournament-list', function (page) {
@@ -1022,7 +1129,7 @@ myApp.onPageInit('tournament-edit', function (page) {
                 options.params = params;
 
                 var ft = new FileTransfer();
-                ft.upload(imgfile, ENVYP_API_URL + "update_tournament.php", winAddTournament, failAddTournament, options);
+                ft.upload(imgfile, ENVYP_API_URL + "update_tournament.php", win, fail, options);
 
                 clearTournamentDetails();
                 myApp.hideIndicator();
@@ -1324,6 +1431,139 @@ function editTournamentImage() {
     });
 }
 
+function getRosterImage() {
+    myApp.modal({
+        title:  'Choose Roster Image',
+        verticalButtons: true,
+        buttons: [
+          {
+            text: 'Take new picture',
+            onClick: function() {
+                try {
+                    navigator.camera.getPicture(attachRosterImage, function(message) {
+                        myApp.alert('No image selected');
+                    }, {
+                        quality: 100,
+                        destinationType: navigator.camera.DestinationType.FILE_URI,
+                        sourceType: navigator.camera.PictureSourceType.CAMERA,
+                        targetWidth: 400,
+                        targetHeight: 400,
+                        correctOrientation: true
+                    });
+                } catch(err) {
+                    myApp.alert('camera error: ' + err.message);
+                }
+            }
+          },
+          {
+            text: 'Select from gallery',
+            onClick: function() {
+                try {
+                    navigator.camera.getPicture(attachRosterImage, function(message) {
+                        myApp.alert('No image selected');
+                    }, {
+                        quality: 100,
+                        destinationType: navigator.camera.DestinationType.FILE_URI,
+                        sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
+                        targetWidth: 400,
+                        targetHeight: 400,
+                        correctOrientation: true
+                    });
+                } catch(err) {
+                    myApp.alert('camera error: ' + err.message);
+                }
+            }
+          },
+          {
+            text: 'Cancel',
+            onClick: function() {
+            }
+          }
+        ]
+    });
+}
+
+function editRosterImage() {
+    myApp.modal({
+        title:  'Choose Roster Image',
+        verticalButtons: true,
+        buttons: [
+          {
+            text: 'Take new picture',
+            onClick: function() {
+                try {
+                    navigator.camera.getPicture(attachEditRosterImage, function(message) {
+                        myApp.alert('No image selected');
+                    }, {
+                        quality: 100,
+                        destinationType: navigator.camera.DestinationType.FILE_URI,
+                        sourceType: navigator.camera.PictureSourceType.CAMERA,
+                        targetWidth: 400,
+                        targetHeight: 400,
+                        correctOrientation: true
+                    });
+                } catch(err) {
+                    myApp.alert('camera error: ' + err.message);
+                }
+            }
+          },
+          {
+            text: 'Select from gallery',
+            onClick: function() {
+                try {
+                    navigator.camera.getPicture(attachEditRosterImage, function(message) {
+                        myApp.alert('No image selected');
+                    }, {
+                        quality: 100,
+                        destinationType: navigator.camera.DestinationType.FILE_URI,
+                        sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
+                        targetWidth: 400,
+                        targetHeight: 400,
+                        correctOrientation: true
+                    });
+                } catch(err) {
+                    myApp.alert('camera error: ' + err.message);
+                }
+            }
+          },
+          {
+            text: 'Cancel',
+            onClick: function() {
+            }
+          }
+        ]
+    });
+}
+
+function attachTournamentImage(imageURI) {
+    imgfile = imageURI
+    $$("#tournament-image").attr("src", imgfile);
+} 
+
+function attachEditTournamentImage(imageURI) {
+    imgfile = imageURI
+    $$("#edit-tournament-image").attr("src", imgfile);
+} 
+
+function attachRosterImage(imageURI) {
+    imgfile = imageURI
+    $$("#roster-image").attr("src", imgfile);
+} 
+
+function attachEditRosterImage(imageURI) {
+    imgfile = imageURI
+    $$("#edit-roster-image").attr("src", imgfile);
+} 
+
+function win(r) {
+    var resp = JSON.parse(r.response);
+    myApp.alert(resp.message);
+}
+
+function fail(error) {
+    myApp.alert("An error has occurred with error code " + error.code + ", please try again.");
+}
+
 function getTeamPassword(team_id, team_admin, team_name, team_password) {
     if (team_admin != localStorage.getItem('account_id')) {
         isAccountInvited(team_id, function(response) {
@@ -1527,6 +1767,7 @@ function clearTeamDetails() {
 function clearRosterDetails() {
     $$('#txt-roster-name').val('');
     $$('#txt-roster-position').val('');
+    imgfile = '';
 }
 
 function clearTournamentDetails() {
