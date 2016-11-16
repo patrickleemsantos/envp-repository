@@ -289,30 +289,63 @@ myApp.onPageInit('team-add', function(page) {
                 return false;
             }
 
-            myApp.showIndicator();
-            $$.ajax({
-                type: "POST",
-                url: ENVYP_API_URL + "add_team.php",
-                data: "account_id=" + localStorage.getItem('account_id') + "&sport_id=" + localStorage.getItem('selectedSportID') + "&team_name=" + team_name + "&team_description=" + team_description + "&team_password=" + team_password,
-                dataType: "json",
-                success: function(msg, string, jqXHR) {
-                    myApp.hideIndicator();
-                    if (msg.status == '0') {
-                        clearTeamDetails();
-                        mainView.router.loadPage('team_management.html?team_id='+msg.team_id+'&team_name=' + team_name);  
+            if (imgfile == '') {
+                myApp.showIndicator();
+                $$.ajax({
+                    type: "POST",
+                    url: ENVYP_API_URL + "add_team.php",
+                    data: "account_id=" + localStorage.getItem('account_id') + "&sport_id=" + localStorage.getItem('selectedSportID') + "&team_name=" + team_name + "&team_description=" + team_description + "&team_password=" + team_password,
+                    dataType: "json",
+                    success: function(msg, string, jqXHR) {
+                        myApp.hideIndicator();
+                        if (msg.status == '0') {
+                            clearTeamDetails();
+                            mainView.router.loadPage('team_management.html?team_id='+msg.team_id+'&team_name=' + team_name);  
+                        }
+                        myApp.alert(msg.message);
+                        $$('#btn-add-team').removeAttr("disabled");
+                    },
+                    error: function(msg, string, jqXHR) { 
+                        myApp.hideIndicator();
+                        myApp.alert(ERROR_ALERT);
+                        $$('#btn-add-team').removeAttr("disabled");
                     }
-                    myApp.alert(msg.message);
-                    $$('#btn-add-team').removeAttr("disabled");
-                },
-                error: function(msg, string, jqXHR) { 
-                    myApp.hideIndicator();
-                    myApp.alert(ERROR_ALERT);
-                    $$('#btn-add-team').removeAttr("disabled");
-                }
-            });
+                });
+            } else {
+                myApp.showIndicator();
+                var options = new FileUploadOptions();
+                options.fileKey = "file";
+                options.fileName = imgfile.substr(imgfile.lastIndexOf('/') + 1);
+                options.mimeType = "image/jpeg";
+                options.chunkedMode = false;
+
+                var params = new Object();
+                params.account_id = localStorage.getItem('account_id');
+                params.sport_id = localStorage.getItem('selectedSportID');
+                params.team_name = team_name;
+                params.team_description = team_description;
+                params.team_password = team_password;
+
+                options.params = params;
+
+                var ft = new FileTransfer();
+                ft.upload(imgfile, ENVYP_API_URL + "add_team.php", winTeamAdd, fail, options);
+
+                clearTeamDetails();
+                myApp.hideIndicator();
+                $$('#btn-add-team').removeAttr("disabled");
+            }
         }
     });
 });
+
+function winTeamAdd(r) {
+    var resp = JSON.parse(r.response);
+    myApp.alert(resp.message);
+    if (resp.status == '0') {
+        mainView.router.loadPage('team_management.html?team_id='+resp.team_id+'&team_name=' + resp.team_name);
+    }
+}
 
 /* ===== Team List Page ===== */
 myApp.onPageInit('team-list', function (page) {
@@ -565,7 +598,7 @@ myApp.onPageInit('roster-edit', function (page) {
                     success: function(msg, string, jqXHR) {
                         myApp.hideIndicator();
                         if (msg.status == '0') {
-                            clearRosterDetails();
+                            clearEditRosterDetails();
                             mainView.router.loadPage('roster_list.html');
                         }
                         myApp.alert(msg.message);
@@ -596,7 +629,7 @@ myApp.onPageInit('roster-edit', function (page) {
                 var ft = new FileTransfer();
                 ft.upload(imgfile, ENVYP_API_URL + "update_roster.php", win, fail, options);
 
-                clearRosterDetails();
+                clearEditRosterDetails();
                 myApp.hideIndicator();
                 $$('#btn-update-roster').removeAttr("disabled");
                 mainView.router.loadPage('roster_list.html');
@@ -1535,6 +1568,110 @@ function editRosterImage() {
     });
 }
 
+function getTeamImage() {
+    myApp.modal({
+        title:  'Choose Team Image',
+        verticalButtons: true,
+        buttons: [
+          {
+            text: 'Take new picture',
+            onClick: function() {
+                try {
+                    navigator.camera.getPicture(attachTeamImage, function(message) {
+                        myApp.alert('No image selected');
+                    }, {
+                        quality: 100,
+                        destinationType: navigator.camera.DestinationType.FILE_URI,
+                        sourceType: navigator.camera.PictureSourceType.CAMERA,
+                        targetWidth: 400,
+                        targetHeight: 400,
+                        correctOrientation: true
+                    });
+                } catch(err) {
+                    myApp.alert('camera error: ' + err.message);
+                }
+            }
+          },
+          {
+            text: 'Select from gallery',
+            onClick: function() {
+                try {
+                    navigator.camera.getPicture(attachTeamImage, function(message) {
+                        myApp.alert('No image selected');
+                    }, {
+                        quality: 100,
+                        destinationType: navigator.camera.DestinationType.FILE_URI,
+                        sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
+                        targetWidth: 400,
+                        targetHeight: 400,
+                        correctOrientation: true
+                    });
+                } catch(err) {
+                    myApp.alert('camera error: ' + err.message);
+                }
+            }
+          },
+          {
+            text: 'Cancel',
+            onClick: function() {
+            }
+          }
+        ]
+    });
+}
+
+function editTeamImage() {
+    myApp.modal({
+        title:  'Choose Team Image',
+        verticalButtons: true,
+        buttons: [
+          {
+            text: 'Take new picture',
+            onClick: function() {
+                try {
+                    navigator.camera.getPicture(attachEditTeamImage, function(message) {
+                        myApp.alert('No image selected');
+                    }, {
+                        quality: 100,
+                        destinationType: navigator.camera.DestinationType.FILE_URI,
+                        sourceType: navigator.camera.PictureSourceType.CAMERA,
+                        targetWidth: 400,
+                        targetHeight: 400,
+                        correctOrientation: true
+                    });
+                } catch(err) {
+                    myApp.alert('camera error: ' + err.message);
+                }
+            }
+          },
+          {
+            text: 'Select from gallery',
+            onClick: function() {
+                try {
+                    navigator.camera.getPicture(attachEditTeamImage, function(message) {
+                        myApp.alert('No image selected');
+                    }, {
+                        quality: 100,
+                        destinationType: navigator.camera.DestinationType.FILE_URI,
+                        sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
+                        targetWidth: 400,
+                        targetHeight: 400,
+                        correctOrientation: true
+                    });
+                } catch(err) {
+                    myApp.alert('camera error: ' + err.message);
+                }
+            }
+          },
+          {
+            text: 'Cancel',
+            onClick: function() {
+            }
+          }
+        ]
+    });
+}
+
 function attachTournamentImage(imageURI) {
     imgfile = imageURI
     $$("#tournament-image").attr("src", imgfile);
@@ -1553,6 +1690,16 @@ function attachRosterImage(imageURI) {
 function attachEditRosterImage(imageURI) {
     imgfile = imageURI
     $$("#edit-roster-image").attr("src", imgfile);
+} 
+
+function attachTeamImage(imageURI) {
+    imgfile = imageURI
+    $$("#team-image").attr("src", imgfile);
+} 
+
+function attachEditTeamImage(imageURI) {
+    imgfile = imageURI
+    $$("#edit-team-image").attr("src", imgfile);
 } 
 
 function win(r) {
@@ -1762,11 +1909,24 @@ function clearLogInDetails() {
 function clearTeamDetails() {
     $$('#txt-team-name').val('');
     $$('#txt-team-description').val('');
+    imgfile = '';
+}
+
+function clearEditTeamDetails() {
+    $$('#edit-txt-team-name').val('');
+    $$('#edit-txt-team-description').val('');
+    imgfile = '';
 }
 
 function clearRosterDetails() {
     $$('#txt-roster-name').val('');
     $$('#txt-roster-position').val('');
+    imgfile = '';
+}
+
+function clearEditRosterDetails() {
+    $$('#edit-txt-roster-name').val('');
+    $$('#edit-txt-roster-position').val('');
     imgfile = '';
 }
 
