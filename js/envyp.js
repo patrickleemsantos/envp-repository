@@ -951,6 +951,7 @@ myApp.onPageInit('tournament-detail', function (page) {
     var tournament_longitude = '';
     var tournament_latitude = '';
     var tournament_formatted_date = '';
+    $$('#div-add-tournament-roster').hide();
 
     localStorage.setItem('selectedTournamentId', page.query.tournament_id);
     
@@ -986,82 +987,94 @@ myApp.onPageInit('tournament-detail', function (page) {
         mainView.router.loadPage('tournament_edit.html?tournament_id='+page.query.tournament_id+'&opponent='+tournament_opponent+'&location='+tournament_location+'&date='+tournament_date+'&description='+tournament_description+'&image_url='+tournament_image_url+'&longitude='+tournament_longitude+'&latitude='+tournament_latitude+'&formatted_date='+tournament_formatted_date);
     });
 
-    $$('#roster').on('show', function () {
-        $("#roster_list").empty();
-        myApp.showIndicator();
-        $.getJSON(ENVYP_API_URL + "get_roster_list.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
-            $.each(result, function(i, field) {
-                if (field.status == 'empty') {
-                    $("#roster_list").append('<li><center><p>No roster</p><center></li>');
+    // Preload roster list
+    $("#roster_list").empty();
+    myApp.showIndicator();
+    $.getJSON(ENVYP_API_URL + "get_tournament_roster.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
+        $.each(result, function(i, field) {
+            if (field.status == 'empty') {
+                $("#roster_list").append('<li><center><p>No roster</p><center></li>');
+            } else {
+                if (field.image_url == '' || field.image_url == null) {
+                    var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
                 } else {
-                    if (field.image_url == '' || field.image_url == null) {
-                        var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
-                    } else {
-                        var image_url = "<img data-src='" + field.image_url + "' class='lazy lazy-fadein' style='width:44px; height:44px;'>";
-                    }
-                    $("#roster_list").append('<li>' +
-                            '<a href="roster_tournament_stats.html?roster_id='+field.roster_id+'&roster_name='+field.name+'&roster_position='+field.position+'&roster_image='+field.image_url+'" class="item-link item-content">' +
-                            '<div class="item-media">'+ image_url +'</div>' +
-                            '<div class="item-inner">' +
-                              '<div class="item-title-row">' +
-                                '<div class="item-title"><b>'+ field.name +'</b></div>' +
-                              '</div>' +
-                              '<div class="item-subtitle">'+ field.position +'</div>' +
-                            '</div></a></li>');
+                    var image_url = "<img data-src='" + field.image_url + "' class='lazy lazy-fadein' style='width:44px; height:44px;'>";
                 }
-            });    
+                $("#roster_list").append('<li>' +
+                        '<a href="roster_tournament_stats.html?roster_id='+field.roster_id+'&roster_name='+field.name+'&roster_position='+field.position+'&roster_image='+field.image_url+'" class="item-link item-content">' +
+                        '<div class="item-media">'+ image_url +'</div>' +
+                        '<div class="item-inner">' +
+                          '<div class="item-title-row">' +
+                            '<div class="item-title"><b>'+ field.name +'</b></div>' +
+                          '</div>' +
+                          '<div class="item-subtitle">'+ field.position +'</div>' +
+                        '</div></a></li>');
+            }
             myApp.initImagesLazyLoad(page.container);
-            myApp.hideIndicator();    
-        });
+        });    
+        myApp.hideIndicator();    
+    });
+    // End Preload roster list
+
+    // Preload game stats
+    var team_name = '';
+    var team_points = 0;
+    var team_assists = 0;
+    var team_fouls = 0;
+    var opponent_name = '';
+    var opponent_points = 0;
+    var opponent_assists = 0;
+    var opponent_fouls = 0;
+
+    $('#team-name').empty();
+    $('#opponent-name').empty();
+    $('#team-points').empty();
+    $('#opponent-points').empty();
+    $('#team-assists').empty();
+    $('#opponent-assists').empty();
+    $('#team-fouls').empty();
+    $('#opponent-fouls').empty();
+
+    myApp.showIndicator();
+    $.getJSON(ENVYP_API_URL + "get_tournament_stats.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
+        $.each(result, function(i, field) {
+            team_name = localStorage.getItem('selectedTeamName');
+            team_points = field.team_points;
+            team_assists = field.team_assists;
+            team_fouls = field.team_fouls;
+            opponent_name = field.opponent;
+            opponent_points = field.opponent_points;
+            opponent_assists = field.opponent_assists;
+            opponent_fouls = field.opponent_fouls;
+        }); 
+
+        $$('#team-name').prepend(team_name);
+        $$('#opponent-name').prepend(opponent_name);
+        $$('#team-points').prepend(team_points);
+        $$('#opponent-points').prepend(opponent_points);
+        $$('#team-assists').prepend(team_assists);
+        $$('#opponent-assists').prepend(opponent_assists);
+        $$('#team-fouls').prepend(team_fouls);
+        $$('#opponent-fouls').prepend(opponent_fouls);
+
+        myApp.hideIndicator();    
+    });
+
+    $$('#btn-edit-team-stats').on('click', function() {
+        mainView.router.loadPage('edit_tournament_stats.html?team_name='+team_name+'&opponent_name='+opponent_name+'&team_points='+team_points+'&opponent_points='+opponent_points+'&team_assists='+team_assists+'&opponent_assists='+opponent_assists+'&team_fouls='+team_fouls+'&opponent_fouls='+opponent_fouls);
+    });
+    // End Preload game stats
+
+    $$('#detail').on('show', function () {
+        $$('#div-add-tournament-roster').hide();
+    });
+
+    $$('#roster').on('show', function () {
+        $$('#div-add-tournament-roster').show();
     });
 
     $$('#stats').on('show', function () {
-        var team_name = '';
-        var team_points = 0;
-        var team_assists = 0;
-        var team_fouls = 0;
-        var opponent_name = '';
-        var opponent_points = 0;
-        var opponent_assists = 0;
-        var opponent_fouls = 0;
-
-        $('#team-name').empty();
-        $('#opponent-name').empty();
-        $('#team-points').empty();
-        $('#opponent-points').empty();
-        $('#team-assists').empty();
-        $('#opponent-assists').empty();
-        $('#team-fouls').empty();
-        $('#opponent-fouls').empty();
-
-        myApp.showIndicator();
-        $.getJSON(ENVYP_API_URL + "get_tournament_stats.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
-            $.each(result, function(i, field) {
-                team_name = localStorage.getItem('selectedTeamName');
-                team_points = field.team_points;
-                team_assists = field.team_assists;
-                team_fouls = field.team_fouls;
-                opponent_name = field.opponent;
-                opponent_points = field.opponent_points;
-                opponent_assists = field.opponent_assists;
-                opponent_fouls = field.opponent_fouls;
-            }); 
-
-            $$('#team-name').prepend(team_name);
-            $$('#opponent-name').prepend(opponent_name);
-            $$('#team-points').prepend(team_points);
-            $$('#opponent-points').prepend(opponent_points);
-            $$('#team-assists').prepend(team_assists);
-            $$('#opponent-assists').prepend(opponent_assists);
-            $$('#team-fouls').prepend(team_fouls);
-            $$('#opponent-fouls').prepend(opponent_fouls);
-
-            myApp.hideIndicator();    
-        });
-
-        $$('#btn-edit-team-stats').on('click', function() {
-            mainView.router.loadPage('edit_tournament_stats.html?team_name='+team_name+'&opponent_name='+opponent_name+'&team_points='+team_points+'&opponent_points='+opponent_points+'&team_assists='+team_assists+'&opponent_assists='+opponent_assists+'&team_fouls='+team_fouls+'&opponent_fouls='+opponent_fouls);
-        });
+       $$('#div-add-tournament-roster').hide();
     });
 }); 
 
@@ -1357,6 +1370,88 @@ myApp.onPageInit('edit-tournament-stats', function (page) {
                 }
             });
         }    
+    });
+});
+
+/* =====Administrator List Page ===== */
+myApp.onPageInit('tournament-roster-list', function (page) {
+    var selectedRosters = new Array();
+
+    if (checkInternetConnection() == true ) {
+        var items = [];
+        myApp.showIndicator();
+        $.getJSON(ENVYP_API_URL + "get_tournament_roster_list.php?tournament_id=" + localStorage.getItem('selectedTournamentId') + "&team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
+            $.each(result, function(i, field) {
+                if (field.status == 'empty') {
+                     myApp.alert('No roster available :(');
+                } else {
+                    var roster_image = (field.image_url == '' || field.image_url == null ? "img/profile.j      pg" : field.image_url);
+                    items.push({
+                        roster_id: field.roster_id,
+                        roster_name: field.roster_name,
+                        roster_position: field.roster_position,
+                        roster_image: roster_image
+                    });
+                }
+            });
+
+            var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
+                items: items,
+                searchAll: function (query, items) {
+                    var found = [];
+                    for (var i = 0; i < items.length; i++) {
+                        if (items[i].roster_name.indexOf(query) >= 0 || query.trim() === '') found.push(i);
+                    }
+                    return found; 
+                },
+                template: '<li>' +
+                                '<label class="label-checkbox item-content">' +
+                                '<input id="checkbox-roster" type="checkbox" name="ks-media-checkbox" value="{{roster_id}}"/>' +
+                                '<div class="item-media"><img src="{{roster_image}}" style="width:44px; height:44px;"/></div>' +
+                                '<div class="item-inner">' +
+                                  '<div class="item-title-row">' +
+                                    '<div class="item-title"><b>{{roster_name}}</b></div>' +
+                                    '<div class="item-after"><i class="icon icon-form-checkbox"></i></div>' +
+                                  '</div>' +
+                                  '<div class="item-subtitle">{{roster_position}}</div>' +
+                                '</div>' +
+                              '</label>' +
+                            '</li>',
+                height: 73,
+            });
+            myApp.hideIndicator();
+        });
+    } else {
+        myApp.alert(NO_INTERNET_ALERT);
+    }
+
+    $$('#btn-tournament-detail-back').on('click', function (e) {
+        $("input:checkbox[id=checkbox-roster]:checked").each(function() {
+            selectedRosters.push($(this).val());
+        });
+
+        if (selectedRosters.length != 0) {
+            myApp.showIndicator();
+            $$.ajax({
+                type: "POST",
+                url: ENVYP_API_URL + "add_roster_tournament.php",
+                data: "roster_ids=" + selectedRosters + "&tournament_id=" + localStorage.getItem('selectedTournamentId') + "&account_id=" + localStorage.getItem('account_id'),
+                dataType: "json",
+                success: function(msg, string, jqXHR) {
+                    myApp.hideIndicator();
+                    if (msg.status == 0) {
+                        myApp.alert(msg.message);
+                        mainView.router.loadPage('tournament_detail.html?tournament_id=' + localStorage.getItem('selectedTournamentId'));
+                    } else {
+                        myApp.alert(msg.message);
+                    }
+                },
+                error: function(msg, string, jqXHR) { 
+                    myApp.hideIndicator();
+                    myApp.alert(ERROR_ALERT);
+                }
+            });
+        }
     });
 });
 
