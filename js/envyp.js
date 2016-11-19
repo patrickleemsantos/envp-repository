@@ -11,8 +11,8 @@ var mainView = myApp.addView('.view-main', {
     dynamicNavbar: false
 });
 
-const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
-// const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
+// const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
+const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
 const NO_INTERNET_ALERT = 'Please check your internet connection';
 const ERROR_ALERT = 'An error occured, please try again.';
 
@@ -970,7 +970,6 @@ myApp.onPageInit('tournament-detail', function (page) {
 
         $$("#tournament-background-image").css("background-image", "url("+(tournament_image_url == '' || tournament_image_url == null ? "img/envyp_logo.png" : tournament_image_url)+")"); 
 
-        // $$('#tournament-name').prepend(tournament_opponent);
         $$('#txt-opponent-name').prepend(tournament_opponent);
         $$('#txt-tournament-location').prepend(tournament_location);
         $$('#txt-tournament-date').prepend(tournament_date);
@@ -979,9 +978,9 @@ myApp.onPageInit('tournament-detail', function (page) {
         myApp.hideIndicator();
     });
 
-    $("#txt-tournament-location").height( $("#txt-tournament-location")[0].scrollHeight);
-    $("#txt-tournament-date").height( $("#txt-tournament-location")[0].scrollHeight);
-    $("#txt-tournament-description").height( $("#txt-tournament-description")[0].scrollHeight);
+    // $("#txt-tournament-location").height( $("#txt-tournament-location")[0].scrollHeight);
+    // $("#txt-tournament-date").height( $("#txt-tournament-location")[0].scrollHeight);
+    // $("#txt-tournament-description").height( $("#txt-tournament-description")[0].scrollHeight);
 
     $$('#btn-edit-tournament-details').on('click', function() {
         mainView.router.loadPage('tournament_edit.html?tournament_id='+page.query.tournament_id+'&opponent='+tournament_opponent+'&location='+tournament_location+'&date='+tournament_date+'&description='+tournament_description+'&image_url='+tournament_image_url+'&longitude='+tournament_longitude+'&latitude='+tournament_latitude+'&formatted_date='+tournament_formatted_date);
@@ -1385,7 +1384,7 @@ myApp.onPageInit('tournament-roster-list', function (page) {
                 if (field.status == 'empty') {
                      myApp.alert('No roster available :(');
                 } else {
-                    var roster_image = (field.image_url == '' || field.image_url == null ? "img/profile.j      pg" : field.image_url);
+                    var roster_image = (field.image_url == '' || field.image_url == null ? "img/profile.jpg" : field.image_url);
                     items.push({
                         roster_id: field.roster_id,
                         roster_name: field.roster_name,
@@ -1441,7 +1440,6 @@ myApp.onPageInit('tournament-roster-list', function (page) {
                     myApp.hideIndicator();
                     if (msg.status == 0) {
                         myApp.alert(msg.message);
-                        mainView.router.loadPage('tournament_detail.html?tournament_id=' + localStorage.getItem('selectedTournamentId'));
                     } else {
                         myApp.alert(msg.message);
                     }
@@ -1452,6 +1450,7 @@ myApp.onPageInit('tournament-roster-list', function (page) {
                 }
             });
         }
+        mainView.router.loadPage('tournament_detail.html?tournament_id=' + localStorage.getItem('selectedTournamentId'));
     });
 });
 
