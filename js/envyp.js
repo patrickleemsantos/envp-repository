@@ -11,8 +11,8 @@ var mainView = myApp.addView('.view-main', {
     dynamicNavbar: false
 });
 
-const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
-// const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
+// const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
+const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
 const NO_INTERNET_ALERT = 'Please check your internet connection';
 const ERROR_ALERT = 'An error occured, please try again.';
 
@@ -1029,7 +1029,7 @@ myApp.onPageInit('tournament-detail', function (page) {
                 } else {
                     var image_url = "<img data-src='" + field.image_url + "' class='lazy lazy-fadein' style='width:44px; height:44px;'>";
                 }
-                $("#fine_list").append('<li><a href="#" class="item-link item-content">' +
+                $("#fine_list").append('<li><a href="fine_detail.html?name='+field.name+'&image_url='+field.image_url+'&price='+field.price+'&description='+field.fine+'" class="item-link item-content">' +
                                     '<div class="item-media">'+image_url+'</div>' +
                                     '<div class="item-inner">' +
                                       '<div class="item-title-row">' +
@@ -1120,6 +1120,16 @@ myApp.onPageInit('tournament-detail', function (page) {
         $$('#div-add-tournament-fine').hide();
     });
 }); 
+
+/* =====Tournament Detail Page ===== */
+myApp.onPageInit('fine-detail', function (page) {
+    $$('#fine-detail-name').prepend(page.query.name);
+    $$('#fine-detail-description').prepend(page.query.description);
+    $$('#fine-detail-price').prepend(page.query.price);
+    $$("#fine-detail-image").attr("data-src",(page.query.image_url == '' || page.query.image_url == null ? "img/profile.jpg" : page.query.image_url));
+    $$("#fine-detail-image").addClass('lazy lazy-fadein');
+    myApp.initImagesLazyLoad(page.container);
+});
 
 /* =====Tournament Edit Page ===== */
 myApp.onPageInit('tournament-edit', function (page) {
@@ -1293,7 +1303,7 @@ myApp.onPageInit('tournament-fine-add', function (page) {
                                     } else {
                                         var image_url = "<img data-src='" + field.image_url + "' class='lazy lazy-fadein' style='width:44px; height:44px;'>";
                                     }
-                                    $("#fine_list").append('<li><a href="#" class="item-link item-content">' +
+                                    $("#fine_list").append('<li><a href="fine_detail.html?name='+field.name+'&image_url='+field.image_url+'&price='+field.price+'&description='+field.fine+'" class="item-link item-content">' +
                                                         '<div class="item-media">'+image_url+'</div>' +
                                                         '<div class="item-inner">' +
                                                           '<div class="item-title-row">' +
@@ -1321,6 +1331,11 @@ myApp.onPageInit('tournament-fine-add', function (page) {
             });
         }
     });
+});
+
+/* =====Fine Detail Page ===== */
+myApp.onPageInit('fine-detail', function (page) {
+
 });
 
 /* =====Roster Tournament Stats Page ===== */
