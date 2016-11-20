@@ -7,15 +7,20 @@
         <div class="right"></div>
       </div>
     </div>
-    <div class="toolbar tabbar theme-indigo" style="padding-top:190px;">
+    <div class="toolbar tabbar tabbar-scrollable theme-indigo" style="padding-top:190px;">
       <div class="toolbar-inner">
         <a href="#detail" style="padding-top:145px;" class="tab-link active">Detail</a>
         <a href="#roster" style="padding-top:145px;" class="tab-link">Roster</a>
         <a href="#stats" style="padding-top:145px;" class="tab-link">Stats</a>
+        <a href="#fine" style="padding-top:145px;" class="tab-link">Fine Box</a>
+        <a href="#mvp" style="padding-top:145px;" class="tab-link">MVP</a>
       </div>
     </div>
     <div id="div-add-tournament-roster">
       <a id="btn-add-tournament-roster" href="tournament_roster_list.html" class="floating-button color-pink"><i class="icon icon-plus"></i></a>
+    </div>
+    <div id="div-add-tournament-fine">
+      <a id="btn-add-tournament-fine" href="fine_add.html" class="floating-button color-blue"><i class="icon icon-plus"></i></a>
     </div>
     <div class="tabs-swipeable-wrap">
       <div class="tabs">
@@ -135,6 +140,17 @@
               </div>
             </div>
           </div>
+        </div>
+        <div id="fine" class="page-content tab" style="padding-top:250px;">
+          <div class="content-block">
+            <div class="list-block media-list">
+              <ul id="fine_list">
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div id="mvp" class="page-content tab" style="padding-top:250px;">
+
         </div>
       </div>
     </div>

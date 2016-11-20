@@ -11,8 +11,8 @@ var mainView = myApp.addView('.view-main', {
     dynamicNavbar: false
 });
 
-// const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
-const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
+const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
+// const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
 const NO_INTERNET_ALERT = 'Please check your internet connection';
 const ERROR_ALERT = 'An error occured, please try again.';
 
@@ -952,6 +952,7 @@ myApp.onPageInit('tournament-detail', function (page) {
     var tournament_latitude = '';
     var tournament_formatted_date = '';
     $$('#div-add-tournament-roster').hide();
+    $$('#div-add-tournament-fine').hide();
 
     localStorage.setItem('selectedTournamentId', page.query.tournament_id);
     
@@ -1015,6 +1016,36 @@ myApp.onPageInit('tournament-detail', function (page) {
     });
     // End Preload roster list
 
+    // Preload fine list
+    $("#fine_list").empty();
+    myApp.showIndicator();
+    $.getJSON(ENVYP_API_URL + "get_roster_fine.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
+        $.each(result, function(i, field) {
+            if (field.status == 'empty') {
+                $("#fine_list").append('<li><center><p>No fine</p><center></li>');
+            } else {
+                if (field.image_url == '' || field.image_url == null) {
+                    var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
+                } else {
+                    var image_url = "<img data-src='" + field.image_url + "' class='lazy lazy-fadein' style='width:44px; height:44px;'>";
+                }
+                $("#fine_list").append('<li><a href="#" class="item-link item-content">' +
+                                    '<div class="item-media">'+image_url+'</div>' +
+                                    '<div class="item-inner">' +
+                                      '<div class="item-title-row">' +
+                                        '<div class="item-title">'+field.name+'</div>' +
+                                        '<div class="item-after">$'+field.price+'</div>' +
+                                      '</div>' +
+                                      '<div class="item-subtitle"></div>' +
+                                      '<div class="item-text">'+field.fine+'</div>' +
+                                    '</div></a></li>');
+            }
+            myApp.initImagesLazyLoad(page.container);
+        });    
+        myApp.hideIndicator();    
+    });
+    // End Preload roster list
+
     // Preload game stats
     var team_name = '';
     var team_points = 0;
@@ -1066,14 +1097,27 @@ myApp.onPageInit('tournament-detail', function (page) {
 
     $$('#detail').on('show', function () {
         $$('#div-add-tournament-roster').hide();
+        $$('#div-add-tournament-fine').hide();
     });
 
     $$('#roster').on('show', function () {
         $$('#div-add-tournament-roster').show();
+        $$('#div-add-tournament-fine').hide();
     });
 
     $$('#stats').on('show', function () {
        $$('#div-add-tournament-roster').hide();
+       $$('#div-add-tournament-fine').hide();
+    });
+
+    $$('#fine').on('show', function () {
+        $$('#div-add-tournament-roster').hide();
+        $$('#div-add-tournament-fine').show();
+    });
+
+    $$('#mvp').on('show', function () {
+        $$('#div-add-tournament-roster').hide();
+        $$('#div-add-tournament-fine').hide();
     });
 }); 
 
@@ -1182,6 +1226,99 @@ myApp.onPageInit('tournament-edit', function (page) {
                 mainView.router.loadPage('tournament_detail.html?tournament_id=' + localStorage.getItem('selectedTournamentId'));
             }
             
+        }
+    });
+});
+
+/* =====Administrator List Page ===== */
+myApp.onPageInit('tournament-fine-add', function (page) {
+    $("#select-roster-list").empty();
+    myApp.showIndicator();
+    $.getJSON(ENVYP_API_URL + "get_tournament_roster.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
+        $.each(result, function(i, field) {
+            if (field.status == 'empty') {
+                myApp.alert('No roster yet :(');
+            } else {
+                $("#select-roster-list").append('<option value="'+field.roster_id+'">'+field.name+'</option>');
+            }
+        });    
+        myApp.hideIndicator();    
+    });
+
+    $$('#btn-add-fine').on('click', function() {
+        if (checkInternetConnection() == true ) {
+            $$('#btn-add-fine').attr('disabled', true);
+            var roster_id = $$('#select-roster-list').val();
+            var fine_description = $$('#txt-fine-description').val();
+            var fine_price = $$('#txt-fine-price').val();
+
+            myApp.alert(roster_id);
+            if (roster_id == '' || roster_id == null) {
+                myApp.alert('Please select a roster!');
+                $$('#btn-add-fine').removeAttr("disabled");
+                return false;
+            }
+
+            if (fine_description == '' || fine_description == null) {
+                myApp.alert('Please enter fine description!');
+                $$('#btn-add-fine').removeAttr("disabled");
+                return false;
+            }
+
+            if (fine_price == '' || fine_price == '') {
+                myApp.alert('Please enter a price!');
+                $$('#btn-add-fine').removeAttr("disabled");
+                return false;
+            }
+
+            myApp.showIndicator();
+            $$.ajax({
+                type: "POST",
+                url: ENVYP_API_URL + "add_tournament_fine.php",
+                data: "tournament_id=" + localStorage.getItem('selectedTournamentId') + "&account_id=" + localStorage.getItem('account_id') + "&roster_id=" + roster_id + "&fine=" + fine_description + "&price=" + fine_price,
+                dataType: "json",
+                success: function(msg, string, jqXHR) {
+                    myApp.hideIndicator();
+                    if (msg.status == 0) {
+                        myApp.alert(msg.message);
+
+                        $("#fine_list").empty();
+                        myApp.showIndicator();
+                        $.getJSON(ENVYP_API_URL + "get_roster_fine.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
+                            $.each(result, function(i, field) {
+                                if (field.status == 'empty') {
+                                    $("#fine_list").append('<li><center><p>No fine</p><center></li>');
+                                } else {
+                                    if (field.image_url == '' || field.image_url == null) {
+                                        var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
+                                    } else {
+                                        var image_url = "<img data-src='" + field.image_url + "' class='lazy lazy-fadein' style='width:44px; height:44px;'>";
+                                    }
+                                    $("#fine_list").append('<li><a href="#" class="item-link item-content">' +
+                                                        '<div class="item-media">'+image_url+'</div>' +
+                                                        '<div class="item-inner">' +
+                                                          '<div class="item-title-row">' +
+                                                            '<div class="item-title">'+field.name+'</div>' +
+                                                            '<div class="item-after">$'+field.price+'</div>' +
+                                                          '</div>' +
+                                                          '<div class="item-subtitle"></div>' +
+                                                          '<div class="item-text">'+field.fine+'</div>' +
+                                                        '</div></a></li>');
+                                }
+                                myApp.initImagesLazyLoad(page.container);
+                            });    
+                            myApp.hideIndicator();    
+                        });
+                        mainView.router.back('tournament_detail.html?tournament_id=' + localStorage.getItem('selectedTournamentId'));
+                    } else {
+                        myApp.alert(msg.message);
+                    }
+                },
+                error: function(msg, string, jqXHR) { 
+                    myApp.hideIndicator();
+                    myApp.alert(ERROR_ALERT);
+                }
+            });
         }
     });
 });
@@ -1440,6 +1577,33 @@ myApp.onPageInit('tournament-roster-list', function (page) {
                     myApp.hideIndicator();
                     if (msg.status == 0) {
                         myApp.alert(msg.message);
+
+                        $("#roster_list").empty();
+                        myApp.showIndicator();
+                        $.getJSON(ENVYP_API_URL + "get_tournament_roster.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
+                            $.each(result, function(i, field) {
+                                if (field.status == 'empty') {
+                                    $("#roster_list").append('<li><center><p>No roster</p><center></li>');
+                                } else {
+                                    if (field.image_url == '' || field.image_url == null) {
+                                        var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
+                                    } else {
+                                        var image_url = "<img data-src='" + field.image_url + "' class='lazy lazy-fadein' style='width:44px; height:44px;'>";
+                                    }
+                                    $("#roster_list").append('<li>' +
+                                            '<a href="roster_tournament_stats.html?roster_id='+field.roster_id+'&roster_name='+field.name+'&roster_position='+field.position+'&roster_image='+field.image_url+'" class="item-link item-content">' +
+                                            '<div class="item-media">'+ image_url +'</div>' +
+                                            '<div class="item-inner">' +
+                                              '<div class="item-title-row">' +
+                                                '<div class="item-title"><b>'+ field.name +'</b></div>' +
+                                              '</div>' +
+                                              '<div class="item-subtitle">'+ field.position +'</div>' +
+                                            '</div></a></li>');
+                                }
+                                myApp.initImagesLazyLoad(page.container);
+                            });    
+                            myApp.hideIndicator();    
+                        });
                     } else {
                         myApp.alert(msg.message);
                     }
@@ -1450,7 +1614,7 @@ myApp.onPageInit('tournament-roster-list', function (page) {
                 }
             });
         }
-        mainView.router.loadPage('tournament_detail.html?tournament_id=' + localStorage.getItem('selectedTournamentId'));
+        // mainView.router.loadPage('tournament_detail.html?tournament_id=' + localStorage.getItem('selectedTournamentId'));
     });
 });
 
