@@ -1252,7 +1252,6 @@ myApp.onPageInit('tournament-fine-add', function (page) {
             var fine_description = $$('#txt-fine-description').val();
             var fine_price = $$('#txt-fine-price').val();
 
-            myApp.alert(roster_id);
             if (roster_id == '' || roster_id == null) {
                 myApp.alert('Please select a roster!');
                 $$('#btn-add-fine').removeAttr("disabled");
@@ -1309,14 +1308,15 @@ myApp.onPageInit('tournament-fine-add', function (page) {
                             });    
                             myApp.hideIndicator();    
                         });
-                        mainView.router.back('tournament_detail.html?tournament_id=' + localStorage.getItem('selectedTournamentId'));
                     } else {
                         myApp.alert(msg.message);
                     }
+                    $$('#btn-add-fine').removeAttr("disabled");
                 },
                 error: function(msg, string, jqXHR) { 
                     myApp.hideIndicator();
                     myApp.alert(ERROR_ALERT);
+                    $$('#btn-add-fine').removeAttr("disabled");
                 }
             });
         }
@@ -1614,7 +1614,6 @@ myApp.onPageInit('tournament-roster-list', function (page) {
                 }
             });
         }
-        // mainView.router.loadPage('tournament_detail.html?tournament_id=' + localStorage.getItem('selectedTournamentId'));
     });
 });
 
