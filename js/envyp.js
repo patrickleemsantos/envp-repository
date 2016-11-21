@@ -11,8 +11,8 @@ var mainView = myApp.addView('.view-main', {
     dynamicNavbar: false
 });
 
-// const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
-const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
+const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
+// const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
 const NO_INTERNET_ALERT = 'Please check your internet connection';
 const ERROR_ALERT = 'An error occured, please try again.';
 
@@ -953,6 +953,7 @@ myApp.onPageInit('tournament-detail', function (page) {
     var tournament_formatted_date = '';
     $$('#div-add-tournament-roster').hide();
     $$('#div-add-tournament-fine').hide();
+    $$('#div-add-tournament-vote').hide();
 
     localStorage.setItem('selectedTournamentId', page.query.tournament_id);
     
@@ -1095,29 +1096,63 @@ myApp.onPageInit('tournament-detail', function (page) {
     });
     // End Preload game stats
 
+    // Preload vote stats
+    $("#vote_list").empty();
+    myApp.showIndicator();
+    $.getJSON(ENVYP_API_URL + "get_roster_vote_list.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
+        $.each(result, function(i, field) {
+            if (field.status == 'empty') {
+                $("#vote_list").append('<li><center><p>No votes</p><center></li>');
+            } else {
+                if (field.image_url == '' || field.image_url == null) {
+                    var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
+                } else {
+                    var image_url = "<img data-src='" + field.image_url + "' class='lazy lazy-fadein' style='width:44px; height:44px;'>";
+                }
+                $("#vote_list").append('<li>' +
+                                          '<div class="item-content">' +
+                                            '<div class="item-media">'+image_url+'</div>' +
+                                            '<div class="item-inner">' + 
+                                              '<div class="item-title">'+field.name+'</div>' +
+                                              '<div class="item-after">Votes: '+field.votes+'</div>' +
+                                            '</div>' +
+                                          '</div>' +
+                                        '</li>');
+            }
+            myApp.initImagesLazyLoad(page.container);
+        });    
+        myApp.hideIndicator();    
+    });
+    // End Preload vote
+
     $$('#detail').on('show', function () {
         $$('#div-add-tournament-roster').hide();
         $$('#div-add-tournament-fine').hide();
+        $$('#div-add-tournament-vote').hide();
     });
 
     $$('#roster').on('show', function () {
         $$('#div-add-tournament-roster').show();
         $$('#div-add-tournament-fine').hide();
+        $$('#div-add-tournament-vote').hide();
     });
 
     $$('#stats').on('show', function () {
        $$('#div-add-tournament-roster').hide();
        $$('#div-add-tournament-fine').hide();
+       $$('#div-add-tournament-vote').hide();
     });
 
     $$('#fine').on('show', function () {
         $$('#div-add-tournament-roster').hide();
         $$('#div-add-tournament-fine').show();
+        $$('#div-add-tournament-vote').hide();
     });
 
     $$('#mvp').on('show', function () {
         $$('#div-add-tournament-roster').hide();
         $$('#div-add-tournament-fine').hide();
+        $$('#div-add-tournament-vote').show();
     });
 }); 
 
@@ -1331,11 +1366,6 @@ myApp.onPageInit('tournament-fine-add', function (page) {
             });
         }
     });
-});
-
-/* =====Fine Detail Page ===== */
-myApp.onPageInit('fine-detail', function (page) {
-
 });
 
 /* =====Roster Tournament Stats Page ===== */
