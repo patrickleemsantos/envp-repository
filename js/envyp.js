@@ -953,7 +953,6 @@ myApp.onPageInit('tournament-detail', function (page) {
     var tournament_formatted_date = '';
     $$('#div-add-tournament-roster').hide();
     $$('#div-add-tournament-fine').hide();
-    $$('#div-add-tournament-vote').hide();
 
     localStorage.setItem('selectedTournamentId', page.query.tournament_id);
     
@@ -1097,6 +1096,18 @@ myApp.onPageInit('tournament-detail', function (page) {
     // End Preload game stats
 
     // Preload vote stats
+    $.getJSON(ENVYP_API_URL + "check_if_already_voted.php?tournament_id=" + localStorage.getItem('selectedTournamentId') + "&account_id=" + localStorage.getItem('account_id'), function(result) {
+        $.each(result, function(i, field) {
+            if (field.status == true) {
+                $$('#div-vote-add').hide();
+                $$('#div-vote-result').show();
+            } else {
+                $$('#div-vote-add').show();
+                $$('#div-vote-result').hide();
+            }
+        });
+    });
+
     $("#vote_list").empty();
     myApp.showIndicator();
     $.getJSON(ENVYP_API_URL + "get_roster_vote_list.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
@@ -1123,36 +1134,96 @@ myApp.onPageInit('tournament-detail', function (page) {
         });    
         myApp.hideIndicator();    
     });
+
+    $("#select-vote-list").empty();
+    myApp.showIndicator();
+    $.getJSON(ENVYP_API_URL + "get_tournament_roster.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
+        $("#select-vote-list").prepend('<option value="" selected="selected">Select a roster</option>');
+        $.each(result, function(i, field) {
+            if (field.status == 'empty') {
+                myApp.alert('No roster yet :(');
+            } else {
+                $("#select-vote-list").append('<option value="'+field.roster_id+'">'+field.name+'</option>');
+            }
+        });    
+        myApp.hideIndicator();    
+    });
     // End Preload vote
 
     $$('#detail').on('show', function () {
         $$('#div-add-tournament-roster').hide();
         $$('#div-add-tournament-fine').hide();
-        $$('#div-add-tournament-vote').hide();
     });
 
     $$('#roster').on('show', function () {
         $$('#div-add-tournament-roster').show();
         $$('#div-add-tournament-fine').hide();
-        $$('#div-add-tournament-vote').hide();
     });
 
     $$('#stats').on('show', function () {
        $$('#div-add-tournament-roster').hide();
        $$('#div-add-tournament-fine').hide();
-       $$('#div-add-tournament-vote').hide();
     });
 
     $$('#fine').on('show', function () {
         $$('#div-add-tournament-roster').hide();
         $$('#div-add-tournament-fine').show();
-        $$('#div-add-tournament-vote').hide();
     });
 
     $$('#mvp').on('show', function () {
         $$('#div-add-tournament-roster').hide();
         $$('#div-add-tournament-fine').hide();
-        $$('#div-add-tournament-vote').show();
+
+        $$('#btn-submit-vote').on('click', function() {
+            myApp.showIndicator();
+            $$.ajax({
+                type: "POST",
+                url: ENVYP_API_URL + "add_vote.php",
+                data: "account_id=" + localStorage.getItem('account_id') + "&tournament_id=" + localStorage.getItem('selectedTournamentId') + "&roster_id=" + $$('#select-vote-list').val(),
+                dataType: "json",
+                success: function(msg, string, jqXHR) {
+                    myApp.hideIndicator();
+                    if (msg.status == 0) {
+                        myApp.alert(msg.message);
+                        $$('#div-vote-add').hide();
+                        $$('#div-vote-result').show();
+
+                        $("#vote_list").empty();
+                        myApp.showIndicator();
+                        $.getJSON(ENVYP_API_URL + "get_roster_vote_list.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
+                            $.each(result, function(i, field) {
+                                if (field.status == 'empty') {
+                                    $("#vote_list").append('<li><center><p>No votes</p><center></li>');
+                                } else {
+                                    if (field.image_url == '' || field.image_url == null) {
+                                        var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
+                                    } else {
+                                        var image_url = "<img data-src='" + field.image_url + "' class='lazy lazy-fadein' style='width:44px; height:44px;'>";
+                                    }
+                                    $("#vote_list").append('<li>' +
+                                                              '<div class="item-content">' +
+                                                                '<div class="item-media">'+image_url+'</div>' +
+                                                                '<div class="item-inner">' + 
+                                                                  '<div class="item-title">'+field.name+'</div>' +
+                                                                  '<div class="item-after">Votes: '+field.votes+'</div>' +
+                                                                '</div>' +
+                                                              '</div>' +
+                                                            '</li>');
+                                }
+                                myApp.initImagesLazyLoad(page.container);
+                            });    
+                            myApp.hideIndicator();    
+                        });
+                    } else {
+                        myApp.alert(msg.message);
+                    }
+                },
+                error: function(msg, string, jqXHR) { 
+                    myApp.hideIndicator();
+                    myApp.alert(ERROR_ALERT);
+                }
+            });
+        });
     });
 }); 
 
@@ -1280,6 +1351,7 @@ myApp.onPageInit('tournament-fine-add', function (page) {
     $("#select-roster-list").empty();
     myApp.showIndicator();
     $.getJSON(ENVYP_API_URL + "get_tournament_roster.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
+        $("#select-roster-list").prepend('<option value="" selected="selected">Select a roster</option>');
         $.each(result, function(i, field) {
             if (field.status == 'empty') {
                 myApp.alert('No roster yet :(');
