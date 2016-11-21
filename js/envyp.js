@@ -11,8 +11,8 @@ var mainView = myApp.addView('.view-main', {
     dynamicNavbar: false
 });
 
-const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
-// const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
+// const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
+const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
 const NO_INTERNET_ALERT = 'Please check your internet connection';
 const ERROR_ALERT = 'An error occured, please try again.';
 
@@ -895,6 +895,9 @@ myApp.onPageInit('tournament-add', function (page) {
 
 /* =====Tournament List Page ===== */
 myApp.onPageInit('tournament-list', function (page) {
+    if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
+        $('#btn-show-add-tournament').hide();    
+    } 
     if (checkInternetConnection() == true ) {
         var items = [];
         myApp.showIndicator();
@@ -942,6 +945,14 @@ myApp.onPageInit('tournament-list', function (page) {
 
 /* =====Tournament Detail Page ===== */
 myApp.onPageInit('tournament-detail', function (page) {
+    if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
+        $('#btn-edit-tournament-details').hide(); 
+        $('#btn-edit-team-stats').hide(); 
+        $('#btn-submit-vote').hide(); 
+        $('#div-add-tournament-roster').hide(); 
+        $('#div-add-tournament-fine').hide();    
+    } 
+
     var tournament_id = 0;
     var tournament_opponent = '';
     var tournament_location = '';
@@ -974,7 +985,7 @@ myApp.onPageInit('tournament-detail', function (page) {
         $$('#txt-opponent-name').prepend(tournament_opponent);
         $$('#txt-tournament-location').prepend(tournament_location);
         $$('#txt-tournament-date').prepend(tournament_date);
-        $$('#txt-tournament-description').prepend(tournament_description);
+        $$('#txt-tournament-description').prepend((tournament_description == '' || tournament_description == null ? "No description" : tournament_description));
 
         myApp.hideIndicator();
     });
@@ -1005,7 +1016,7 @@ myApp.onPageInit('tournament-detail', function (page) {
                         '<div class="item-media">'+ image_url +'</div>' +
                         '<div class="item-inner">' +
                           '<div class="item-title-row">' +
-                            '<div class="item-title"><b>'+ field.name +'</b></div>' +
+                            '<div class="item-title">'+ field.name +'</div>' +
                           '</div>' +
                           '<div class="item-subtitle">'+ field.position +'</div>' +
                         '</div></a></li>');
@@ -1156,7 +1167,10 @@ myApp.onPageInit('tournament-detail', function (page) {
     });
 
     $$('#roster').on('show', function () {
-        $$('#div-add-tournament-roster').show();
+        if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
+        } else {
+           $$('#div-add-tournament-roster').show(); 
+        }
         $$('#div-add-tournament-fine').hide();
     });
 
@@ -1167,7 +1181,10 @@ myApp.onPageInit('tournament-detail', function (page) {
 
     $$('#fine').on('show', function () {
         $$('#div-add-tournament-roster').hide();
-        $$('#div-add-tournament-fine').show();
+        if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
+        } else {
+            $$('#div-add-tournament-fine').show();
+        }
     });
 
     $$('#mvp').on('show', function () {
