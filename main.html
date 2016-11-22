@@ -47,6 +47,47 @@
   </head>
   <body class="theme-indigo">
   <div class="panel-overlay"></div>
+  <div class="panel panel-left panel-cover">
+     <div class="pages navbar-fixed">
+      <div data-page="panel-right2" class="page">
+        <div class="navbar">
+          <div class="navbar-inner">
+            <div class="left"></div>
+            <div class="center">Profile</div>
+            <div class="right"></div>
+          </div>
+        </div>
+        <div class="page-content">
+          <div class="center-inner">
+            <div class="login-screen-title" style="padding-top:45px; background-color:#93c01f; padding-bottom:15px;">
+                <img id="img-profile-image" width="90px" height="90px" class="img-circle fit center">
+                <center> 
+                  <div id="div-profile-name" class="content-block-title" style="font-weight: bold;"></div>
+                </center>
+            </div>
+          </div>
+          <div class="list-block" style="padding-top:0px; margin-top:0px; border-top:0px;">
+            <ul>
+              <li>
+                <div class="item-content">
+                  <div class="item-inner"> 
+                    <div class="item-title"><a href="#" class="link icon-only">Edit Profile</a></div>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="item-content">
+                  <div class="item-inner"> 
+                    <div class="item-title"><a id="btn-logout" href="#" class="link icon-only">Logout</a></div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div> 
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="panel panel-right panel-cover">
      <div class="pages navbar-fixed">
       <div data-page="panel-right1" class="page">
@@ -76,7 +117,7 @@
     <div class="views">
         <div class="view view-main">
             <div class="pages">
-              <div class="page blue_bg" data-page="login">
+              <div data-page="main" class="page blue_bg" data-page="login">
                 <div class="page-content center-outer">
                   <div class="center-inner">
                     <div class="login-screen-title">

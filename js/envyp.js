@@ -11,8 +11,8 @@ var mainView = myApp.addView('.view-main', {
     dynamicNavbar: false
 });
 
-// const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
-const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
+const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
+// const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
 const NO_INTERNET_ALERT = 'Please check your internet connection';
 const ERROR_ALERT = 'An error occured, please try again.';
 
@@ -28,12 +28,13 @@ $(document).on({
     }
 }, '.pac-container');
 
-if (localStorage.getItem('account_id') != null) {
+if (localStorage.getItem('account_id') != '' && localStorage.getItem('account_id') != null) {
+    $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
+    $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
     mainView.router.loadPage('choose_sports.html');
-    // mainView.router.loadPage('edit_tournament_stats.html');
-}
+} 
 
-/* ===== Login Page ===== */
+/* ===== Main Page ===== */
 $$('#btn-email-login').on('click', function () {
     if (checkInternetConnection() == true ) {
         $$('#btn-email-login').attr('disabled', true);
@@ -62,6 +63,10 @@ $$('#btn-email-login').on('click', function () {
                         localStorage.setItem('age', msg.age);
                         localStorage.setItem('description', msg.description);
                         localStorage.setItem('account_image', msg.account_image);
+
+                        $$('#div-profile-name').prepend(msg.first_name + ' ' + msg.last_name);
+                        $$('#img-profile-image').attr('src', (msg.account_image == '' || msg.account_image == null ? "img/profile.jpg" : msg.account_image));
+
                         mainView.router.loadPage('choose_sports.html');
                     } else {
                         myApp.alert(msg.message);
@@ -82,9 +87,74 @@ $$('#btn-email-login').on('click', function () {
     }
 });
 
-
 $$('#btn-signup-page').on('click', function () {
     mainView.router.loadPage('signup.html');
+});
+
+$$('#btn-logout').on('click', function () {
+    myApp.closePanel('left');
+    localStorage.setItem('account_id', '');
+    $('#div-profile-name').empty();
+    $('#img-profile-image').empty();
+    mainView.router.loadPage('main.html');
+});
+
+myApp.onPageInit('main', function(page) {
+    $$('#btn-email-login').on('click', function () {
+        if (checkInternetConnection() == true ) {
+            $$('#btn-email-login').attr('disabled', true);
+            $$('#btn-signup-page').attr('disabled', true);
+            var txt_username = $$('#txt-log-email-add').val();
+            var txt_password = $$("#txt-log-email-pass").val();
+
+            if (txt_username == '' || txt_password == '') {
+                myApp.alert('Username or Password cannot be empty');
+                $$('#btn-email-login').removeAttr("disabled");
+                $$('#btn-signup-page').removeAttr("disabled");
+            } else {
+                myApp.showIndicator();
+                $$.ajax({
+                    type: "POST",
+                    url: ENVYP_API_URL + "login.php",
+                    data: "account=" + txt_username + "&password=" + txt_password,
+                    dataType: "json",
+                    success: function(msg, string, jqXHR) {
+                        myApp.hideIndicator();
+                        if (msg.status == '0') {
+                            localStorage.setItem('account_id', msg.account_id);
+                            localStorage.setItem('email', msg.email);
+                            localStorage.setItem('first_name', msg.first_name);
+                            localStorage.setItem('last_name', msg.last_name);
+                            localStorage.setItem('age', msg.age);
+                            localStorage.setItem('description', msg.description);
+                            localStorage.setItem('account_image', msg.account_image);
+
+                            $$('#div-profile-name').prepend(msg.first_name + ' ' + msg.last_name);
+                            $$('#img-profile-image').attr('src', (msg.account_image == '' || msg.account_image == null ? "img/profile.jpg" : msg.account_image));
+
+                            mainView.router.loadPage('choose_sports.html');
+                        } else {
+                            myApp.alert(msg.message);
+                        }
+                        $$('#btn-email-login').removeAttr("disabled");
+                        $$('#btn-signup-page').removeAttr("disabled");
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        myApp.hideIndicator();
+                        myApp.alert(ERROR_ALERT);
+                        $$('#btn-email-login').removeAttr("disabled");
+                        $$('#btn-signup-page').removeAttr("disabled");
+                    }
+                });
+            }
+        } else {
+            myApp.alert(NO_INTERNET_ALERT);
+        }
+    });
+
+    $$('#btn-signup-page').on('click', function () {
+        mainView.router.loadPage('signup.html');
+    });
 });
 
 /* ===== Signup Page ===== */
@@ -220,37 +290,61 @@ myApp.onPageInit('profile-add', function(page) {
                 return false;
             }
 
-            myApp.showIndicator();
-            $$.ajax({
-                type: "POST",
-                url: ENVYP_API_URL + "update_user.php",
-                data: "account_id=" + localStorage.getItem('account_id') + "&first_name=" + first_name + "&last_name=" + last_name + "&age=" + age + "&description=" + description,
-                dataType: "json",
-                success: function(msg, string, jqXHR) {
-                    myApp.hideIndicator();
-                    if (msg.status == '0') {
-                        localStorage.setItem('first_name', first_name);
-                        localStorage.setItem('last_name', last_name);
-                        localStorage.setItem('age', age);
-                        localStorage.setItem('description', description);
-                        localStorage.setItem('profile_image', imgfile);
-                        if (imgfile != '') {
-                            uploadProfilePic(localStorage.getItem('account_id'));
+            if (imgfile == '') {
+                myApp.showIndicator();
+                $$.ajax({
+                    type: "POST",
+                    url: ENVYP_API_URL + "add_team.php",
+                    data: "account_id=" + localStorage.getItem('account_id') + "&sport_id=" + localStorage.getItem('selectedSportID') + "&team_name=" + team_name + "&team_description=" + team_description + "&team_password=" + team_password,
+                    dataType: "json",
+                    success: function(msg, string, jqXHR) {
+                        myApp.hideIndicator();
+                        if (msg.status == '0') {
+                            clearTeamDetails();
+                            mainView.router.loadPage('team_management.html?team_id='+msg.team_id+'&team_name=' + team_name);  
                         }
-                        myApp.alert('Welcome ' + first_name + ' ' + last_name + '!');
-                        clearLogInDetails();
-                        mainView.router.loadPage('choose_sports.html');
-                    } else {
                         myApp.alert(msg.message);
+                        $$('#btn-add-team').removeAttr("disabled");
+                    },
+                    error: function(msg, string, jqXHR) { 
+                        myApp.hideIndicator();
+                        myApp.alert(ERROR_ALERT);
+                        $$('#btn-add-team').removeAttr("disabled");
                     }
-                    $$('#btn-continue').removeAttr("disabled");
-                },
-                error: function(msg, string, jqXHR) { 
-                    myApp.hideIndicator();
-                    myApp.alert(ERROR_ALERT);
-                    $$('#btn-continue').removeAttr("disabled");
-                }
-            });
+                });
+            } else {
+                myApp.showIndicator();
+                $$.ajax({
+                    type: "POST",
+                    url: ENVYP_API_URL + "update_user.php",
+                    data: "account_id=" + localStorage.getItem('account_id') + "&first_name=" + first_name + "&last_name=" + last_name + "&age=" + age + "&description=" + description,
+                    dataType: "json",
+                    success: function(msg, string, jqXHR) {
+                        myApp.hideIndicator();
+                        if (msg.status == '0') {
+                            localStorage.setItem('first_name', first_name);
+                            localStorage.setItem('last_name', last_name);
+                            localStorage.setItem('age', age);
+                            localStorage.setItem('description', description);
+                            localStorage.setItem('profile_image', imgfile);
+                            if (imgfile != '') {
+                                uploadProfilePic(localStorage.getItem('account_id'));
+                            }
+                            myApp.alert('Welcome ' + first_name + ' ' + last_name + '!');
+                            clearLogInDetails();
+                            mainView.router.loadPage('choose_sports.html');
+                        } else {
+                            myApp.alert(msg.message);
+                        }
+                        $$('#btn-continue').removeAttr("disabled");
+                    },
+                    error: function(msg, string, jqXHR) { 
+                        myApp.hideIndicator();
+                        myApp.alert(ERROR_ALERT);
+                        $$('#btn-continue').removeAttr("disabled");
+                    }
+                });
+            }
         } else {
             myApp.alert(NO_INTERNET_ALERT);
         }
@@ -259,7 +353,13 @@ myApp.onPageInit('profile-add', function(page) {
 
 /* ===== Choose Sports Page ===== */
 myApp.onPageInit('choose-sports', function(page) {
+    $$('#open-left-panel').on('click', function (e) {
+        myApp.openPanel('left');
+    });
 
+    $$('#close-left-panel').on('click', function() {
+        myApp.closePanel('left');
+    });
 });
 
 /* ===== Home Page ===== */
@@ -418,7 +518,7 @@ myApp.onPageInit('team-management', function(page) {
     });
 
     $$('#close-right-panel').on('click', function() {
-        myApp.closePanel();
+        myApp.closePanel('right');
     });
 });
 
