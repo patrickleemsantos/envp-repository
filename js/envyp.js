@@ -229,7 +229,7 @@ myApp.onPageInit('signup', function(page) {
                 myApp.alert("character ivalid");
                 $$('#btn-signup').removeAttr("disabled");
                 return false;
-            // }
+            }
 
             if ($('#chkbox-terms').is(':checked') == false) {
                 myApp.alert("Please agree with the terms and conditions");
@@ -260,7 +260,7 @@ myApp.onPageInit('signup', function(page) {
                         $$('#btn-signup').removeAttr("disabled");
                     }
                 });
-            // }
+            }
         } else {
             myApp.alert(NO_INTERNET_ALERT);
         }
