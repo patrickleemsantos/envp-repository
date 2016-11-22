@@ -304,7 +304,7 @@ myApp.onPageInit('profile-add', function(page) {
                             localStorage.setItem('last_name', last_name);
                             localStorage.setItem('age', age);
                             localStorage.setItem('description', description);
-                            localStorage.setItem('profile_image', imgfile);
+                            localStorage.setItem('account_image', '');
 
                             myApp.alert('Welcome ' + first_name + ' ' + last_name + '!');
                             clearLogInDetails();
@@ -342,9 +342,19 @@ myApp.onPageInit('profile-add', function(page) {
 
                 clearLogInDetails();
                 myApp.hideIndicator();
+
+                localStorage.setItem('first_name', first_name);
+                localStorage.setItem('last_name', last_name);
+                localStorage.setItem('age', age);
+                localStorage.setItem('description', description);
+                localStorage.setItem('account_image', imgfile);
+
                 mainView.router.loadPage('choose_sports.html');
                 $$('#btn-continue').removeAttr("disabled");
             }
+
+            $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
+            $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
         } else {
             myApp.alert(NO_INTERNET_ALERT);
         }
