@@ -321,6 +321,7 @@ myApp.onPageInit('profile-add', function(page) {
                     }
                 });
             } else {
+                myApp.alert(imgfile);
                 myApp.showIndicator();
                 var options = new FileUploadOptions();
                 options.fileKey = "file";
