@@ -342,6 +342,7 @@ myApp.onPageInit('profile-add', function(page) {
 
                 clearLogInDetails();
                 myApp.hideIndicator();
+                mainView.router.loadPage('choose_sports.html');
                 $$('#btn-continue').removeAttr("disabled");
             }
         } else {
@@ -2246,7 +2247,7 @@ function attachEditTeamImage(imageURI) {
 
 function attachProfileImage(imageURI) {
     imgfile = imageURI
-    $$("#img-profile").attr("src", imgfile);
+    $$("#profile-image").attr("src", imgfile);
 } 
 
 function win(r) {
