@@ -64,8 +64,8 @@ $$('#btn-email-login').on('click', function() {
                         localStorage.setItem('description', msg.description);
                         localStorage.setItem('account_image', msg.account_image);
 
-                        $$('#div-profile-name').prepend(msg.first_name + ' ' + msg.last_name);
-                        $$('#img-profile-image').attr('src', (msg.account_image == '' || msg.account_image == null ? "img/profile.jpg" : msg.account_image));
+                        $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
+                        $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
 
                         mainView.router.loadPage('choose_sports.html');
                     } else {
@@ -134,8 +134,8 @@ myApp.onPageInit('main', function(page) {
                             localStorage.setItem('description', msg.description);
                             localStorage.setItem('account_image', msg.account_image);
 
-                            $$('#div-profile-name').prepend(msg.first_name + ' ' + msg.last_name);
-                            $$('#img-profile-image').attr('src', (msg.account_image == '' || msg.account_image == null ? "img/profile.jpg" : msg.account_image));
+                            $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
+                            $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
 
                             mainView.router.loadPage('choose_sports.html');
                         } else {
@@ -314,12 +314,14 @@ myApp.onPageInit('profile-add', function(page) {
                         myApp.hideIndicator();
                         if (msg.status == '0') {
                             myApp.alert('Success');
+                            localStorage.setItem('account_image', '');
                             clearLogInDetails();
                             mainView.router.loadPage('choose_sports.html');
                         } else {
                             myApp.alert(msg.message);
                         }
                         $$('#btn-continue').removeAttr("disabled");
+                        imgfile = '';
                     },
                     error: function(msg, string, jqXHR) {
                         myApp.hideIndicator();
