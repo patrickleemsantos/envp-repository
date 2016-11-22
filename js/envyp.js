@@ -321,7 +321,6 @@ myApp.onPageInit('profile-add', function(page) {
                     }
                 });
             } else {
-                myApp.alert(imgfile);
                 myApp.showIndicator();
                 var options = new FileUploadOptions();
                 options.fileKey = "file";
@@ -355,7 +354,7 @@ myApp.onPageInit('profile-add', function(page) {
             }
 
             $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
-            $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
+            $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' ? "img/profile.jpg" : localStorage.getItem('account_image')));
         } else {
             myApp.alert(NO_INTERNET_ALERT);
         }
