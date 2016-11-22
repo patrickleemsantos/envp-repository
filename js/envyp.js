@@ -99,6 +99,11 @@ $$('#btn-logout').on('click', function () {
     mainView.router.loadPage('main.html');
 });
 
+$$('#btn-edit-profile').on('click', function () {
+    myApp.closePanel('left');
+    mainView.router.loadPage('profile_add.html?account_id='+localStorage.getItem('account_id')+'&first_name=' + localStorage.getItem('first_name')+'&last_name=' + localStorage.getItem('last_name')+'&age=' + localStorage.getItem('age')+'&description=' + localStorage.getItem('description')+'&image_url=' + localStorage.getItem('account_image'));
+});
+
 myApp.onPageInit('main', function(page) {
     $$('#btn-email-login').on('click', function () {
         if (checkInternetConnection() == true ) {
@@ -166,71 +171,71 @@ myApp.onPageInit('signup', function(page) {
             var txt_password = $$('#txt-password').val();
             var txt_repeat_password = $$('#txt-repeat-password').val();
 
-            // if (txt_email_add == '') {
-            //     myApp.alert('Please enter email!');
-            //     $$('#btn-signup').removeAttr("disabled");
-            //     return false;
+            if (txt_email_add == '') {
+                myApp.alert('Please enter email!');
+                $$('#btn-signup').removeAttr("disabled");
+                return false;
+            }
+
+            if (validateEmail(txt_email_add) == false) {
+                myApp.alert('Please enter valid email!');
+                $$('#btn-signup').removeAttr("disabled");
+                return false;
+            }
+
+            if (txt_password == '') {
+                myApp.alert('Please enter password!');
+                $$('#btn-signup').removeAttr("disabled");
+                return false;
+            }
+
+            if (txt_repeat_password == '') {
+                myApp.alert('Please repeat the password!');
+                $$('#btn-signup').removeAttr("disabled");
+                return false;
+            }
+
+            if (txt_password != txt_repeat_password) {
+                myApp.alert('Password is not the same!');
+                $$('#btn-signup').removeAttr("disabled");
+                return false;
+            } 
+
+            if (txt_password.length < 6) {
+                myApp.alert("min 6 characters, max 50 characters");
+                $$('#btn-signup').removeAttr("disabled");
+                return false;
+            }
+
+            if (txt_password.length > 50) {
+                myApp.alert("min 6 characters, max 50 characters");
+                $$('#btn-signup').removeAttr("disabled");
+                return false;
+            }
+
+            if (txt_password.search(/\d/) == -1) {
+                myApp.alert("must contain at least 1 number");
+                $$('#btn-signup').removeAttr("disabled");
+                return false;
+            }
+
+            if (txt_password.search(/[a-zA-Z]/) == -1) {
+                myApp.alert("must contain at least 1 letter");
+                $$('#btn-signup').removeAttr("disabled");
+                return false;
+            }
+
+            if (txt_password.search(/[^a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\_\+\.\,\;\:]/) != -1) {
+                myApp.alert("character ivalid");
+                $$('#btn-signup').removeAttr("disabled");
+                return false;
             // }
 
-            // if (validateEmail(txt_email_add) == false) {
-            //     myApp.alert('Please enter valid email!');
-            //     $$('#btn-signup').removeAttr("disabled");
-            //     return false;
-            // }
-
-            // if (txt_password == '') {
-            //     myApp.alert('Please enter password!');
-            //     $$('#btn-signup').removeAttr("disabled");
-            //     return false;
-            // }
-
-            // if (txt_repeat_password == '') {
-            //     myApp.alert('Please repeat the password!');
-            //     $$('#btn-signup').removeAttr("disabled");
-            //     return false;
-            // }
-
-            // if (txt_password != txt_repeat_password) {
-            //     myApp.alert('Password is not the same!');
-            //     $$('#btn-signup').removeAttr("disabled");
-            //     return false;
-            // } 
-
-            // if (txt_password.length < 6) {
-            //     myApp.alert("min 6 characters, max 50 characters");
-            //     $$('#btn-signup').removeAttr("disabled");
-            //     return false;
-            // }
-
-            // if (txt_password.length > 50) {
-            //     myApp.alert("min 6 characters, max 50 characters");
-            //     $$('#btn-signup').removeAttr("disabled");
-            //     return false;
-            // }
-
-            // if (txt_password.search(/\d/) == -1) {
-            //     myApp.alert("must contain at least 1 number");
-            //     $$('#btn-signup').removeAttr("disabled");
-            //     return false;
-            // }
-
-            // if (txt_password.search(/[a-zA-Z]/) == -1) {
-            //     myApp.alert("must contain at least 1 letter");
-            //     $$('#btn-signup').removeAttr("disabled");
-            //     return false;
-            // }
-
-            // if (txt_password.search(/[^a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\_\+\.\,\;\:]/) != -1) {
-            //     myApp.alert("character ivalid");
-            //     $$('#btn-signup').removeAttr("disabled");
-            //     return false;
-            // // }
-
-            // if ($('#chkbox-terms').is(':checked') == false) {
-            //     myApp.alert("Please agree with the terms and conditions");
-            //     $$('#btn-signup').removeAttr("disabled");
-            //     return false;
-            // } else {
+            if ($('#chkbox-terms').is(':checked') == false) {
+                myApp.alert("Please agree with the terms and conditions");
+                $$('#btn-signup').removeAttr("disabled");
+                return false;
+            } else {
                 myApp.showIndicator();
                 $$.ajax({
                     type: "POST",
@@ -264,6 +269,14 @@ myApp.onPageInit('signup', function(page) {
 
 /* ===== Add Profile Page ===== */
 myApp.onPageInit('profile-add', function(page) {
+    if (page.query.account_id != '' || page.query.account_id != null) {
+        $$('#txt-firstname').val(page.query.first_name);
+        $$('#txt-lastname').val(page.query.last_name);
+        $$('#txt-age').val(page.query.age);
+        $$('#txt-description').val(page.query.description);
+        $$('#profile-image').attr('src', (page.query.image_url == '' || page.query.image_url == null ? "img/profile.jpg" : page.query.image_url));
+    }
+
     $$('#btn-continue').on('click', function() {
         if (checkInternetConnection() == true ) {
             $$('#btn-continue').attr('disabled', true);
@@ -300,13 +313,7 @@ myApp.onPageInit('profile-add', function(page) {
                     success: function(msg, string, jqXHR) {
                         myApp.hideIndicator();
                         if (msg.status == '0') {
-                            localStorage.setItem('first_name', first_name);
-                            localStorage.setItem('last_name', last_name);
-                            localStorage.setItem('age', age);
-                            localStorage.setItem('description', description);
-                            localStorage.setItem('account_image', '');
-
-                            myApp.alert('Welcome ' + first_name + ' ' + last_name + '!');
+                            myApp.alert('Success');
                             clearLogInDetails();
                             mainView.router.loadPage('choose_sports.html');
                         } else {
@@ -343,18 +350,22 @@ myApp.onPageInit('profile-add', function(page) {
                 clearLogInDetails();
                 myApp.hideIndicator();
 
-                localStorage.setItem('first_name', first_name);
-                localStorage.setItem('last_name', last_name);
-                localStorage.setItem('age', age);
-                localStorage.setItem('description', description);
                 localStorage.setItem('account_image', imgfile);
 
                 mainView.router.loadPage('choose_sports.html');
                 $$('#btn-continue').removeAttr("disabled");
+                imgfile = '';
             }
 
+            localStorage.setItem('first_name', first_name);
+            localStorage.setItem('last_name', last_name);
+            localStorage.setItem('age', age);
+            localStorage.setItem('description', description);
+
+            $('#div-profile-name').empty();
+            $('#img-profile-image').empty();
             $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
-            $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' ? "img/profile.jpg" : localStorage.getItem('account_image')));
+            $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
         } else {
             myApp.alert(NO_INTERNET_ALERT);
         }
@@ -2512,19 +2523,19 @@ function validateEmail(sEmail) {
 }
 
 function checkInternetConnection() {
-    // try {
-    //     if (DEBUG == false) {
-    //         var state = navigator.connection.type;
-    //         if (state == 'none') {
-    //             return false;
-    //         } else {
-    //             return true;
-    //         }
-    //     } else {
-    //         return true;
-    //     }
-    // } catch (err) { 
-    //     return true;
-    // }
-    return true;
+    try {
+        if (DEBUG == false) {
+            var state = navigator.connection.type;
+            if (state == 'none') {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+    } catch (err) { 
+        return true;
+    }
+    // return true;
 }
