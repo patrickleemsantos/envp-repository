@@ -11,8 +11,8 @@ var mainView = myApp.addView('.view-main', {
     dynamicNavbar: false
 });
 
-const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
-// const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
+// const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
+const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
 const NO_INTERNET_ALERT = 'Please check your internet connection';
 const ERROR_ALERT = 'An error occured, please try again.';
 
@@ -294,28 +294,6 @@ myApp.onPageInit('profile-add', function(page) {
                 myApp.showIndicator();
                 $$.ajax({
                     type: "POST",
-                    url: ENVYP_API_URL + "add_team.php",
-                    data: "account_id=" + localStorage.getItem('account_id') + "&sport_id=" + localStorage.getItem('selectedSportID') + "&team_name=" + team_name + "&team_description=" + team_description + "&team_password=" + team_password,
-                    dataType: "json",
-                    success: function(msg, string, jqXHR) {
-                        myApp.hideIndicator();
-                        if (msg.status == '0') {
-                            clearTeamDetails();
-                            mainView.router.loadPage('team_management.html?team_id='+msg.team_id+'&team_name=' + team_name);  
-                        }
-                        myApp.alert(msg.message);
-                        $$('#btn-add-team').removeAttr("disabled");
-                    },
-                    error: function(msg, string, jqXHR) { 
-                        myApp.hideIndicator();
-                        myApp.alert(ERROR_ALERT);
-                        $$('#btn-add-team').removeAttr("disabled");
-                    }
-                });
-            } else {
-                myApp.showIndicator();
-                $$.ajax({
-                    type: "POST",
                     url: ENVYP_API_URL + "update_user.php",
                     data: "account_id=" + localStorage.getItem('account_id') + "&first_name=" + first_name + "&last_name=" + last_name + "&age=" + age + "&description=" + description,
                     dataType: "json",
@@ -327,9 +305,7 @@ myApp.onPageInit('profile-add', function(page) {
                             localStorage.setItem('age', age);
                             localStorage.setItem('description', description);
                             localStorage.setItem('profile_image', imgfile);
-                            if (imgfile != '') {
-                                uploadProfilePic(localStorage.getItem('account_id'));
-                            }
+
                             myApp.alert('Welcome ' + first_name + ' ' + last_name + '!');
                             clearLogInDetails();
                             mainView.router.loadPage('choose_sports.html');
@@ -344,6 +320,29 @@ myApp.onPageInit('profile-add', function(page) {
                         $$('#btn-continue').removeAttr("disabled");
                     }
                 });
+            } else {
+                myApp.showIndicator();
+                var options = new FileUploadOptions();
+                options.fileKey = "file";
+                options.fileName = imgfile.substr(imgfile.lastIndexOf('/') + 1);
+                options.mimeType = "image/jpeg";
+                options.chunkedMode = false;
+
+                var params = new Object();
+                params.account_id = localStorage.getItem('account_id');
+                params.first_name = first_name;
+                params.last_name = last_name;
+                params.age = age;
+                params.description = description;
+
+                options.params = params;
+
+                var ft = new FileTransfer();
+                ft.upload(imgfile, ENVYP_API_URL + "update_user.php", win, fail, options);
+
+                clearLogInDetails();
+                myApp.hideIndicator();
+                $$('#btn-continue').removeAttr("disabled");
             }
         } else {
             myApp.alert(NO_INTERNET_ALERT);
@@ -2163,6 +2162,58 @@ function editTeamImage() {
     });
 }
 
+function getProfileImage() {
+    myApp.modal({
+        title:  'Choose Profile Image',
+        verticalButtons: true,
+        buttons: [
+          {
+            text: 'Take new picture',
+            onClick: function() {
+                try {
+                    navigator.camera.getPicture(attachProfileImage, function(message) {
+                        myApp.alert('No image selected');
+                    }, {
+                        quality: 100,
+                        destinationType: navigator.camera.DestinationType.FILE_URI,
+                        sourceType: navigator.camera.PictureSourceType.CAMERA,
+                        targetWidth: 400,
+                        targetHeight: 400,
+                        correctOrientation: true
+                    });
+                } catch(err) {
+                    myApp.alert('camera error: ' + err.message);
+                }
+            }
+          },
+          {
+            text: 'Select from gallery',
+            onClick: function() {
+                try {
+                    navigator.camera.getPicture(attachProfileImage, function(message) {
+                        myApp.alert('No image selected');
+                    }, {
+                        quality: 100,
+                        destinationType: navigator.camera.DestinationType.FILE_URI,
+                        sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
+                        targetWidth: 400,
+                        targetHeight: 400,
+                        correctOrientation: true
+                    });
+                } catch(err) {
+                    myApp.alert('camera error: ' + err.message);
+                }
+            }
+          },
+          {
+            text: 'Cancel',
+            onClick: function() {
+            }
+          }
+        ]
+    });
+}
+
 function attachTournamentImage(imageURI) {
     imgfile = imageURI
     $$("#tournament-image").attr("src", imgfile);
@@ -2191,6 +2242,11 @@ function attachTeamImage(imageURI) {
 function attachEditTeamImage(imageURI) {
     imgfile = imageURI
     $$("#edit-team-image").attr("src", imgfile);
+} 
+
+function attachProfileImage(imageURI) {
+    imgfile = imageURI
+    $$("#img-profile").attr("src", imgfile);
 } 
 
 function win(r) {
