@@ -476,6 +476,7 @@ myApp.onPageInit('team-list', function(page) {
                         team_admin: field.team_admin,
                         team_name: field.team_name,
                         team_password: field.team_password,
+                        team_image: field.team_image,
                         created_by: field.first_name + ' ' + field.last_name
                     });
                 }
@@ -492,6 +493,7 @@ myApp.onPageInit('team-list', function(page) {
                 },
                 template: '<li>' +
                     '<a href="#" onclick="getTeamPassword({{team_id}},{{team_admin}},\'{{team_name}}\',\'{{team_password}}\')" class="item-link item-content">' +
+                    '<div class="item-media"><img data-src="{{team_image}}" class="lazy lazy-fadein" style="width:44px; height:44px;"/></div>' +
                     '<div class="item-inner">' +
                     '<div class="item-title-row">' +
                     '<div class="item-title"><b>{{team_name}}</b></div>' +
@@ -502,7 +504,7 @@ myApp.onPageInit('team-list', function(page) {
                     '</li>',
                 height: 73,
             });
-
+            myApp.initImagesLazyLoad(page.container);
             myApp.hideIndicator();
         });
     } else {
@@ -571,7 +573,7 @@ myApp.onPageInit('roster-list', function(page) {
                 },
                 template: '<li>' +
                     '<a href="roster_detail.html?roster_id={{roster_id}}&roster_name={{roster_name}}&roster_position={{roster_position}}&roster_image={{roster_image}}" class="item-link item-content">' +
-                    '<div class="item-media"><img src="{{roster_image}}" style="width:44px; height:44px;"/></div>' +
+                    '<div class="item-media"><img data-src="{{roster_image}}" class="lazy lazy-fadein" style="width:44px; height:44px;"/></div>' +
                     '<div class="item-inner">' +
                     '<div class="item-title-row">' +
                     '<div class="item-title"><b>{{roster_name}}</b></div>' +
@@ -580,6 +582,7 @@ myApp.onPageInit('roster-list', function(page) {
                     '</div></a></li>',
                 height: 62,
             });
+            myApp.initImagesLazyLoad(page.container);
             myApp.hideIndicator();
         });
     } else {
