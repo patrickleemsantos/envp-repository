@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="com.envp.dk" version="1.0" versionCode="1">
 
-	<name>Envyp</name>
+	<name>Envp</name>
 	<description>Envyp</description>
 	<author>Patrick Santos</author>
 	<gap:platforms>
