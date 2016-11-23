@@ -45,7 +45,7 @@
 	<!-- <gap:plugin name="cordova-plugin-crosswalk-webview-pgb-adapt" source="npm" version="1.4.0-dev-5"/> -->
 
 	<preference name="android-build-tool" value="gradle" />
-	<gap:plugin name="cordova-plugin-crosswalk-webview-pgb-adapt" source="npm" version="1.4.0-dev-9"/>
+	<gap:plugin name="cordova-plugin-crosswalk-webview-pgb-adapt" source="npm" version="1.4.0-dev-11"/>
 
 	<preference name="android-minSdkVersion" value="15" />
 	
