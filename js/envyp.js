@@ -346,12 +346,12 @@ myApp.onPageInit('profile-add', function(page) {
                 options.params = params;
 
                 var ft = new FileTransfer();
-                ft.upload(imgfile, ENVYP_API_URL + "update_user.php", win, fail, options);
+                ft.upload(imgfile, ENVYP_API_URL + "update_user.php", winUpdateUser, fail, options);
 
                 clearLogInDetails();
                 myApp.hideIndicator();
 
-                localStorage.setItem('account_image', imgfile);
+                // localStorage.setItem('account_image', imgfile);
 
                 mainView.router.loadPage('choose_sports.html');
                 $$('#btn-continue').removeAttr("disabled");
@@ -460,14 +460,6 @@ myApp.onPageInit('team-add', function(page) {
         }
     });
 });
-
-function winTeamAdd(r) {
-    var resp = JSON.parse(r.response);
-    myApp.alert(resp.message);
-    if (resp.status == '0') {
-        mainView.router.loadPage('team_management.html?team_id=' + resp.team_id + '&team_name=' + resp.team_name);
-    }
-}
 
 /* ===== Team List Page ===== */
 myApp.onPageInit('team-list', function(page) {
@@ -1579,6 +1571,10 @@ myApp.onPageInit('tournament-fine-add', function(page) {
 
 /* =====Roster Tournament Stats Page ===== */
 myApp.onPageInit('roster-tournament-stats', function(page) {
+     if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
+        $('#btn-edit-roster-stats').hide();
+    }
+
     var points = 0;
     var assists = 0;
     var fouls = 0;
@@ -2240,6 +2236,22 @@ function win(r) {
     myApp.alert(resp.message);
 }
 
+function winUpdateUser(r) {
+    var resp = JSON.parse(r.response);
+    myApp.alert(resp.message);
+    if (resp.status == '0') {
+        localStorage.setItem('account_image', resp.account_image);
+    }
+}
+
+function winTeamAdd(r) {
+    var resp = JSON.parse(r.response);
+    myApp.alert(resp.message);
+    if (resp.status == '0') {
+        mainView.router.loadPage('team_management.html?team_id=' + resp.team_id + '&team_name=' + resp.team_name);
+    }
+}
+
 function fail(error) {
     myApp.alert("An error has occurred with error code " + error.code + ", please try again.");
 }
@@ -2505,43 +2517,27 @@ function checkInternetConnection() {
 }
 
 var fbLoginSuccess = function (userData) {   
-    // alert("fbLoginSuccess: " + JSON.stringify(userData));
-
     if (userData.status === 'connected') {
         getFBDetails();
     } else if (userData.status === 'not_authorized') {
-        // myApp.loginScreen();
-        // $$('#btn-signin').removeAttr("disabled");
-        // $$('#btn-goto-signup').removeAttr("disabled");
-        // $$('#btn_fblogin').removeAttr("disabled");
+
     } else {
-        // myApp.loginScreen();
-        // $$('#btn-signin').removeAttr("disabled");
-        // $$('#btn-goto-signup').removeAttr("disabled");
-        // $$('#btn_fblogin').removeAttr("disabled");  
+
     }   
 }
 
 function FBLogin() {
     if (checkInternetConnection() == true ) {
-        // $$('#btn-signin').attr('disabled', true);
-        // $$('#btn_fblogin').attr('disabled', true);
-        // $$('#btn-goto-signup').attr('disabled', true);
-
         try {
             facebookConnectPlugin.login(["public_profile"],
                 fbLoginSuccess,
                 function (error) { 
-                    myApp.alert("[ERROR] Facebook Login" + error);
+                    myApp.alert("[ERROR] " + error);
                 }
             );
         } catch(err) {
-            myApp.alert(err.message);
-        } finally {
-            // $$('#btn-signin').removeAttr("disabled");
-            // $$('#btn-goto-signup').removeAttr("disabled");
-            // $$('#btn_fblogin').removeAttr("disabled");
-        }
+            myApp.alert('[ERROR] ' + err.message);
+        } 
     } else {
         myApp.alert(NO_INTERNET_ALERT);
     }
@@ -2557,49 +2553,48 @@ function getFBDetails() {
     facebookConnectPlugin.api("me/?fields=id,last_name,first_name,email,birthday",["public_profile"],
         function (result) {
 
-        // alert("getFBDetails: " + JSON.stringify(result));
-
-        // var age = calcAge(result.birthday);
-
+        $$('#btn-email-login').attr('disabled', true);
+        $$('#btn-signup-page').attr('disabled', true);
         myApp.alert(result.id + ' ' + result.first_name + ' ' + result.last_name);
-        // $$.ajax({
-        //     type: "POST",
-        //     url: GOFISH_API_URL + "get_facebook_details.php",
-        //     data: "facebook_id=" + result.id + "&first_name=" + result.first_name + "&last_name=" + result.last_name + "&age=" + age + "&image_url=" + "https://graph.facebook.com/" + result.id + "/picture?type=large",
-        //     dataType: "json",
-        //     success: function(msg, string, jqXHR) {
-        //         if (msg.status == '0' || msg.status == '1') {
-        //             isFBLogin = true;
-        //             localStorage.setItem('account_id', msg.account_id);
-        //             localStorage.setItem('account_no', result.id);
-        //             localStorage.setItem('username', result.email);
-        //             localStorage.setItem('first_name', result.first_name);
-        //             localStorage.setItem('last_name', result.last_name);
-        //             // localStorage.setItem('age', age);
-        //             localStorage.setItem('age', msg.age);
-        //             localStorage.setItem('description', msg.description);
-        //             // localStorage.setItem('profile_image', "https://graph.facebook.com/" + result.id + "/picture?type=normal");
-        //             localStorage.setItem('profile_image', msg.image_url);
-        //             myApp.closeModal('.login-screen');
-        //             loadIndexPage = true;
-        //             mainView.router.loadPage('event_latest.html');
-        //             callPushBot();
-        //         }
-        //         $$('#btn-signin').removeAttr("disabled");
-        //         $$('#btn-goto-signup').removeAttr("disabled");
-        //         $$('#btn_fblogin').removeAttr("disabled");
-        //     },
-        //     error: function(xhr, ajaxOptions, thrownError) {
-        //         myApp.alert("Error: " + xhr.thrownError);
-        //         $$('#btn-signin').removeAttr("disabled");
-        //         $$('#btn-goto-signup').removeAttr("disabled");
-        //         $$('#btn_fblogin').removeAttr("disabled");
-        //     }
-        // });
+        $$.ajax({
+            type: "POST",
+            url: ENVYP_API_URL + "add_facebook_user.php",
+            data: "facebook_id=" + result.id,
+            dataType: "json",
+            success: function(msg, string, jqXHR) {
+                if (msg.status = 1) {
+                    localStorage.setItem('account_id', msg.account_id);
+                    localStorage.setItem('email', msg.email);
+                    localStorage.setItem('first_name', msg.first_name);
+                    localStorage.setItem('last_name', msg.last_name);
+                    localStorage.setItem('age', msg.age);
+                    localStorage.setItem('description', msg.description);
+                    localStorage.setItem('account_image', msg.account_image);
+
+                    $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
+                    $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
+
+                    mainView.router.loadPage('choose_sports.html');
+                } else {
+                    var age = calcAge(result.birthday);
+                    var fb_image = 'https://graph.facebook.com/' + result.id + '/picture?type=large';
+                    mainView.router.loadPage('profile_add.html?account_id=' + msg.account_id + '&first_name=' + result.first_name + '&last_name=' + result.last_name + '&age=' + age + '&description=&image_url=' + fb_image);
+                }
+                $$('#btn-email-login').removeAttr("disabled");
+                $$('#btn-signup-page').removeAttr("disabled");
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                myApp.alert("[ERROR] " + xhr.thrownError);
+                $$('#btn-email-login').removeAttr("disabled");
+                $$('#btn-signup-page').removeAttr("disabled");
+            }
+        });
     }, function (error) {
-        myApp.alert("facebookConnectPlugin Error: " + error);
-        // $$('#btn-signin').removeAttr("disabled");
-        // $$('#btn-goto-signup').removeAttr("disabled");
-        // $$('#btn_fblogin').removeAttr("disabled");
+        myApp.alert("[ERROR] " + error);
     });
+}
+
+function calcAge(dateString) {
+    var birthday = +new Date(dateString);
+    return ~~((Date.now() - birthday) / (31557600000));
 }
