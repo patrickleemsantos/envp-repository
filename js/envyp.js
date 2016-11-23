@@ -314,7 +314,6 @@ myApp.onPageInit('profile-add', function(page) {
                         myApp.hideIndicator();
                         if (msg.status == '0') {
                             myApp.alert('Success');
-                            localStorage.setItem('account_image', '');
                             clearLogInDetails();
                             mainView.router.loadPage('choose_sports.html');
                         } else {
@@ -2503,4 +2502,104 @@ function checkInternetConnection() {
     //     return true;
     // }
     return true;
+}
+
+var fbLoginSuccess = function (userData) {   
+    // alert("fbLoginSuccess: " + JSON.stringify(userData));
+
+    if (userData.status === 'connected') {
+        getFBDetails();
+    } else if (userData.status === 'not_authorized') {
+        // myApp.loginScreen();
+        // $$('#btn-signin').removeAttr("disabled");
+        // $$('#btn-goto-signup').removeAttr("disabled");
+        // $$('#btn_fblogin').removeAttr("disabled");
+    } else {
+        // myApp.loginScreen();
+        // $$('#btn-signin').removeAttr("disabled");
+        // $$('#btn-goto-signup').removeAttr("disabled");
+        // $$('#btn_fblogin').removeAttr("disabled");  
+    }   
+}
+
+function FBLogin() {
+    if (checkInternetConnection() == true ) {
+        // $$('#btn-signin').attr('disabled', true);
+        // $$('#btn_fblogin').attr('disabled', true);
+        // $$('#btn-goto-signup').attr('disabled', true);
+
+        try {
+            facebookConnectPlugin.login(["public_profile"],
+                fbLoginSuccess,
+                function (error) { 
+                    myApp.alert("[ERROR] Facebook Login" + error);
+                }
+            );
+        } catch(err) {
+            myApp.alert(err.message);
+        } finally {
+            // $$('#btn-signin').removeAttr("disabled");
+            // $$('#btn-goto-signup').removeAttr("disabled");
+            // $$('#btn_fblogin').removeAttr("disabled");
+        }
+    } else {
+        myApp.alert(NO_INTERNET_ALERT);
+    }
+}
+
+function FBLogout() {
+    facebookConnectPlugin.logout(function(response) {
+    });
+}
+
+function getFBDetails() {
+    // facebookConnectPlugin.api("me/?fields=id,last_name,first_name,email,birthday",["public_profile","email"],
+    facebookConnectPlugin.api("me/?fields=id,last_name,first_name,email,birthday",["public_profile"],
+        function (result) {
+
+        // alert("getFBDetails: " + JSON.stringify(result));
+
+        // var age = calcAge(result.birthday);
+
+        myApp.alert(result.id + ' ' + result.first_name + ' ' + result.last_name);
+        // $$.ajax({
+        //     type: "POST",
+        //     url: GOFISH_API_URL + "get_facebook_details.php",
+        //     data: "facebook_id=" + result.id + "&first_name=" + result.first_name + "&last_name=" + result.last_name + "&age=" + age + "&image_url=" + "https://graph.facebook.com/" + result.id + "/picture?type=large",
+        //     dataType: "json",
+        //     success: function(msg, string, jqXHR) {
+        //         if (msg.status == '0' || msg.status == '1') {
+        //             isFBLogin = true;
+        //             localStorage.setItem('account_id', msg.account_id);
+        //             localStorage.setItem('account_no', result.id);
+        //             localStorage.setItem('username', result.email);
+        //             localStorage.setItem('first_name', result.first_name);
+        //             localStorage.setItem('last_name', result.last_name);
+        //             // localStorage.setItem('age', age);
+        //             localStorage.setItem('age', msg.age);
+        //             localStorage.setItem('description', msg.description);
+        //             // localStorage.setItem('profile_image', "https://graph.facebook.com/" + result.id + "/picture?type=normal");
+        //             localStorage.setItem('profile_image', msg.image_url);
+        //             myApp.closeModal('.login-screen');
+        //             loadIndexPage = true;
+        //             mainView.router.loadPage('event_latest.html');
+        //             callPushBot();
+        //         }
+        //         $$('#btn-signin').removeAttr("disabled");
+        //         $$('#btn-goto-signup').removeAttr("disabled");
+        //         $$('#btn_fblogin').removeAttr("disabled");
+        //     },
+        //     error: function(xhr, ajaxOptions, thrownError) {
+        //         myApp.alert("Error: " + xhr.thrownError);
+        //         $$('#btn-signin').removeAttr("disabled");
+        //         $$('#btn-goto-signup').removeAttr("disabled");
+        //         $$('#btn_fblogin').removeAttr("disabled");
+        //     }
+        // });
+    }, function (error) {
+        myApp.alert("facebookConnectPlugin Error: " + error);
+        // $$('#btn-signin').removeAttr("disabled");
+        // $$('#btn-goto-signup').removeAttr("disabled");
+        // $$('#btn_fblogin').removeAttr("disabled");
+    });
 }

@@ -49,5 +49,10 @@
 	<gap:config-file platform="android" parent="/manifest/application">
         android:windowSoftInputMode="stateVisible"
 	</gap:config-file> 
+
+	<gap:plugin name="cordova-plugin-facebook4" source="npm">
+	    <gap:param name="APP_ID" value="1835116006710130" />
+	    <gap:param name="APP_NAME" value="Envp" />
+	</gap:plugin>
 	
 </widget>
