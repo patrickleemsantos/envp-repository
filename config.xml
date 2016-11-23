@@ -42,7 +42,7 @@
 	<plugin name="org.apache.cordova.media-capture" spec="0.3.6" source="npm" />
 	<plugin name="org.apache.cordova.geolocation" spec="0.3.12" source="npm" />
 	<plugin name="org.apache.cordova.network-information" source="npm" />
-	<gap:plugin name="cordova-plugin-crosswalk-webview-pgb-adapt" source="npm" version="1.4.0-dev-5"/>
+	<!-- <gap:plugin name="cordova-plugin-crosswalk-webview-pgb-adapt" source="npm" version="1.4.0-dev-5"/> -->
 	
 	<preference name="android-minSdkVersion" value="15" />
 	
