@@ -46,6 +46,8 @@
 
 	<preference name="android-build-tool" value="gradle" />
 	<gap:plugin name="cordova-plugin-crosswalk-webview-pgb-adapt" source="npm" version="1.4.0-dev-11"/>
+	<plugin name="com.telerik.plugins.nativepagetransitions" source="npm" />
+	<gap:plugin name="pushbots-cordova-plugin" source="npm" />
 
 	<preference name="android-minSdkVersion" value="15" />
 	
