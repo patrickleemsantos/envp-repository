@@ -2565,6 +2565,7 @@ function getFBDetails() {
             data: "facebook_id=" + result.id,
             dataType: "json",
             success: function(msg, string, jqXHR) {
+                myApp.alert('status: ' + msg.status);
                 if (msg.status = 1) {
                     localStorage.setItem('account_id', msg.account_id);
                     localStorage.setItem('email', msg.email);
