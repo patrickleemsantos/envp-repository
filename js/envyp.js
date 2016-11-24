@@ -2581,11 +2581,8 @@ function getFBDetails() {
 
                     mainView.router.loadPage('choose_sports.html');
                 } else if (msg.status == 0) {
-                    myApp.alert('FB account_id: ' + msg.account_id);
                     var age = calcAge(result.birthday);
-                    myApp.alert('FB age: ' + age);
                     var fb_image = 'https://graph.facebook.com/' + result.id + '/picture?type=large';
-                    myApp.alert('FB image: ' + fb_image);
                     mainView.router.loadPage('profile_add.html?account_id=' + msg.account_id + '&first_name=' + result.first_name + '&last_name=' + result.last_name + '&age=' + age + '&description=&image_url=' + fb_image);
                 }
                 $$('#btn-email-login').removeAttr("disabled");
