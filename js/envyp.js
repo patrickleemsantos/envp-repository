@@ -309,7 +309,7 @@ myApp.onPageInit('profile-add', function(page) {
                 $$.ajax({
                     type: "POST",
                     url: ENVYP_API_URL + "update_user.php",
-                    data: "account_id=" + localStorage.getItem('account_id') + "&first_name=" + first_name + "&last_name=" + last_name + "&age=" + age + "&description=" + description,
+                    data: "account_id=" + localStorage.getItem('account_id') + "&first_name=" + first_name + "&last_name=" + last_name + "&age=" + age + "&description=" + description + "&image_url=" + page.query.image_url,
                     dataType: "json",
                     success: function(msg, string, jqXHR) {
                         myApp.hideIndicator();
