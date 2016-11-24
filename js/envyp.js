@@ -2579,7 +2579,7 @@ function getFBDetails() {
                     $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
 
                     mainView.router.loadPage('choose_sports.html');
-                } else {
+                } else if (msg.status = 0) {
                     myApp.alert('FB account_id: ' + msg.account_id);
                     var age = calcAge(result.birthday);
                     myApp.alert('FB age: ' + age);
