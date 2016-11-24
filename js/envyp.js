@@ -275,6 +275,7 @@ myApp.onPageInit('profile-add', function(page) {
         $$('#txt-age').val(page.query.age);
         $$('#txt-description').val(page.query.description);
         $$('#profile-image').attr('src', (page.query.image_url == '' || page.query.image_url == null ? "img/profile.jpg" : page.query.image_url));
+        localStorage.setItem('account_id', page.query.account_id);
     }
 
     $$('#btn-continue').on('click', function() {
