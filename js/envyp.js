@@ -12,7 +12,7 @@ var mainView = myApp.addView('.view-main', {
 });
 
 // const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
-const ENVYP_API_URL = 'http://115.85.17.61/envyp/';
+const ENVYP_API_URL = 'http://envp.dk/api/';
 const NO_INTERNET_ALERT = 'Please check your internet connection';
 const ERROR_ALERT = 'An error occured, please try again.';
 
