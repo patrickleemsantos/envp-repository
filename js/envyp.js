@@ -1369,6 +1369,7 @@ myApp.onPageInit('tournament-detail', function(page) {
         $$('#div-add-tournament-fine').hide();
 
         $$('#btn-submit-vote').on('click', function() {
+            $$('#btn-submit-vote').attr('disabled', true);
             myApp.showIndicator();
             $$.ajax({
                 type: "POST",
@@ -1415,10 +1416,12 @@ myApp.onPageInit('tournament-detail', function(page) {
                     } else {
                         myApp.alert(msg.message);
                     }
+                    $$('#btn-submit-vote').removeAttr("disabled");
                 },
                 error: function(msg, string, jqXHR) {
                     myApp.hideIndicator();
                     myApp.alert(ERROR_ALERT);
+                    $$('#btn-submit-vote').removeAttr("disabled");
                 }
             });
         });
