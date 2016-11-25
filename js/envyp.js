@@ -14,6 +14,7 @@ var mainView = myApp.addView('.view-main', {
 // const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
 const ENVYP_API_URL = 'http://envp.dk/api/';
 const NO_INTERNET_ALERT = 'Please check your internet connection';
+const AJAX_ERROR_ALERT = 'Network error, please try again.';
 const ERROR_ALERT = 'An error occured, please try again.';
 
 var imgfile = '';
@@ -511,6 +512,10 @@ myApp.onPageInit('team-list', function(page) {
             });
             myApp.initImagesLazyLoad(page.container);
             myApp.hideIndicator();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator(); 
+            myApp.alert(AJAX_ERROR_ALERT); 
         });
     } else {
         myApp.alert(NO_INTERNET_ALERT);
@@ -593,6 +598,10 @@ myApp.onPageInit('roster-list', function(page) {
             });
             myApp.initImagesLazyLoad(page.container);
             myApp.hideIndicator();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator(); 
+            myApp.alert(AJAX_ERROR_ALERT); 
         });
     } else {
         myApp.alert(NO_INTERNET_ALERT);
@@ -683,6 +692,10 @@ myApp.onPageInit('roster-detail', function(page) {
             $('#roster-fpg').prepend(field.fpg);
         });
         myApp.hideIndicator();
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+        myApp.hideIndicator(); 
+        myApp.alert(AJAX_ERROR_ALERT); 
     });
 
     $$('#btn-edit-roster-detail').on('click', function() {
@@ -812,6 +825,10 @@ myApp.onPageInit('account-list', function(page) {
                 height: 73,
             });
             myApp.hideIndicator();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator(); 
+            myApp.alert(AJAX_ERROR_ALERT); 
         });
     } else {
         myApp.alert(NO_INTERNET_ALERT);
@@ -896,6 +913,10 @@ myApp.onPageInit('administrator-list', function(page) {
                 height: 73,
             });
             myApp.hideIndicator();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator(); 
+            myApp.alert(AJAX_ERROR_ALERT); 
         });
     } else {
         myApp.alert(NO_INTERNET_ALERT);
@@ -1063,6 +1084,10 @@ myApp.onPageInit('tournament-list', function(page) {
                 height: 73,
             });
             myApp.hideIndicator();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator(); 
+            myApp.alert(AJAX_ERROR_ALERT); 
         });
     } else {
         myApp.alert(NO_INTERNET_ALERT);
@@ -1114,6 +1139,10 @@ myApp.onPageInit('tournament-detail', function(page) {
         $$('#txt-tournament-description').prepend((tournament_description == '' || tournament_description == null ? "No description" : tournament_description));
 
         myApp.hideIndicator();
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+        myApp.hideIndicator(); 
+        myApp.alert(AJAX_ERROR_ALERT); 
     });
 
     // $("#txt-tournament-location").height( $("#txt-tournament-location")[0].scrollHeight);
@@ -1150,6 +1179,10 @@ myApp.onPageInit('tournament-detail', function(page) {
             // myApp.initImagesLazyLoad(page.container);
         });
         myApp.hideIndicator();
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+        myApp.hideIndicator(); 
+        myApp.alert(AJAX_ERROR_ALERT); 
     });
     // End Preload roster list
 
@@ -1180,6 +1213,10 @@ myApp.onPageInit('tournament-detail', function(page) {
             // myApp.initImagesLazyLoad(page.container);
         });
         myApp.hideIndicator();
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+        myApp.hideIndicator(); 
+        myApp.alert(AJAX_ERROR_ALERT); 
     });
     // End Preload roster list
 
@@ -1225,6 +1262,10 @@ myApp.onPageInit('tournament-detail', function(page) {
         $$('#opponent-fouls').prepend(opponent_fouls);
 
         myApp.hideIndicator();
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+        myApp.hideIndicator(); 
+        myApp.alert(AJAX_ERROR_ALERT); 
     });
 
     $$('#btn-edit-team-stats').on('click', function() {
@@ -1243,6 +1284,10 @@ myApp.onPageInit('tournament-detail', function(page) {
                 $$('#div-vote-result').hide();
             }
         });
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+        myApp.hideIndicator(); 
+        myApp.alert(AJAX_ERROR_ALERT); 
     });
 
     $("#vote_list").empty();
@@ -1270,6 +1315,10 @@ myApp.onPageInit('tournament-detail', function(page) {
             // myApp.initImagesLazyLoad(page.container);
         });
         myApp.hideIndicator();
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+        myApp.hideIndicator(); 
+        myApp.alert(AJAX_ERROR_ALERT); 
     });
 
     $("#select-vote-list").empty();
@@ -1284,6 +1333,10 @@ myApp.onPageInit('tournament-detail', function(page) {
             }
         });
         myApp.hideIndicator();
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+        myApp.hideIndicator(); 
+        myApp.alert(AJAX_ERROR_ALERT); 
     });
     // End Preload vote
 
@@ -1354,6 +1407,10 @@ myApp.onPageInit('tournament-detail', function(page) {
                                 // myApp.initImagesLazyLoad(page.container);
                             });
                             myApp.hideIndicator();
+                        })
+                        .fail(function(jqXHR, textStatus, errorThrown) {
+                            myApp.hideIndicator(); 
+                            myApp.alert(AJAX_ERROR_ALERT); 
                         });
                     } else {
                         myApp.alert(msg.message);
@@ -1501,6 +1558,10 @@ myApp.onPageInit('tournament-fine-add', function(page) {
             }
         });
         myApp.hideIndicator();
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+        myApp.hideIndicator(); 
+        myApp.alert(AJAX_ERROR_ALERT); 
     });
 
     $$('#btn-add-fine').on('click', function() {
@@ -1565,6 +1626,10 @@ myApp.onPageInit('tournament-fine-add', function(page) {
                                 // myApp.initImagesLazyLoad(page.container);
                             });
                             myApp.hideIndicator();
+                        })
+                        .fail(function(jqXHR, textStatus, errorThrown) {
+                            myApp.hideIndicator(); 
+                            myApp.alert(AJAX_ERROR_ALERT); 
                         });
                     } else {
                         myApp.alert(msg.message);
@@ -1614,6 +1679,10 @@ myApp.onPageInit('roster-tournament-stats', function(page) {
         $$('#roster-votes').prepend(votes);
 
         myApp.hideIndicator();
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+        myApp.hideIndicator(); 
+        myApp.alert(AJAX_ERROR_ALERT); 
     });
 
     $$('#btn-edit-roster-stats').on('click', function() {
@@ -1818,6 +1887,10 @@ myApp.onPageInit('tournament-roster-list', function(page) {
                 height: 73,
             });
             myApp.hideIndicator();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator(); 
+            myApp.alert(AJAX_ERROR_ALERT); 
         });
     } else {
         myApp.alert(NO_INTERNET_ALERT);
@@ -1865,6 +1938,10 @@ myApp.onPageInit('tournament-roster-list', function(page) {
                                 // myApp.initImagesLazyLoad(page.container);
                             });
                             myApp.hideIndicator();
+                        })
+                        .fail(function(jqXHR, textStatus, errorThrown) {
+                            myApp.hideIndicator(); 
+                            myApp.alert(AJAX_ERROR_ALERT); 
                         });
 
                         $("#select-vote-list").empty();
@@ -1879,6 +1956,10 @@ myApp.onPageInit('tournament-roster-list', function(page) {
                                     }
                                 });
                                 myApp.hideIndicator();
+                            })
+                            .fail(function(jqXHR, textStatus, errorThrown) {
+                                myApp.hideIndicator(); 
+                                myApp.alert(AJAX_ERROR_ALERT); 
                             });
                     } else {
                         myApp.alert(msg.message);
@@ -2366,6 +2447,10 @@ function getParticipantList() {
             }
         });
         myApp.hideIndicator();
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+        myApp.hideIndicator(); 
+        myApp.alert(AJAX_ERROR_ALERT); 
     });
 }
 
@@ -2415,6 +2500,10 @@ function getTeamAdministratorList() {
             }
         });
         myApp.hideIndicator();
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+        myApp.hideIndicator(); 
+        myApp.alert(AJAX_ERROR_ALERT); 
     });
 }
 
