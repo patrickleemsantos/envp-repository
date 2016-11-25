@@ -387,8 +387,12 @@ myApp.onPageInit('choose-sports', function(page) {
 
 /* ===== Home Page ===== */
 myApp.onPageInit('home', function(page) {
-    localStorage.setItem('selectedSportID', page.query.sport_id);
-    $$("#img-sport-selected").attr("src", page.query.image_url);
+    if (page.query.sport_id != null) {
+        localStorage.setItem('selectedSportID', page.query.sport_id);
+        localStorage.setItem('selectedSportImage', page.query.image_url);
+    }
+
+    $$("#img-sport-selected").attr("src", localStorage.getItem('selectedSportImage'));
 });
 
 /* ===== Team Add Page ===== */
@@ -494,7 +498,7 @@ myApp.onPageInit('team-list', function(page) {
                 },
                 template: '<li>' +
                     '<a href="#" onclick="getTeamPassword({{team_id}},{{team_admin}},\'{{team_name}}\',\'{{team_password}}\')" class="item-link item-content">' +
-                    '<div class="item-media"><img data-src="{{team_image}}" class="lazy lazy-fadein" style="width:44px; height:44px;"/></div>' +
+                    '<div class="item-media"><img data-src="{{team_image}}" class="lazy lazy-fadein img-circle" style="width:44px; height:44px;"/></div>' +
                     '<div class="item-inner">' +
                     '<div class="item-title-row">' +
                     '<div class="item-title"><b>{{team_name}}</b></div>' +
@@ -515,10 +519,14 @@ myApp.onPageInit('team-list', function(page) {
 
 /* ===== Team Management Page ===== */
 myApp.onPageInit('team-management', function(page) {
-    $('#header-team-name').append(page.query.team_name);
-    localStorage.setItem('selectedTeamID', page.query.team_id);
-    localStorage.setItem('selectedTeamName', page.query.team_name);
-    localStorage.setItem('currentTeamAdmin', page.query.team_admin);
+    if (page.query.team_id != null) {
+        localStorage.setItem('selectedTeamName', page.query.team_name);
+        localStorage.setItem('selectedTeamID', page.query.team_id);
+        localStorage.setItem('selectedTeamName', page.query.team_name);
+        localStorage.setItem('currentTeamAdmin', page.query.team_admin);
+    }
+
+    $('#header-team-name').append(localStorage.getItem('selectedTeamName'));
 
     $$('#btn-roster').on('click', function() {
         mainView.router.loadPage('roster_list.html');
@@ -574,7 +582,7 @@ myApp.onPageInit('roster-list', function(page) {
                 },
                 template: '<li>' +
                     '<a href="roster_detail.html?roster_id={{roster_id}}&roster_name={{roster_name}}&roster_position={{roster_position}}&roster_image={{roster_image}}" class="item-link item-content">' +
-                    '<div class="item-media"><img data-src="{{roster_image}}" class="lazy lazy-fadein" style="width:44px; height:44px;"/></div>' +
+                    '<div class="item-media"><img data-src="{{roster_image}}" class="lazy lazy-fadein img-circle" style="width:44px; height:44px;"/></div>' +
                     '<div class="item-inner">' +
                     '<div class="item-title-row">' +
                     '<div class="item-title"><b>{{roster_name}}</b></div>' +
@@ -1127,7 +1135,7 @@ myApp.onPageInit('tournament-detail', function(page) {
                 if (field.image_url == '' || field.image_url == null) {
                     var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
                 } else {
-                    var image_url = "<img data-src='" + field.image_url + "' class='lazy lazy-fadein' style='width:44px; height:44px;'>";
+                    var image_url = "<img src='" + field.image_url + "' class='img-circle' style='width:44px; height:44px;'>";
                 }
                 $("#roster_list").append('<li>' +
                     '<a href="roster_tournament_stats.html?roster_id=' + field.roster_id + '&roster_name=' + field.name + '&roster_position=' + field.position + '&roster_image=' + field.image_url + '" class="item-link item-content">' +
@@ -1139,7 +1147,7 @@ myApp.onPageInit('tournament-detail', function(page) {
                     '<div class="item-subtitle">' + field.position + '</div>' +
                     '</div></a></li>');
             }
-            myApp.initImagesLazyLoad(page.container);
+            // myApp.initImagesLazyLoad(page.container);
         });
         myApp.hideIndicator();
     });
@@ -1156,7 +1164,7 @@ myApp.onPageInit('tournament-detail', function(page) {
                 if (field.image_url == '' || field.image_url == null) {
                     var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
                 } else {
-                    var image_url = "<img data-src='" + field.image_url + "' class='lazy lazy-fadein' style='width:44px; height:44px;'>";
+                    var image_url = "<img src='" + field.image_url + "' class='img-circle' style='width:44px; height:44px;'>";
                 }
                 $("#fine_list").append('<li><a href="fine_detail.html?name=' + field.name + '&image_url=' + field.image_url + '&price=' + field.price + '&description=' + field.fine + '" class="item-link item-content">' +
                     '<div class="item-media">' + image_url + '</div>' +
@@ -1169,7 +1177,7 @@ myApp.onPageInit('tournament-detail', function(page) {
                     '<div class="item-text">' + field.fine + '</div>' +
                     '</div></a></li>');
             }
-            myApp.initImagesLazyLoad(page.container);
+            // myApp.initImagesLazyLoad(page.container);
         });
         myApp.hideIndicator();
     });
@@ -1247,7 +1255,7 @@ myApp.onPageInit('tournament-detail', function(page) {
                 if (field.image_url == '' || field.image_url == null) {
                     var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
                 } else {
-                    var image_url = "<img data-src='" + field.image_url + "' class='lazy lazy-fadein' style='width:44px; height:44px;'>";
+                    var image_url = "<img src='" + field.image_url + "' class='img-circle' style='width:44px; height:44px;'>";
                 }
                 $("#vote_list").append('<li>' +
                     '<div class="item-content">' +
@@ -1259,7 +1267,7 @@ myApp.onPageInit('tournament-detail', function(page) {
                     '</div>' +
                     '</li>');
             }
-            myApp.initImagesLazyLoad(page.container);
+            // myApp.initImagesLazyLoad(page.container);
         });
         myApp.hideIndicator();
     });
@@ -1270,7 +1278,7 @@ myApp.onPageInit('tournament-detail', function(page) {
         $("#select-vote-list").prepend('<option value="" selected="selected">Select a roster</option>');
         $.each(result, function(i, field) {
             if (field.status == 'empty') {
-                myApp.alert('No roster yet :(');
+                // myApp.alert('No roster yet :(');
             } else {
                 $("#select-vote-list").append('<option value="' + field.roster_id + '">' + field.name + '</option>');
             }
@@ -1331,7 +1339,7 @@ myApp.onPageInit('tournament-detail', function(page) {
                                     if (field.image_url == '' || field.image_url == null) {
                                         var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
                                     } else {
-                                        var image_url = "<img data-src='" + field.image_url + "' class='lazy lazy-fadein' style='width:44px; height:44px;'>";
+                                        var image_url = "<img src='" + field.image_url + "' class='img-circle' style='width:44px; height:44px;'>";
                                     }
                                     $("#vote_list").append('<li>' +
                                         '<div class="item-content">' +
@@ -1343,7 +1351,7 @@ myApp.onPageInit('tournament-detail', function(page) {
                                         '</div>' +
                                         '</li>');
                                 }
-                                myApp.initImagesLazyLoad(page.container);
+                                // myApp.initImagesLazyLoad(page.container);
                             });
                             myApp.hideIndicator();
                         });
@@ -1541,7 +1549,7 @@ myApp.onPageInit('tournament-fine-add', function(page) {
                                     if (field.image_url == '' || field.image_url == null) {
                                         var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
                                     } else {
-                                        var image_url = "<img data-src='" + field.image_url + "' class='lazy lazy-fadein' style='width:44px; height:44px;'>";
+                                        var image_url = "<img src='" + field.image_url + "' class='img-circle' style='width:44px; height:44px;'>";
                                     }
                                     $("#fine_list").append('<li><a href="fine_detail.html?name=' + field.name + '&image_url=' + field.image_url + '&price=' + field.price + '&description=' + field.fine + '" class="item-link item-content">' +
                                         '<div class="item-media">' + image_url + '</div>' +
@@ -1554,7 +1562,7 @@ myApp.onPageInit('tournament-fine-add', function(page) {
                                         '<div class="item-text">' + field.fine + '</div>' +
                                         '</div></a></li>');
                                 }
-                                myApp.initImagesLazyLoad(page.container);
+                                // myApp.initImagesLazyLoad(page.container);
                             });
                             myApp.hideIndicator();
                         });
@@ -1797,7 +1805,7 @@ myApp.onPageInit('tournament-roster-list', function(page) {
                 template: '<li>' +
                     '<label class="label-checkbox item-content">' +
                     '<input id="checkbox-roster" type="checkbox" name="ks-media-checkbox" value="{{roster_id}}"/>' +
-                    '<div class="item-media"><img src="{{roster_image}}" style="width:44px; height:44px;"/></div>' +
+                    '<div class="item-media"><img src="{{roster_image}}" class="img-circle" style="width:44px; height:44px;"/></div>' +
                     '<div class="item-inner">' +
                     '<div class="item-title-row">' +
                     '<div class="item-title"><b>{{roster_name}}</b></div>' +
@@ -1842,7 +1850,7 @@ myApp.onPageInit('tournament-roster-list', function(page) {
                                     if (field.image_url == '' || field.image_url == null) {
                                         var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
                                     } else {
-                                        var image_url = "<img data-src='" + field.image_url + "' class='lazy lazy-fadein' style='width:44px; height:44px;'>";
+                                        var image_url = "<img src='" + field.image_url + "' class='img-circle' style='width:44px; height:44px;'>";
                                     }
                                     $("#roster_list").append('<li>' +
                                         '<a href="roster_tournament_stats.html?roster_id=' + field.roster_id + '&roster_name=' + field.name + '&roster_position=' + field.position + '&roster_image=' + field.image_url + '" class="item-link item-content">' +
@@ -1854,10 +1862,24 @@ myApp.onPageInit('tournament-roster-list', function(page) {
                                         '<div class="item-subtitle">' + field.position + '</div>' +
                                         '</div></a></li>');
                                 }
-                                myApp.initImagesLazyLoad(page.container);
+                                // myApp.initImagesLazyLoad(page.container);
                             });
                             myApp.hideIndicator();
                         });
+
+                        $("#select-vote-list").empty();
+                            myApp.showIndicator();
+                            $.getJSON(ENVYP_API_URL + "get_tournament_roster.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
+                                $("#select-vote-list").prepend('<option value="" selected="selected">Select a roster</option>');
+                                $.each(result, function(i, field) {
+                                    if (field.status == 'empty') {
+                                        myApp.alert('No roster yet :(');
+                                    } else {
+                                        $("#select-vote-list").append('<option value="' + field.roster_id + '">' + field.name + '</option>');
+                                    }
+                                });
+                                myApp.hideIndicator();
+                            });
                     } else {
                         myApp.alert(msg.message);
                     }
@@ -2327,7 +2349,7 @@ function getParticipantList() {
                 var account_image = (field.image_url == '' || field.image_url == null ? "img/profile.jpg" : field.image_url);
                 $("#list-view-participants").append('<li>' +
                     '<div class="item-content">' +
-                    '<div class="item-media"><img src="' + account_image + '" style="width:44px; height:44px;"/></div>' +
+                    '<div class="item-media"><img src="' + account_image + '" class="img-circle" style="width:44px; height:44px;"/></div>' +
                     '<div class="item-inner">' +
                     '<div class="item-title-row">' +
                     '<div class="item-title">' + field.first_name + ' ' + field.last_name + '</div>' +
@@ -2376,7 +2398,7 @@ function getTeamAdministratorList() {
                 var account_image = (field.image_url == '' || field.image_url == null ? "img/profile.jpg" : field.image_url);
                 $("#list-view-administrator").append('<li>' +
                     '<div class="item-content">' +
-                    '<div class="item-media"><img src="' + account_image + '" style="width:44px; height:44px;"/></div>' +
+                    '<div class="item-media"><img src="' + account_image + '" class="img-circle" style="width:44px; height:44px;"/></div>' +
                     '<div class="item-inner">' +
                     '<div class="item-title-row">' +
                     '<div class="item-title">' + field.first_name + ' ' + field.last_name + '</div>' +
