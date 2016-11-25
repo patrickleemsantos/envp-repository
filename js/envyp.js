@@ -1045,7 +1045,7 @@ myApp.onPageInit('tournament-list', function(page) {
                 },
                 template: '<li>' +
                     '<a href="tournament_detail.html?tournament_id={{tournament_id}}" class="item-link item-content">' +
-                    '<div class="item-media"><img src="{{tournament_image}}" style="width:44px; height:44px;"/></div>' +
+                    '<div class="item-media"><img src="{{tournament_image}}" style="width:44px; height:44px;" class="img-circle"/></div>' +
                     '<div class="item-inner">' +
                     '<div class="item-title-row">' +
                     '<div class="item-title"><b>{{opponent}}</b></div>' +
