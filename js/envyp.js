@@ -2347,8 +2347,11 @@ function win(r) {
 }
 
 function winUpdateUser(r) {
+    myApp.alert('Success upload!');
     var resp = JSON.parse(r.response);
+    alert('resp: ' + resp);
     myApp.alert(resp.message);
+    alert('resp image: ' + resp.account_image);
     if (resp.status == '0') {
         localStorage.setItem('account_image', resp.account_image);
     }
