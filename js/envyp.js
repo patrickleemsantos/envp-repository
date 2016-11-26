@@ -22,6 +22,7 @@ var latitude = '';
 var longitude = '';
 var edit_latitude = '';
 var edit_longitude = '';
+localStorage.setItem('selectedLanguage', '1');
 
 $(document).on({
     'DOMNodeInserted': function() {
@@ -377,6 +378,12 @@ myApp.onPageInit('profile-add', function(page) {
 
 /* ===== Choose Sports Page ===== */
 myApp.onPageInit('choose-sports', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-choose-sports').prepend('Choose Sports');
+    } else {
+        $('#lbl-choose-sports').prepend('Vælg Sport');
+    }
+
     $$('#open-left-panel').on('click', function(e) {
         myApp.openPanel('left');
     });
@@ -388,6 +395,12 @@ myApp.onPageInit('choose-sports', function(page) {
 
 /* ===== Home Page ===== */
 myApp.onPageInit('home', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-home').prepend('Home');
+    } else {
+        $('#lbl-home').prepend('Hjem');
+    }
+
     if (page.query.sport_id != null) {
         localStorage.setItem('selectedSportID', page.query.sport_id);
         localStorage.setItem('selectedSportImage', page.query.image_url);
@@ -498,7 +511,7 @@ myApp.onPageInit('team-list', function(page) {
                     return found;
                 },
                 template: '<li>' +
-                    '<a href="#" onclick="getTeamPassword({{team_id}},{{team_admin}},\'{{team_name}}\',\'{{team_password}}\')" class="item-link item-content">' +
+                    '<a href="#" onclick="getTeamPassword({{team_id}},{{team_admin}},\'{{team_name}}\',\'{{team_password}}\',\'{{team_image}}\')" class="item-link item-content">' +
                     '<div class="item-media"><img data-src="{{team_image}}" class="lazy lazy-fadein img-circle" style="width:44px; height:44px;"/></div>' +
                     '<div class="item-inner">' +
                     '<div class="item-title-row">' +
@@ -524,40 +537,34 @@ myApp.onPageInit('team-list', function(page) {
 
 /* ===== Team Stats Page ===== */
 myApp.onPageInit('team-stats', function(page) {
-    var points = 0;
-    var assists = 0;
-    var fouls = 0;
+    var ppg = 0;
+    var apg = 0;
+    var fpg = 0;
 
-    $$("#roster-image").attr("data-src", (page.query.roster_image == '' || page.query.roster_image == null ? "img/profile.jpg" : page.query.roster_image));
-    $$("#roster-image").addClass('lazy lazy-fadein');
+    $$("#img-team-image").attr("data-src", (localStorage.getItem('selectedTeamImage') == '' || localStorage.getItem('selectedTeamImage') == null ? "img/profile.jpg" : localStorage.getItem('selectedTeamImage')));
+    $$("#img-team-image").addClass('lazy lazy-fadein');
     myApp.initImagesLazyLoad(page.container);
 
-    $$('#roster-name').prepend(page.query.roster_name);
-    $$('#roster-position').prepend(page.query.roster_position);
+    $$('#p-team-name').prepend(localStorage.getItem('selectedTeamName'));
 
     myApp.showIndicator();
-    $.getJSON(ENVYP_API_URL + "get_roster_tournament_stats.php?tournament_id=" + localStorage.getItem('selectedTournamentId') + '&roster_id=' + page.query.roster_id, function(result) {
+    $.getJSON(ENVYP_API_URL + "get_team_stats.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
         $.each(result, function(i, field) {
-            points = field.points
-            assists = field.assists
-            fouls = field.fouls
-            votes = field.votes
+            ppg = field.ppg
+            apg = field.apg
+            fpg = field.fpg
         });
 
-        $$('#team-ppg').prepend(points);
-        $$('#team-apg').prepend(assists);
-        $$('#team-fpg').prepend(fouls);
+        $('#team-ppg').prepend(ppg);
+        $('#team-apg').prepend(apg);
+        $('#team-fpg').prepend(fpg);
 
         myApp.hideIndicator();
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
         myApp.hideIndicator(); 
         myApp.alert(AJAX_ERROR_ALERT); 
-    });
-
-    $$('#btn-edit-roster-stats').on('click', function() {
-        mainView.router.loadPage('edit_roster_tournament_stats.html?roster_image=' + page.query.roster_image + '&roster_id=' + page.query.roster_id + '&roster_name=' + page.query.roster_name + '&roster_position=' + page.query.roster_position + '&points=' + points + '&assists=' + assists + '&fouls=' + fouls);
-    });     
+    });  
 });
 
 /* ===== Team Management Page ===== */
@@ -566,6 +573,7 @@ myApp.onPageInit('team-management', function(page) {
         localStorage.setItem('selectedTeamName', page.query.team_name);
         localStorage.setItem('selectedTeamID', page.query.team_id);
         localStorage.setItem('selectedTeamName', page.query.team_name);
+        localStorage.setItem('selectedTeamImage', page.query.team_image);
         localStorage.setItem('currentTeamAdmin', page.query.team_admin);
     }
 
@@ -2409,14 +2417,14 @@ function fail(error) {
     myApp.alert("An error has occurred with error code " + error.code + ", please try again.");
 }
 
-function getTeamPassword(team_id, team_admin, team_name, team_password) {
+function getTeamPassword(team_id, team_admin, team_name, team_password, team_image) {
     if (team_admin != localStorage.getItem('account_id')) {
         isAccountInvited(team_id, function(response) {
             if (response.status == true) {
                 myApp.prompt('Please enter a password', function(data) {
                     if (data == team_password) {
                         localStorage.setItem('currentAccountIsTeamAdmin', response.is_admin);
-                        mainView.router.loadPage('team_management.html?team_id=' + team_id + '&team_name=' + team_name + '&team_admin=' + team_admin);
+                        mainView.router.loadPage('team_management.html?team_id=' + team_id + '&team_name=' + team_name + '&team_admin=' + team_admin + '&team_image=' + team_image);
                     } else {
                         myApp.alert('Incorrect team password!');
                     }
@@ -2426,7 +2434,7 @@ function getTeamPassword(team_id, team_admin, team_name, team_password) {
             }
         })
     } else {
-        mainView.router.loadPage('team_management.html?team_id=' + team_id + '&team_name=' + team_name + '&team_admin=' + team_admin);
+        mainView.router.loadPage('team_management.html?team_id=' + team_id + '&team_name=' + team_name + '&team_admin=' + team_admin + '&team_image=' + team_image);
     }
 }
 
@@ -2761,3 +2769,4 @@ function calcAge(dateString) {
     var birthday = +new Date(dateString);
     return ~~((Date.now() - birthday) / (31557600000));
 }
+

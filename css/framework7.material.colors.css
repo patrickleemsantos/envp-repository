@@ -1,5 +1,4 @@
-/**
- * Framework7 1.4.2
+1e5799* Framework7 1.4.2
  * Full Featured Mobile HTML Framework For Building iOS & Android Apps
  * 
  * Google Material Theme
@@ -3271,20 +3270,20 @@ html:not(.watch-active-state) .speed-dial-buttons a.bg-teal:active,
   color: #fff;
 }
 .color-green {
-  color: #4caf50;
+  color: #1e5799;
 }
 .list-block .item-link.list-button.color-green,
 .list-block .item-link.color-green,
 .tabbar a.active.color-green,
 a.color-green {
-  color: #4caf50;
+  color: #1e5799;
 }
 .label-switch input[type="checkbox"]:checked + .checkbox.color-green,
 .label-switch.color-green input[type="checkbox"]:checked + .checkbox {
-  background-color: #4caf50;
+  background-color: #1e5799;
 }
 .theme-green .button:not(.button-fill) {
-  color: #4caf50;
+  color: #1e5799;
 }
 .theme-green .navbar .button:not(.button-fill),
 .theme-green.navbar .button:not(.button-fill),
@@ -3296,10 +3295,10 @@ a.color-green {
 }
 .button.color-green:not(.button-fill),
 .color-green.buttons-row .button:not(.button-fill) {
-  color: #4caf50 !important;
+  color: #1e5799 !important;
 }
 .theme-green .button.button-fill {
-  background: #4caf50;
+  background: #1e5799;
   color: #fff;
 }
 html:not(.watch-active-state) .theme-green .button.button-fill:active,
@@ -3308,7 +3307,7 @@ html:not(.watch-active-state) .theme-green .button.button-fill:active,
 }
 .button.button-fill.bg-green,
 .button.button-fill.color-green {
-  background: #4caf50 !important;
+  background: #1e5799 !important;
   color: #fff;
 }
 html:not(.watch-active-state) .button.button-fill.bg-green:active,
@@ -3327,7 +3326,7 @@ html:not(.watch-active-state) .button.button-fill.color-green:active,
 .progressbar.theme-green span,
 .theme-green .progressbar span,
 .progressbar.bg-green span {
-  background-color: #4caf50;
+  background-color: #1e5799;
 }
 .progressbar-infinite.color-green,
 .progressbar-infinite.theme-green,
@@ -3343,44 +3342,44 @@ html:not(.watch-active-state) .button.button-fill.color-green:active,
 .progressbar-infinite.theme-green:before,
 .theme-green .progressbar-infinite:before,
 .progressbar-infinite.bg-green:before {
-  background-color: #4caf50;
+  background-color: #1e5799;
 }
 .color-green i.icon,
 i.icon.color-green {
-  color: #4caf50;
+  color: #1e5799;
 }
 i.icon-next.color-green,
 i.icon-next.theme-green {
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20fill%3D'%234caf50'%20width%3D'24'%20height%3D'24'%20viewBox%3D'0%200%2024%2024'%3E%3Cpath%20d%3D'M10%206L8.59%207.41%2013.17%2012l-4.58%204.59L10%2018l6-6z'%2F%3E%3Cpath%20d%3D'M0%200h24v24H0z'%20fill%3D'none'%2F%3E%3C%2Fsvg%3E");
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20fill%3D'%231e5799'%20width%3D'24'%20height%3D'24'%20viewBox%3D'0%200%2024%2024'%3E%3Cpath%20d%3D'M10%206L8.59%207.41%2013.17%2012l-4.58%204.59L10%2018l6-6z'%2F%3E%3Cpath%20d%3D'M0%200h24v24H0z'%20fill%3D'none'%2F%3E%3C%2Fsvg%3E");
 }
 i.icon-prev.color-green,
 i.icon-prev.theme-green {
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20fill%3D'%234caf50'%20width%3D'24'%20height%3D'24'%20viewBox%3D'0%200%2024%2024'%3E%3Cpath%20d%3D'M15.41%207.41L14%206l-6%206%206%206%201.41-1.41L10.83%2012z'%2F%3E%3Cpath%20d%3D'M0%200h24v24H0z'%20fill%3D'none'%2F%3E%3C%2Fsvg%3E");
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20fill%3D'%231e5799'%20width%3D'24'%20height%3D'24'%20viewBox%3D'0%200%2024%2024'%3E%3Cpath%20d%3D'M15.41%207.41L14%206l-6%206%206%206%201.41-1.41L10.83%2012z'%2F%3E%3Cpath%20d%3D'M0%200h24v24H0z'%20fill%3D'none'%2F%3E%3C%2Fsvg%3E");
 }
 i.icon-back.color-green,
 i.icon-back.theme-green {
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'24'%20height%3D'24'%20viewBox%3D'0%200%2024%2024'%3E%3Cpath%20d%3D'M20%2011H7.83l5.59-5.59L12%204l-8%208%208%208%201.41-1.41L7.83%2013H20v-2z'%20fill%3D'%234caf50'%2F%3E%3C%2Fsvg%3E");
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'24'%20height%3D'24'%20viewBox%3D'0%200%2024%2024'%3E%3Cpath%20d%3D'M20%2011H7.83l5.59-5.59L12%204l-8%208%208%208%201.41-1.41L7.83%2013H20v-2z'%20fill%3D'%231e5799'%2F%3E%3C%2Fsvg%3E");
 }
 i.icon-forward.color-green,
 i.icon-forward.theme-green {
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'24'%20height%3D'24'%20viewBox%3D'0%200%2024%2024'%3E%3Cpath%20d%3D'M12%204l-1.41%201.41L16.17%2011H4v2h12.17l-5.58%205.59L12%2020l8-8z'%20fill%3D'%234caf50'%2F%3E%3C%2Fsvg%3E");
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'24'%20height%3D'24'%20viewBox%3D'0%200%2024%2024'%3E%3Cpath%20d%3D'M12%204l-1.41%201.41L16.17%2011H4v2h12.17l-5.58%205.59L12%2020l8-8z'%20fill%3D'%231e5799'%2F%3E%3C%2Fsvg%3E");
 }
 i.icon-bars.color-green,
 i.icon-bars.theme-green {
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'24'%20height%3D'24'%20viewBox%3D'0%200%2024%2024'%3E%3Cpath%20d%3D'M3%2018h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z'%20fill%3D'%234caf50'%2F%3E%3C%2Fsvg%3E");
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'24'%20height%3D'24'%20viewBox%3D'0%200%2024%2024'%3E%3Cpath%20d%3D'M3%2018h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z'%20fill%3D'%231e5799'%2F%3E%3C%2Fsvg%3E");
 }
 .preloader.color-green svg circle,
 .preloader.preloader-green svg circle {
-  stroke: #4caf50;
+  stroke: #1e5799;
 }
 .preloader.color-green .preloader-inner-gap,
 .preloader.preloader-green .preloader-inner-gap,
 .preloader.color-green .preloader-inner-half-circle,
 .preloader.preloader-green .preloader-inner-half-circle {
-  border-color: #4caf50;
+  border-color: #1e5799;
 }
 .theme-green a {
-  color: #4caf50;
+  color: #1e5799;
 }
 .theme-green .navbar,
 .navbar.theme-green,
@@ -3390,27 +3389,27 @@ i.icon-bars.theme-green {
 .subnavbar.theme-green,
 .theme-green .searchbar,
 .searchbar.theme-green {
-  background-color: #4caf50;
+  background-color: #1e5799;
 }
 .theme-green .range-slider input[type="range"]::-webkit-slider-thumb:before,
 .range-slider.theme-green input[type="range"]::-webkit-slider-thumb:before {
-  background-color: #4caf50;
+  background-color: #1e5799;
 }
 .theme-green .range-slider input[type="range"]::-webkit-slider-thumb,
 .range-slider.theme-green input[type="range"]::-webkit-slider-thumb {
-  background-color: #4caf50;
+  background-color: #1e5799;
 }
 .theme-green .range-slider input[type="range"]::-ms-thumb,
 .range-slider.theme-green input[type="range"]::-ms-thumb {
-  background-color: #4caf50;
+  background-color: #1e5799;
 }
 .theme-green .range-slider input[type="range"]::-ms-fill-lower,
 .range-slider.theme-green input[type="range"]::-ms-fill-lower {
-  background-color: #4caf50;
+  background-color: #1e5799;
 }
 .theme-green .range-slider input[type="range"]::-moz-range-thumb,
 .range-slider.theme-green input[type="range"]::-moz-range-thumb {
-  background-color: #4caf50;
+  background-color: #1e5799;
 }
 .theme-green .label-switch input[type="checkbox"]:checked + .checkbox,
 .label-switch.theme-green input[type="checkbox"]:checked + .checkbox {
@@ -3418,7 +3417,7 @@ i.icon-bars.theme-green {
 }
 .theme-green .label-switch input[type="checkbox"]:checked + .checkbox:after,
 .label-switch.theme-green input[type="checkbox"]:checked + .checkbox:after {
-  background-color: #4caf50;
+  background-color: #1e5799;
 }
 .theme-green label.label-checkbox,
 label.label-checkbox.theme-green {
@@ -3440,12 +3439,12 @@ label.label-checkbox.theme-green input[type="radio"]:checked ~ .item-after i.ico
 label.label-checkbox.theme-green input[type="checkbox"]:checked ~ .item-inner i.icon-form-checkbox,
 .theme-green label.label-checkbox input[type="radio"]:checked ~ .item-inner i.icon-form-checkbox,
 label.label-checkbox.theme-green input[type="radio"]:checked ~ .item-inner i.icon-form-checkbox {
-  border-color: #4caf50;
-  background-color: #4caf50;
+  border-color: #1e5799;
+  background-color: #1e5799;
 }
 .theme-green label.label-radio i.icon-form-radio:after,
 label.label-radio.theme-green i.icon-form-radio:after {
-  background-color: #4caf50;
+  background-color: #1e5799;
 }
 .theme-green label.label-radio input[type="checkbox"]:checked + .item-media i.icon-form-radio,
 label.label-radio.theme-green input[type="checkbox"]:checked + .item-media i.icon-form-radio,
@@ -3459,7 +3458,7 @@ label.label-radio.theme-green input[type="radio"]:checked ~ .item-after i.icon-f
 label.label-radio.theme-green input[type="checkbox"]:checked ~ .item-inner i.icon-form-radio,
 .theme-green label.label-radio input[type="radio"]:checked ~ .item-inner i.icon-form-radio,
 label.label-radio.theme-green input[type="radio"]:checked ~ .item-inner i.icon-form-radio {
-  border-color: #4caf50;
+  border-color: #1e5799;
 }
 .theme-green label.label-radio input[type="checkbox"]:checked + .item-media i.icon-form-radio:after,
 label.label-radio.theme-green input[type="checkbox"]:checked + .item-media i.icon-form-radio:after,
@@ -3473,41 +3472,41 @@ label.label-radio.theme-green input[type="radio"]:checked ~ .item-after i.icon-f
 label.label-radio.theme-green input[type="checkbox"]:checked ~ .item-inner i.icon-form-radio:after,
 .theme-green label.label-radio input[type="radio"]:checked ~ .item-inner i.icon-form-radio:after,
 label.label-radio.theme-green input[type="radio"]:checked ~ .item-inner i.icon-form-radio:after {
-  background-color: #4caf50;
+  background-color: #1e5799;
 }
 .theme-green .focus-state .label,
 .theme-green .focus-state .floating-label {
-  color: #4caf50;
+  color: #1e5799;
 }
 .theme-green .item-input-field.focus-state:after,
 .theme-green .input-field.focus-state:after,
 .theme-green .item-input-field.not-empty-state:after,
 .theme-green .input-field.not-empty-state:after {
-  background: #4caf50;
+  background: #1e5799;
 }
 .theme-green .picker-calendar-day.picker-calendar-day-today span {
-  color: #4caf50;
+  color: #1e5799;
 }
 .theme-green .picker-calendar-day.picker-calendar-day-selected span {
-  background-color: #4caf50;
+  background-color: #1e5799;
   color: #fff;
 }
 .theme-green .picker-calendar-day.picker-calendar-day-has-events span:after {
-  background-color: #4caf50;
+  background-color: #1e5799;
 }
 .theme-green .picker-header {
-  background-color: #4caf50;
+  background-color: #1e5799;
 }
 .theme-green .modal-button {
-  color: #4caf50;
+  color: #1e5799;
 }
 .swiper-pagination.color-green .swiper-pagination-bullet-active,
 .theme-green .swiper-pagination .swiper-pagination-bullet-active {
-  background-color: #4caf50;
+  background-color: #1e5799;
 }
 .swiper-pagination.color-green .swiper-pagination-progressbar,
 .theme-green .swiper-pagination .swiper-pagination-progressbar {
-  background-color: #4caf50;
+  background-color: #1e5799;
 }
 .swiper-pagination.swiper-pagination-progress.bg-green {
   background-color: rgba(76, 175, 80, 0.25);
@@ -3516,19 +3515,19 @@ label.label-radio.theme-green input[type="radio"]:checked ~ .item-inner i.icon-f
 .swiper-container-rtl .swiper-button-prev.color-green,
 .theme-green .swiper-button-next,
 .theme-green .swiper-container-rtl .swiper-button-prev {
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2027%2044'%3E%3Cpath%20d%3D'M27%2C22L27%2C22L5%2C44l-2.1-2.1L22.8%2C22L2.9%2C2.1L5%2C0L27%2C22L27%2C22z'%20fill%3D'%234caf50'%2F%3E%3C%2Fsvg%3E");
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2027%2044'%3E%3Cpath%20d%3D'M27%2C22L27%2C22L5%2C44l-2.1-2.1L22.8%2C22L2.9%2C2.1L5%2C0L27%2C22L27%2C22z'%20fill%3D'%231e5799'%2F%3E%3C%2Fsvg%3E");
 }
 .swiper-button-prev.color-green,
 .swiper-container-rtl .swiper-button-next.color-green,
 .theme-green .swiper-button-prev,
 .theme-green .swiper-container-rtl .swiper-button-next {
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2027%2044'%3E%3Cpath%20d%3D'M0%2C22L22%2C0l2.1%2C2.1L4.2%2C22l19.9%2C19.9L22%2C44L0%2C22L0%2C22L0%2C22z'%20fill%3D'%234caf50'%2F%3E%3C%2Fsvg%3E");
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2027%2044'%3E%3Cpath%20d%3D'M0%2C22L22%2C0l2.1%2C2.1L4.2%2C22l19.9%2C19.9L22%2C44L0%2C22L0%2C22L0%2C22z'%20fill%3D'%231e5799'%2F%3E%3C%2Fsvg%3E");
 }
 .bg-green,
 a.bg-green,
 .list-block .swipeout-actions-left a.bg-green,
 .list-block .swipeout-actions-right a.bg-green {
-  background-color: #4caf50;
+  background-color: #1e5799;
 }
 html:not(.watch-active-state) .list-block .bg-green .item-link:active,
 html:not(.watch-active-state) .list-block a.bg-green .item-link:active,
@@ -3557,7 +3556,7 @@ html:not(.watch-active-state) .list-block .item-link.list-block .swipeout-action
   background: #388E3C;
 }
 .border-green {
-  border-color: #4caf50;
+  border-color: #1e5799;
 }
 .list-block .border-green.item-inner:after,
 .list-block ul.border-green:after,
@@ -3565,7 +3564,7 @@ html:not(.watch-active-state) .list-block .item-link.list-block .swipeout-action
 .list-block .border-green.item-inner:before,
 .list-block ul.border-green:before,
 .border-green:before {
-  background-color: #4caf50;
+  background-color: #1e5799;
 }
 .theme-green .floating-button,
 .theme-green .speed-dial-buttons a,
@@ -3576,7 +3575,7 @@ html:not(.watch-active-state) .list-block .item-link.list-block .swipeout-action
 .floating-button.bg-green,
 .speed-dial-buttons a.bg-green {
   color: #fff;
-  background: #4caf50;
+  background: #1e5799;
 }
 html:not(.watch-active-state) .theme-green .floating-button:active,
 html:not(.watch-active-state) .theme-green .speed-dial-buttons a:active,
@@ -3611,7 +3610,7 @@ html:not(.watch-active-state) .speed-dial-buttons a.bg-green:active,
 }
 .badge.color-green,
 .badge.theme-green {
-  background-color: #4caf50;
+  background-color: #1e5799;
   color: #fff;
 }
 .color-lightgreen {
@@ -7398,3 +7397,4 @@ html:not(.watch-active-state) .speed-dial-buttons a.bg-black:active,
   background-color: #000000;
   color: #fff;
 }
+
