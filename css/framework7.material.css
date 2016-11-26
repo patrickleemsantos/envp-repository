@@ -2432,6 +2432,8 @@ html.pixel-ratio-3 .list-block .item-inner:after {
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
+  color:#0066CC;
+  font-weight:bold;
 }
 .list-block .item-after {
   white-space: nowrap;

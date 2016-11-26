@@ -21,6 +21,15 @@
     /*border: 1px solid cyan;*/
 }
 
+.pac-container {
+    z-index: 5000;
+}
+
+.blur {
+  -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+  filter: grayscale(100%);
+}
+
 .center-outer{
     width:100%;
 

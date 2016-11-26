@@ -502,7 +502,7 @@ myApp.onPageInit('team-list', function(page) {
                     '<div class="item-media"><img data-src="{{team_image}}" class="lazy lazy-fadein img-circle" style="width:44px; height:44px;"/></div>' +
                     '<div class="item-inner">' +
                     '<div class="item-title-row">' +
-                    '<div class="item-title"><b>{{team_name}}</b></div>' +
+                    '<div class="item-title">{{team_name}}</div>' +
                     '</div>' +
                     '<div class="item-subtitle">Administrator: {{created_by}}</div>' +
                     '</div>' +
@@ -520,6 +520,44 @@ myApp.onPageInit('team-list', function(page) {
     } else {
         myApp.alert(NO_INTERNET_ALERT);
     }
+});
+
+/* ===== Team Stats Page ===== */
+myApp.onPageInit('team-stats', function(page) {
+    var points = 0;
+    var assists = 0;
+    var fouls = 0;
+
+    $$("#roster-image").attr("data-src", (page.query.roster_image == '' || page.query.roster_image == null ? "img/profile.jpg" : page.query.roster_image));
+    $$("#roster-image").addClass('lazy lazy-fadein');
+    myApp.initImagesLazyLoad(page.container);
+
+    $$('#roster-name').prepend(page.query.roster_name);
+    $$('#roster-position').prepend(page.query.roster_position);
+
+    myApp.showIndicator();
+    $.getJSON(ENVYP_API_URL + "get_roster_tournament_stats.php?tournament_id=" + localStorage.getItem('selectedTournamentId') + '&roster_id=' + page.query.roster_id, function(result) {
+        $.each(result, function(i, field) {
+            points = field.points
+            assists = field.assists
+            fouls = field.fouls
+            votes = field.votes
+        });
+
+        $$('#team-ppg').prepend(points);
+        $$('#team-apg').prepend(assists);
+        $$('#team-fpg').prepend(fouls);
+
+        myApp.hideIndicator();
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+        myApp.hideIndicator(); 
+        myApp.alert(AJAX_ERROR_ALERT); 
+    });
+
+    $$('#btn-edit-roster-stats').on('click', function() {
+        mainView.router.loadPage('edit_roster_tournament_stats.html?roster_image=' + page.query.roster_image + '&roster_id=' + page.query.roster_id + '&roster_name=' + page.query.roster_name + '&roster_position=' + page.query.roster_position + '&points=' + points + '&assists=' + assists + '&fouls=' + fouls);
+    });     
 });
 
 /* ===== Team Management Page ===== */
@@ -590,7 +628,7 @@ myApp.onPageInit('roster-list', function(page) {
                     '<div class="item-media"><img data-src="{{roster_image}}" class="lazy lazy-fadein img-circle" style="width:44px; height:44px;"/></div>' +
                     '<div class="item-inner">' +
                     '<div class="item-title-row">' +
-                    '<div class="item-title"><b>{{roster_name}}</b></div>' +
+                    '<div class="item-title">{{roster_name}}</div>' +
                     '</div>' +
                     '<div class="item-subtitle">{{roster_position}}</div>' +
                     '</div></a></li>',
@@ -677,6 +715,10 @@ myApp.onPageInit('roster-add', function(page) {
 
 /* ===== Roster Detail Page ===== */
 myApp.onPageInit('roster-detail', function(page) {
+    if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
+        $('#btn-edit-roster-detail').hide();
+    }
+
     $$('#roster-detail-name').prepend(page.query.roster_name);
     $$('#roster-detail-position').prepend(page.query.roster_position);
 
@@ -815,7 +857,7 @@ myApp.onPageInit('account-list', function(page) {
                     '<div class="item-media"><img src="{{account_image}}" style="width:44px; height:44px;" height="44"/></div>' +
                     '<div class="item-inner">' +
                     '<div class="item-title-row">' +
-                    '<div class="item-title"><b>{{account_name}}</b></div>' +
+                    '<div class="item-title">{{account_name}}</div>' +
                     '<div class="item-after"><i class="icon icon-form-checkbox"></i></div>' +
                     '</div>' +
                     '<div class="item-subtitle">{{account_description}}</div>' +
@@ -903,7 +945,7 @@ myApp.onPageInit('administrator-list', function(page) {
                     '<div class="item-media"><img src="{{account_image}}" style="width:44px; height:44px;"/></div>' +
                     '<div class="item-inner">' +
                     '<div class="item-title-row">' +
-                    '<div class="item-title"><b>{{account_name}}</b></div>' +
+                    '<div class="item-title">{{account_name}}</div>' +
                     '<div class="item-after"><i class="icon icon-form-checkbox"></i></div>' +
                     '</div>' +
                     '<div class="item-subtitle">{{account_description}}</div>' +
@@ -1077,7 +1119,7 @@ myApp.onPageInit('tournament-list', function(page) {
                     '<div class="item-media"><img src="{{tournament_image}}" style="width:44px; height:44px;" class="img-circle"/></div>' +
                     '<div class="item-inner">' +
                     '<div class="item-title-row">' +
-                    '<div class="item-title"><b>{{opponent}}</b></div>' +
+                    '<div class="item-title">{{opponent}}</div>' +
                     '</div>' +
                     '<div class="item-subtitle">{{tournament_date}}</div>' +
                     '</div></a></li>',
@@ -1880,7 +1922,7 @@ myApp.onPageInit('tournament-roster-list', function(page) {
                     '<div class="item-media"><img src="{{roster_image}}" class="img-circle" style="width:44px; height:44px;"/></div>' +
                     '<div class="item-inner">' +
                     '<div class="item-title-row">' +
-                    '<div class="item-title"><b>{{roster_name}}</b></div>' +
+                    '<div class="item-title">{{roster_name}}</div>' +
                     '<div class="item-after"><i class="icon icon-form-checkbox"></i></div>' +
                     '</div>' +
                     '<div class="item-subtitle">{{roster_position}}</div>' +
@@ -1933,7 +1975,7 @@ myApp.onPageInit('tournament-roster-list', function(page) {
                                         '<div class="item-media">' + image_url + '</div>' +
                                         '<div class="item-inner">' +
                                         '<div class="item-title-row">' +
-                                        '<div class="item-title"><b>' + field.name + '</b></div>' +
+                                        '<div class="item-title">' + field.name + '</div>' +
                                         '</div>' +
                                         '<div class="item-subtitle">' + field.position + '</div>' +
                                         '</div></a></li>');
@@ -2347,13 +2389,11 @@ function win(r) {
 }
 
 function winUpdateUser(r) {
-    myApp.alert('Success upload!');
     var resp = JSON.parse(r.response);
-    alert('resp: ' + resp);
     myApp.alert(resp.message);
-    alert('resp image: ' + resp.account_image);
     if (resp.status == '0') {
         localStorage.setItem('account_image', resp.account_image);
+        $$('#img-profile-image').attr('src', resp.account_image);
     }
 }
 
@@ -2700,6 +2740,7 @@ function getFBDetails() {
                 } else if (msg.status == 0) {
                     var age = calcAge(result.birthday);
                     var fb_image = 'https://graph.facebook.com/' + result.id + '/picture?type=large';
+                    $$('#img-profile-image').attr('src', fb_image);
                     mainView.router.loadPage('profile_add.html?account_id=' + msg.account_id + '&first_name=' + result.first_name + '&last_name=' + result.last_name + '&age=' + age + '&description=&image_url=' + fb_image);
                 }
                 $$('#btn-email-login').removeAttr("disabled");
