@@ -30,7 +30,7 @@
         <div class="navbar">
           <div class="navbar-inner">
             <div class="left"></div>
-            <div class="center">Profile</div>
+            <div id="lbl-profile" class="center">Profile</div>
             <div class="right"></div>
           </div>
         </div>
@@ -48,21 +48,21 @@
               <li>
                 <div class="item-content">
                   <div class="item-inner"> 
-                    <div class="item-title"><a id="btn-edit-profile" href="#" class="link icon-only">Edit Profile</a></div>
+                    <div class="item-title"><a id="btn-edit-profile" href="#" class="link icon-only"></a></div>
                   </div>
                 </div>
               </li>
               <li>
                 <div class="item-content">
                   <div class="item-inner"> 
-                    <div class="item-title"><a id="btn-choose-language" href="#" class="link icon-only open-popover" data-popover=".popover-menu">Language</a></div>
+                    <div class="item-title"><a id="btn-choose-language" href="#" onClick="chooseLanguage();" class="link icon-only"></a></div>
                   </div>
                 </div>
               </li>
               <li>
                 <div class="item-content">
                   <div class="item-inner"> 
-                    <div class="item-title"><a id="btn-logout" href="#" class="link icon-only">Logout</a></div>
+                    <div class="item-title"><a id="btn-logout" href="#" class="link icon-only"></a></div>
                   </div>
                 </div>
               </li>
@@ -80,16 +80,16 @@
             <div class="left">
               <a href="#" id="close-right-panel" class="link icon-only"><i class="icon icon-back"></i></a>
             </div>
-            <div class="center">Settings</div>
+            <div id="lbl-team-settings" class="center"></div>
           </div>
         </div>
         <div class="page-content">
-          <div class="content-block-title">Participants</div>
+          <div id="lbl-team-participants" class="content-block-title"></div>
           <div class="list-block media-list">
             <ul id="list-view-participants">
             </ul>
           </div>
-          <div class="content-block-title" style="padding-top:0px">Administrators</div>
+          <div id="lbl-team-administrators" class="content-block-title" style="padding-top:0px"></div>
           <div class="list-block media-list">
             <ul id="list-view-administrator">
             </ul>

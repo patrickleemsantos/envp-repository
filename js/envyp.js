@@ -22,7 +22,7 @@ var latitude = '';
 var longitude = '';
 var edit_latitude = '';
 var edit_longitude = '';
-localStorage.setItem('selectedLanguage', '1');
+localStorage.setItem('selectedLanguage', '2');
 
 $(document).on({
     'DOMNodeInserted': function() {
@@ -34,6 +34,38 @@ if (localStorage.getItem('account_id') != '' && localStorage.getItem('account_id
     $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
     $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
     mainView.router.loadPage('choose_sports.html');
+}
+
+if (localStorage.getItem('selectedLanguage') == '1') {
+    $('#lbl-profile').empty();
+    $('#lbl-profile').prepend('Profile');
+    $('#btn-edit-profile').empty();
+    $('#btn-edit-profile').prepend('Edit Profile');
+    $('#btn-choose-language').empty();
+    $('#btn-choose-language').prepend('Language');
+    $('#btn-logout').empty();
+    $('#btn-logout').prepend('Logout');
+    $('#lbl-team-settings').empty();
+    $('#lbl-team-settings').prepend('Settings');
+    $('#lbl-team-participants').empty();
+    $('#lbl-team-participants').prepend('Participants');
+    $('#lbl-team-administrators').empty();
+    $('#lbl-team-administrators').prepend('Administrators');
+} else {
+    $('#lbl-profile').empty();
+    $('#lbl-profile').prepend('Profil');
+    $('#btn-edit-profile').empty();
+    $('#btn-edit-profile').prepend('Rediger profil');
+    $('#btn-choose-language').empty();
+    $('#btn-choose-language').prepend('Sprog');
+    $('#btn-logout').empty();
+    $('#btn-logout').prepend('Log ud');
+    $('#lbl-team-settings').empty();
+    $('#lbl-team-settings').prepend('Indstillinger');
+    $('#lbl-team-participants').empty();
+    $('#lbl-team-participants').prepend('Deltagere');
+    $('#lbl-team-administrators').empty();
+    $('#lbl-team-administrators').prepend('Administratorer');
 }
 
 /* ===== Main Page ===== */
@@ -107,6 +139,11 @@ $$('#btn-edit-profile').on('click', function() {
 });
 
 myApp.onPageInit('main', function(page) {
+    if (localStorage.getItem('account_id') != '') {
+        myApp.alert('main');
+        mainView.router.loadPage('choose_sports.html');
+    }
+
     $$('#btn-email-login').on('click', function() {
         if (checkInternetConnection() == true) {
             $$('#btn-email-login').attr('disabled', true);
@@ -397,8 +434,12 @@ myApp.onPageInit('choose-sports', function(page) {
 myApp.onPageInit('home', function(page) {
     if (localStorage.getItem('selectedLanguage') == '1') {
         $('#lbl-home').prepend('Home');
+        $('#btn-make-new-team').prepend('Make New Team');
+        $('#btn-choose-existing').prepend('Choose Existing');
     } else {
         $('#lbl-home').prepend('Hjem');
+        $('#btn-make-new-team').prepend('Foretag nye hold');
+        $('#btn-choose-existing').prepend('Vælg eksisterende');
     }
 
     if (page.query.sport_id != null) {
@@ -411,6 +452,24 @@ myApp.onPageInit('home', function(page) {
 
 /* ===== Team Add Page ===== */
 myApp.onPageInit('team-add', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-create-team').prepend('Create Team');
+        $('#lbl-team-add-upload-image').prepend('Upload Image');
+        $('#lbl-team-add-details').prepend('Details');
+        $('#lbl-team-name').prepend('Team name');
+        $('#lbl-team-description').prepend('Description');
+        $('#lbl-team-password').prepend('Password');
+        $('#btn-add-team').prepend('Continue');
+    } else {
+        $('#lbl-create-team').prepend('Opret Team');
+        $('#lbl-team-add-upload-image').prepend('Upload billede');
+        $('#lbl-team-add-details').prepend('Detaljer');
+        $('#lbl-team-name').prepend('Hold navn');
+        $('#lbl-team-description').prepend('Beskrivelse');
+        $('#lbl-team-password').prepend('Adgangskode');
+        $('#btn-add-team').prepend('Blive ved');
+    }
+
     $$('#btn-add-team').on('click', function() {
         if (checkInternetConnection() == true) {
             $$('#btn-add-team').attr('disabled', true);
@@ -482,6 +541,12 @@ myApp.onPageInit('team-add', function(page) {
 
 /* ===== Team List Page ===== */
 myApp.onPageInit('team-list', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-team-list').prepend('Team List');
+    } else {
+        $('#lbl-team-list').prepend('Team List');
+    }
+
     if (checkInternetConnection() == true) {
         myApp.showIndicator();
         var items = [];
@@ -569,6 +634,16 @@ myApp.onPageInit('team-stats', function(page) {
 
 /* ===== Team Management Page ===== */
 myApp.onPageInit('team-management', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-team-management-roster').append('Roster');
+        $('#btn-tournament').append('Tournament');
+        $('#lbl-team-management-statistics').append('Statistics');
+    } else {
+        $('#lbl-team-management-roster').append('Roster');
+        $('#btn-tournament').append('Turnering');
+        $('#lbl-team-management-statistics').append('Statistik');
+    }
+
     if (page.query.team_id != null) {
         localStorage.setItem('selectedTeamName', page.query.team_name);
         localStorage.setItem('selectedTeamID', page.query.team_id);
@@ -2352,6 +2427,56 @@ function getProfileImage() {
         }, {
             text: 'Cancel',
             onClick: function() {}
+        }]
+    });
+}
+
+function chooseLanguage() {
+    myApp.modal({
+        title: 'Choose Language',
+        horizontalButtons: true,
+        buttons: [{
+            text: 'English',
+            onClick: function() {
+                localStorage.setItem('selectedLanguage', '1');
+                $('#lbl-choose-sports').empty();
+                $('#lbl-choose-sports').prepend('Choose Sports');
+                $('#lbl-profile').empty();
+                $('#lbl-profile').prepend('Profile');
+                $('#btn-edit-profile').empty();
+                $('#btn-edit-profile').prepend('Edit Profile');
+                $('#btn-choose-language').empty();
+                $('#btn-choose-language').prepend('Language');
+                $('#btn-logout').empty();
+                $('#btn-logout').prepend('Logout');
+                $('#lbl-team-settings').empty();
+                $('#lbl-team-settings').prepend('Settings');
+                $('#lbl-team-participants').empty();
+                $('#lbl-team-participants').prepend('Participants');
+                $('#lbl-team-administrators').empty();
+                $('#lbl-team-administrators').prepend('Administrators');
+            }
+        }, {
+            text: 'Danish',
+            onClick: function() {
+                localStorage.setItem('selectedLanguage', '2');
+                $('#lbl-choose-sports').empty();
+                $('#lbl-choose-sports').prepend('Vælg Sport');
+                $('#lbl-profile').empty();
+                $('#lbl-profile').prepend('Profil');
+                $('#btn-edit-profile').empty();
+                $('#btn-edit-profile').prepend('Rediger profil');
+                $('#btn-choose-language').empty();
+                $('#btn-choose-language').prepend('Sprog');
+                $('#btn-logout').empty();
+                $('#btn-logout').prepend('Log ud');
+                $('#lbl-team-settings').empty();
+                $('#lbl-team-settings').prepend('Indstillinger');
+                $('#lbl-team-participants').empty();
+                $('#lbl-team-participants').prepend('Deltagere');
+                $('#lbl-team-administrators').empty();
+                $('#lbl-team-administrators').prepend('Administratorer');
+            }   
         }]
     });
 }

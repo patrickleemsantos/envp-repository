@@ -5,24 +5,24 @@
         <div class="left">
           <a href="#" class="back link icon-only"><i class="icon icon-back"></i></a>
         </div>
-        <div class="center">Create Team</div>
+        <div id="lbl-create-team" class="center"></div>
         <div class="right">
           <a href="choose_sports.html" class="link icon-only"><i class="fa fa-home" aria-hidden="true"></i></a>
         </div>
       </div>
     </div>
     <div class="page-content" style="padding-top:50px;">
-        <div class="content-block-title">Upload Image</div>
+        <div id="lbl-team-add-upload-image" class="content-block-title"></div>
         <div onclick="getTeamImage();">
           <img id="team-image" src="img/icon-basketball.png" width="115px" height="115px" class="img-circle fit center">
         </div>
-        <div class="content-block-title">Details</div>
+        <div id="lbl-team-add-details" class="content-block-title"></div>
         <div class="list-block inputs-list">
           <ul>
             <li>
               <div class="item-content">
                 <div class="item-inner"> 
-                  <div class="item-title label">Team name</div>
+                  <div id="lbl-team-name" class="item-title label"></div>
                   <div class="item-input">
                     <input id="txt-team-name" type="text" placeholder="Team name"/>
                   </div>
@@ -32,7 +32,7 @@
             <li>
               <div class="item-content">
                 <div class="item-inner"> 
-                  <div class="item-title label">Description</div>
+                  <div id="lbl-team-description" class="item-title label"></div>
                   <div class="item-input">
                     <textarea id="txt-team-description" class="resizable" placeholder="Description"></textarea>
                   </div>
@@ -42,7 +42,7 @@
             <li>
               <div class="item-content">
                 <div class="item-inner"> 
-                  <div class="item-title label">Password</div>
+                  <div id="lbl-team-password" class="item-title label"></div>
                   <div class="item-input">
                     <input id="txt-team-password" type="password" placeholder="Password"/>
                   </div>
@@ -52,7 +52,7 @@
           </ul>
         </div>
         <div class="content-block">
-          <p><a href="#" id="btn-add-team" class="button button-big button-fill button-raised color-teal">Continue</a></p>
+          <p><a href="#" id="btn-add-team" class="button button-big button-fill button-raised color-teal"></a></p>
         </div>
     </div>
     </div>
