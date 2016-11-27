@@ -25,6 +25,7 @@ var edit_longitude = '';
 localStorage.setItem('selectedLanguage', '1');
 
 function onLoad() {
+    myApp.alert('onLoad');
     document.addEventListener("deviceready", onDeviceReady, false);
 }
 
