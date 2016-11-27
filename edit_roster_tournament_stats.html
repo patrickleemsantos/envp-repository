@@ -3,7 +3,7 @@
     <div class="navbar theme-indigo">
       <div class="navbar-inner">
         <div class="left"><a href="#" class="back link icon-only"><i class="icon icon-back"></i></a></div>
-        <div class="center">Edit Statistics</div>
+        <div id="lbl-edit-statistics" class="center"></div>
         <div class="right">
           <a href="#" id="btn-update-roster-stats" class="link icon-only">
             <i class="fa fa-check" aria-hidden="true"></i>
@@ -12,8 +12,8 @@
       </div>
     </div>
     <div class="page-content" style="padding-top:56px;">
-      <div style="width:100%; background-color:#008B8B; padding-top:15px; padding-bottom:15px;">
-        <img id="edit-roster-image" src="" class="img-circle fit center" style="width:150px; height: 150px;" />
+      <div style="width:100%; background-color:#34495E; padding-top:55px; padding-bottom:10px;">
+        <img id="edit-roster-image" src="" class="img-circle fit center" style="width:120px; height: 120px;" />
         <center><p id="edit-roster-name" style="font-size:20px; font-weight:bold; color:white; margin-bottom:0px;"></p></center>
         <center><p id="edit-roster-position" style="color:white; margin-top:0px;"></p></center>
       </div>
@@ -22,7 +22,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner"> 
-                <div class="item-title label">Points</div>
+                <div id="lbl-edit-roster-statistics-points" class="item-title label"></div>
                 <div class="item-input">
                   <input id="edit-roster-points" type="number" placeholder="Points" value=""/>
                 </div>
@@ -32,7 +32,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner"> 
-                <div class="item-title label">Assists</div>
+                <div id="lbl-edit-roster-statistics-assists" class="item-title label"></div>
                 <div class="item-input">
                   <input id="edit-roster-assists" type="number" placeholder="Assists" value=""/>
                 </div>
@@ -42,7 +42,7 @@
           <li>
             <div class="item-content">
               <div class="item-inner"> 
-                <div class="item-title label">Fouls</div>
+                <div id="lbl-edit-roster-statistics-fouls" class="item-title label"></div>
                 <div class="item-input">
                   <input id="edit-roster-fouls" type="number" placeholder="Fouls" value=""/>
                 </div>

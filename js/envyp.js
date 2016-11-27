@@ -24,9 +24,37 @@ var edit_latitude = '';
 var edit_longitude = '';
 localStorage.setItem('selectedLanguage', '2');
 
-document.addEventListener("backbutton", onBackKeyDown, false);
+function onLoad() {
+    document.addEventListener("deviceready", onDeviceReady, false);
+}
+
+function onDeviceReady() {
+    document.addEventListener("backbutton", onBackKeyDown, false);
+}
+
 function onBackKeyDown() {
     myApp.alert('Back is clicked!');
+    var view=myApp.getCurrentView();
+    if($$('.popup.popup-login').length){
+        return false;
+    } else if($$('.popover, .actions-modal, .picker-modal').length){
+        myApp.closeModal('.popover, .actions-modal, .picker-modal'); 
+    } else if($$('.searchbar.searchbar-active').length){
+        $$('.searchbar.searchbar-active')[0].f7Searchbar.disable();
+    } else if($$('.photo-browser').length){
+        $$('.photo-browser .photo-browser-close-link, .photo-browser .close-popup')
+        .trigger('click');
+    } else if($$('.popup').length && $$('.popup .view')[0].f7View){
+        if($$('.popup .view')[0].f7View.history.length>1){
+          view.router.back();
+        }else{
+            myApp.closeModal('.popup');
+        }
+    } else if($$('.popup').length){
+        myApp.closeModal('.popup'); 
+    } else if(view.history.length){
+        view.router.back();
+    }
 }
 
 $(document).on({
@@ -1950,6 +1978,20 @@ myApp.onPageInit('tournament-fine-add', function(page) {
 
 /* =====Roster Tournament Stats Page ===== */
 myApp.onPageInit('roster-tournament-stats', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-roster-statistics').append('Roster Statistics');
+        $('#lbl-roster-tournament-points').append('Points');
+        $('#lbl-roster-tournament-assists').append('Assists');
+        $('#lbl-roster-tournament-fouls').append('Fouls');
+        $('#lbl-roster-tournament-votes').append('Votes');
+    } else {
+        $('#lbl-roster-statistics').append('Kampprogram statistik');
+        $('#lbl-roster-tournament-points').append('Points');
+        $('#lbl-roster-tournament-assists').append('Hjælpe');
+        $('#lbl-roster-tournament-fouls').append('foul');
+        $('#lbl-roster-tournament-votes').append('Stemme');
+    }
+
      if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
         $('#btn-edit-roster-stats').hide();
     }
@@ -1994,6 +2036,18 @@ myApp.onPageInit('roster-tournament-stats', function(page) {
 
 /* =====Edit Roster Tournament Stats Page ===== */
 myApp.onPageInit('edit-roster-tournament-stats', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-edit-statistics').append('Roster Statistics');
+        $('#lbl-edit-roster-statistics-points').append('Points');
+        $('#lbl-edit-roster-statistics-assists').append('Assists');
+        $('#lbl-edit-roster-statistics-fouls').append('Fouls');
+    } else {
+        $('#lbl-roster-statistics').append('Kampprogram statistik');
+        $('#lbl-edit-roster-statistics-points').append('Points');
+        $('#lbl-edit-roster-statistics-assists').append('Hjælpe');
+        $('#lbl-edit-roster-statistics-fouls').append('foul');
+    }
+
     $$("#edit-roster-image").attr("data-src", (page.query.roster_image == '' || page.query.roster_image == null ? "img/profile.jpg" : page.query.roster_image));
     $$("#edit-roster-image").addClass('lazy lazy-fadein');
     myApp.initImagesLazyLoad(page.container);
