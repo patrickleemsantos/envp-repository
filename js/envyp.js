@@ -25,39 +25,38 @@ var edit_latitude = '';
 var edit_longitude = '';
 localStorage.setItem('selectedLanguage', '1');
 
-// function onLoad() {
-//     myApp.alert('onLoad');
-//     document.addEventListener("deviceready", onDeviceReady, false);
-// }
+function onLoad() {
+    document.addEventListener("deviceready", onDeviceReady, false);
+}
 
-// function onDeviceReady() {
-//     document.addEventListener("backbutton", onBackKeyDown, false);
-// }
+function onDeviceReady() {
+    document.addEventListener("backbutton", onBackKeyDown, false);
+}
 
-// function onBackKeyDown() {
-//     myApp.alert('Back is clicked!');
-//     var view=myApp.getCurrentView();
-//     if($$('.popup.popup-login').length){
-//         return false;
-//     } else if($$('.popover, .actions-modal, .picker-modal').length){
-//         myApp.closeModal('.popover, .actions-modal, .picker-modal'); 
-//     } else if($$('.searchbar.searchbar-active').length){
-//         $$('.searchbar.searchbar-active')[0].f7Searchbar.disable();
-//     } else if($$('.photo-browser').length){
-//         $$('.photo-browser .photo-browser-close-link, .photo-browser .close-popup')
-//         .trigger('click');
-//     } else if($$('.popup').length && $$('.popup .view')[0].f7View){
-//         if($$('.popup .view')[0].f7View.history.length>1){
-//           view.router.back();
-//         }else{
-//             myApp.closeModal('.popup');
-//         }
-//     } else if($$('.popup').length){
-//         myApp.closeModal('.popup'); 
-//     } else if(view.history.length){
-//         view.router.back();
-//     }
-// }
+function onBackKeyDown() {
+    myApp.alert('Back is clicked!');
+    var view=myApp.getCurrentView();
+    if($$('.popup.popup-login').length){
+        return false;
+    } else if($$('.popover, .actions-modal, .picker-modal').length){
+        myApp.closeModal('.popover, .actions-modal, .picker-modal'); 
+    } else if($$('.searchbar.searchbar-active').length){
+        $$('.searchbar.searchbar-active')[0].f7Searchbar.disable();
+    } else if($$('.photo-browser').length){
+        $$('.photo-browser .photo-browser-close-link, .photo-browser .close-popup')
+        .trigger('click');
+    } else if($$('.popup').length && $$('.popup .view')[0].f7View){
+        if($$('.popup .view')[0].f7View.history.length>1){
+          view.router.back();
+        }else{
+            myApp.closeModal('.popup');
+        }
+    } else if($$('.popup').length){
+        myApp.closeModal('.popup'); 
+    } else if(view.history.length){
+        view.router.back();
+    }
+}
 
 $(document).on({
     'DOMNodeInserted': function() {
