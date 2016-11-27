@@ -544,7 +544,7 @@ myApp.onPageInit('team-list', function(page) {
     if (localStorage.getItem('selectedLanguage') == '1') {
         $('#lbl-team-list').prepend('Team List');
     } else {
-        $('#lbl-team-list').prepend('Team List');
+        $('#lbl-team-list').prepend('Team liste');
     }
 
     if (checkInternetConnection() == true) {
@@ -635,13 +635,13 @@ myApp.onPageInit('team-stats', function(page) {
 /* ===== Team Management Page ===== */
 myApp.onPageInit('team-management', function(page) {
     if (localStorage.getItem('selectedLanguage') == '1') {
-        $('#lbl-team-management-roster').append('Roster');
+        $('#btn-roster').append('Roster');
         $('#btn-tournament').append('Tournament');
-        $('#lbl-team-management-statistics').append('Statistics');
+        $('#btn-statistics').append('Statistics');
     } else {
-        $('#lbl-team-management-roster').append('Roster');
+        $('#btn-roster').append('Roster');
         $('#btn-tournament').append('Turnering');
-        $('#lbl-team-management-statistics').append('Statistik');
+        $('#btn-statistics').append('Statistik');
     }
 
     if (page.query.team_id != null) {
@@ -675,6 +675,12 @@ myApp.onPageInit('team-management', function(page) {
 
 /* =====Roster List Page ===== */
 myApp.onPageInit('roster-list', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-roster-list').append('Roster');
+    } else {
+        $('#lbl-roster-list').append('Roster liste');
+    }
+
     if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
         $('#btn-show-add-roster').hide();
     }
@@ -731,6 +737,20 @@ myApp.onPageInit('roster-list', function(page) {
 
 /* ===== Roster Add Page ===== */
 myApp.onPageInit('roster-add', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-add-roster').append('Add Roster');
+        $('#lbl-roster-add-image').append('Image');
+        $('#lbl-roster-add-name').append('Roster name');
+        $('#lbl-roster-add-position').append('Position');
+        $('#btn-add-roster').append('Continue');
+    } else {
+        $('#lbl-add-roster').append('Tilføj vagtplan');
+        $('#lbl-roster-add-image').append('Billede');
+        $('#lbl-roster-add-name').append('Roster navn');
+        $('#lbl-roster-add-position').append('Position');
+        $('#btn-add-roster').append('Blive ved');
+    }
+
     $$('#btn-add-roster').on('click', function() {
         if (checkInternetConnection() == true) {
             $$('#btn-add-roster').attr('disabled', true);
@@ -798,6 +818,12 @@ myApp.onPageInit('roster-add', function(page) {
 
 /* ===== Roster Detail Page ===== */
 myApp.onPageInit('roster-detail', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-roster-detail').append('Roster Detail');
+    } else {
+        $('#lbl-roster-detail').append('Roster detalje');
+    }
+
     if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
         $('#btn-edit-roster-detail').hide();
     }
@@ -830,6 +856,20 @@ myApp.onPageInit('roster-detail', function(page) {
 
 /* ===== Roster Edit Page ===== */
 myApp.onPageInit('roster-edit', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-edit-roster').append('Edit Roster');
+        $('#lbl-roster-edit-image').append('Image');
+        $('#lbl-roster-edit-name').append('Roster name');
+        $('#lbl-roster-edit-position').append('Position');
+        $('#btn-update-roster').append('Continue');
+    } else {
+        $('#lbl-edit-roster').append('Rediger vagtplan');
+        $('#lbl-roster-edit-image').append('Billede');
+        $('#lbl-roster-edit-name').append('Roster navn');
+        $('#lbl-roster-edit-position').append('Position');
+        $('#btn-update-roster').append('Blive ved');
+    }
+
     $$('#edit-txt-roster-name').attr('value', page.query.roster_name);
     $$('#edit-txt-roster-position').attr('value', page.query.roster_position);
     $$("#edit-roster-image").attr("data-src", (page.query.roster_image == '' || page.query.roster_image == null ? "img/profile.jpg" : page.query.roster_image));
@@ -904,6 +944,12 @@ myApp.onPageInit('roster-edit', function(page) {
 
 /* =====Participant List Page ===== */
 myApp.onPageInit('account-list', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-account-list').append('Account List');
+    } else {
+        $('#lbl-account-list').append('liste konto');
+    }
+
     myApp.closePanel();
     var selectedParticipants = new Array();
 
@@ -992,6 +1038,12 @@ myApp.onPageInit('account-list', function(page) {
 
 /* =====Administrator List Page ===== */
 myApp.onPageInit('administrator-list', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-administrator-list').append('Administrator List');
+    } else {
+        $('#lbl-administrator-list').append('administrator liste');
+    }
+
     myApp.closePanel();
     var selectedAdministrator = new Array();
 
@@ -1080,6 +1132,26 @@ myApp.onPageInit('administrator-list', function(page) {
 
 /* =====Tournament Add Page ===== */
 myApp.onPageInit('tournament-add', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-add-tournament').append('Add Tournament');
+        $('#lbl-add-tournament-image').append('Image');
+        $('#lbl-add-tournament-details').append('Details');
+        $('#lbl-add-tournament-opponent').append('Opponent');
+        $('#lbl-add-tournament-location').append('Location');
+        $('#lbl-add-tournament-date').append('Date');
+        $('#lbl-add-tournament-description').append('Description');
+        $('#btn-add-tournament').append('Continue');
+    } else {
+        $('#lbl-add-tournament').append('Tilføj turnering');
+        $('#lbl-add-tournament-image').append('Billede');
+        $('#lbl-add-tournament-details').append('Detaljer');
+        $('#lbl-add-tournament-opponent').append('Modstander');
+        $('#lbl-add-tournament-location').append('Beliggenhed');
+        $('#lbl-add-tournament-date').append('Dato');
+        $('#lbl-add-tournament-description').append('Beskrivelse');
+        $('#btn-add-tournament').append('Blive ved');
+    }
+
     var places = new google.maps.places.Autocomplete(document.getElementById('txt-tournament-location'));
     google.maps.event.addListener(places, 'place_changed', function() {
         place = places.getPlace();
@@ -1167,6 +1239,12 @@ myApp.onPageInit('tournament-add', function(page) {
 
 /* =====Tournament List Page ===== */
 myApp.onPageInit('tournament-list', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-tournament-list').append('Tournament List');
+    } else {
+        $('#lbl-tournament-list').append('Tournament liste');
+    }
+
     if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
         $('#btn-show-add-tournament').hide();
     }
@@ -1221,6 +1299,20 @@ myApp.onPageInit('tournament-list', function(page) {
 
 /* =====Tournament Detail Page ===== */
 myApp.onPageInit('tournament-detail', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-tournament-detail').append('Detail');
+        $('#lbl-tournament-detail-roster').append('Roster');
+        $('#lbl-tournament-detail-stats').append('Stats');
+        $('#lbl-tournament-detail-fine-box').append('Fine Box');
+        $('#lbl-tournament-detail-mvp').append('MVP');
+    } else {
+        $('#lbl-tournament-detail').append('detaljer');
+        $('#lbl-tournament-detail-roster').append('Roster');
+        $('#lbl-tournament-detail-stats').append('Statistik');
+        $('#lbl-tournament-detail-fine-box').append('fint kasse');
+        $('#lbl-tournament-detail-mvp').append('MVP');
+    }
+
     if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
         $('#btn-edit-tournament-details').hide();
         $('#btn-edit-team-stats').hide();
@@ -1565,6 +1657,26 @@ myApp.onPageInit('fine-detail', function(page) {
 
 /* =====Tournament Edit Page ===== */
 myApp.onPageInit('tournament-edit', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-edit-tournament').append('Edit Tournament');
+        $('#lbl-edit-tournament-image').append('Image');
+        $('#lbl-edit-tournament-details').append('Details');
+        $('#lbl-edit-tournament-opponent').append('Opponent');
+        $('#lbl-edit-tournament-location').append('Location');
+        $('#lbl-edit-tournament-date').append('Date');
+        $('#lbl-edit-tournament-description').append('Description');
+        $('#btn-update-tournament').append('Continue');
+    } else {
+        $('#lbl-edit-tournament').append('Rediger turnering');
+        $('#lbl-edit-tournament-image').append('Billede');
+        $('#lbl-edit-tournament-details').append('Detaljer');
+        $('#lbl-edit-tournament-opponent').append('Modstander');
+        $('#lbl-edit-tournament-location').append('Beliggenhed');
+        $('#lbl-edit-tournament-date').append('Dato');
+        $('#lbl-edit-tournament-description').append('Beskrivelse');
+        $('#btn-update-tournament').append('Blive ved');
+    }
+
     var places = new google.maps.places.Autocomplete(document.getElementById('edit-txt-tournament-location'));
     google.maps.event.addListener(places, 'place_changed', function() {
         place = places.getPlace();
@@ -2583,11 +2695,17 @@ function isAccountInvited(team_id, callback) {
 function getParticipantList() {
     $("#list-view-participants").empty();
 
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        var lbl_add_participant = 'Add participants';
+    } else {
+        var lbl_add_participant = 'Tilføj deltagere';
+    }
+
     if ((localStorage.getItem('currentTeamAdmin') == localStorage.getItem('account_id')) || localStorage.getItem('currentAccountIsTeamAdmin') == 1) {
         $("#list-view-participants").prepend('<li>' +
             '<div class="item-content">' +
             '<div class="item-inner">' +
-            '<div class="item-title"><a href="account_list.html" class="link"><font size="2">Add participant</font></a></div>' +
+            '<div class="item-title"><a href="account_list.html" class="link"><font size="2">'+lbl_add_participant+'</font></a></div>' +
             '</div>' +
             '</div>' +
             '</li>');
@@ -2636,11 +2754,17 @@ function getParticipantList() {
 function getTeamAdministratorList() {
     $("#list-view-administrator").empty();
 
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        var lbl_add_administrator = 'Add administrator';
+    } else {
+        var lbl_add_administrator = 'Tilføj administrator';
+    }
+
     if ((localStorage.getItem('currentTeamAdmin') == localStorage.getItem('account_id')) || localStorage.getItem('currentAccountIsTeamAdmin') == 1) {
         $("#list-view-administrator").prepend('<li>' +
             '<div class="item-content">' +
             '<div class="item-inner">' +
-            '<div class="item-title"><a href="administrator_list.html" class="link"><font size="2">Add administrator</font></a></div>' +
+            '<div class="item-title"><a href="administrator_list.html" class="link"><font size="2">'+lbl_add_administrator+'</font></a></div>' +
             '</div>' +
             '</div>' +
             '</li>');
