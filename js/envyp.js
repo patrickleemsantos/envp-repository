@@ -2,7 +2,8 @@ var myApp = new Framework7({
     modalTitle: 'Envp',
     material: true,
     preloadPreviousPage: false,
-    fastClicks: true
+    fastClicks: true,
+    pushState: true
 });
 
 var $$ = Dom7;
