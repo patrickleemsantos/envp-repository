@@ -26,24 +26,24 @@
       <div class="tabs">
         <div id="detail" class="page-content tab active" style="padding-top:240px;">
           <!-- <div class="content-block-title" style="padding-top:0px;">Details</div> -->
-          <div class="content-block-title">Opponent</div>
+          <div id="lbl-tournament-detail-opponent" class="content-block-title"></div>
           <div class="content-block" style="margin-bottom:0px;">
             <p id="txt-opponent-name"></p>
           </div>
-          <div class="content-block-title" style="padding-top:0px; margin-top:0px;">Location</div>
+          <div id="lbl-tournament-detail-location" class="content-block-title" style="padding-top:0px; margin-top:0px;"></div>
           <div class="content-block" style="margin-bottom:0px;">  
             <p id="txt-tournament-location"></p>
           </div>
-          <div class="content-block-title" style="padding-top:0px; margin-top:0px;">Date</div>
+          <div id="lbl-tournament-detail-date" class="content-block-title" style="padding-top:0px; margin-top:0px;"></div>
           <div class="content-block" style="margin-bottom:0px;">  
             <p id="txt-tournament-date"></p>
           </div>
-          <div class="content-block-title" style="padding-top:0px; margin-top:0px;">Description</div>
+          <div id="lbl-tournament-detail-description" class="content-block-title" style="padding-top:0px; margin-top:0px;"></div>
           <div class="content-block">  
             <p id="txt-tournament-description"></p>
           </div>
           <div class="content-block" style="margin-top:0px;">
-            <p style="margin-top:0px;"><a href="#" id="btn-edit-tournament-details" class="button button-big button-fill button-raised color-teal">Edit</a></p>
+            <p style="margin-top:0px;"><a href="#" id="btn-edit-tournament-details" class="button button-big button-fill button-raised color-teal"></a></p>
           </div>
         </div>
         <div id="roster" class="page-content tab" style="padding-top:250px;">
@@ -64,7 +64,7 @@
                         <p id="team-name" style="font-weight:bold;"></p>
                       </div>
                       <div class="col-20">
-                        <p><b>vs</b></p>
+                        <p><b id="lbl-tournament-detail-versus"></b></p>
                       </div>
                       <div class="col-40">
                         <p id="opponent-name" style="font-weight:bold;"></p>
@@ -73,7 +73,7 @@
                         <p id="team-points"></p>
                       </div>
                       <div class="col-20">
-                        <p><b>Score</b></p>
+                        <p><b id="lbl-tournament-detail-score"></b></p>
                       </div>
                       <div class="col-40">
                         <p id="opponent-points"></p>
@@ -82,7 +82,7 @@
                         <p id="team-assists"></p>
                       </div>
                       <div class="col-20">
-                        <p><b>Assist</b></p>
+                        <p><b id="lbl-tournament-detail-assist"></b></p>
                       </div>
                       <div class="col-40">
                         <p id="opponent-assists"></p>
@@ -91,7 +91,7 @@
                         <p id="team-fouls"></p>
                       </div>
                       <div class="col-20">
-                        <p><b>Fouls</b></p>
+                        <p><b id="lbl-tournament-detail-foul"></b></p>
                       </div>
                       <div class="col-40">
                         <p id="opponent-fouls"></p>
@@ -115,7 +115,7 @@
         </div>
         <div id="mvp" class="page-content tab" style="padding-top:250px;">
           <div id="div-vote-add">
-            <div class="content-block-title">Enter your vote</div>
+            <div id="lbl-tournament-detail-enter-vote" class="content-block-title"></div>
             <div class="list-block inputs-list">
               <ul>
                 <li>
@@ -125,7 +125,7 @@
                     </select>
                     <div class="item-content">
                       <div class="item-inner">
-                        <div class="item-title">Roster</div>
+                        <div id="lbl-tournament-detail-roster-vote" class="item-title"></div>
                       </div>
                   </div>
                   </a>

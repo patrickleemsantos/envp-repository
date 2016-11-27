@@ -139,11 +139,6 @@ $$('#btn-edit-profile').on('click', function() {
 });
 
 myApp.onPageInit('main', function(page) {
-    if (localStorage.getItem('account_id') != '') {
-        myApp.alert('main');
-        mainView.router.loadPage('choose_sports.html');
-    }
-
     $$('#btn-email-login').on('click', function() {
         if (checkInternetConnection() == true) {
             $$('#btn-email-login').attr('disabled', true);
@@ -602,6 +597,12 @@ myApp.onPageInit('team-list', function(page) {
 
 /* ===== Team Stats Page ===== */
 myApp.onPageInit('team-stats', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-team-stats').prepend('Team Statistics');
+    } else {
+        $('#lbl-team-stats').prepend('Team statistik');
+    }
+
     var ppg = 0;
     var apg = 0;
     var fpg = 0;
@@ -1305,12 +1306,42 @@ myApp.onPageInit('tournament-detail', function(page) {
         $('#lbl-tournament-detail-stats').append('Stats');
         $('#lbl-tournament-detail-fine-box').append('Fine Box');
         $('#lbl-tournament-detail-mvp').append('MVP');
+
+        $('#lbl-tournament-detail-opponent').append('Opponent');
+        $('#lbl-tournament-detail-location').append('Location');
+        $('#lbl-tournament-detail-date').append('Date');
+        $('#lbl-tournament-detail-description').append('Description');
+        $('#btn-edit-tournament-details').append('Edit');
+
+        $('#lbl-tournament-detail-versus').append('Versus');
+        $('#lbl-tournament-detail-score').append('Score');
+        $('#lbl-tournament-detail-assist').append('Assist');
+        $('#lbl-tournament-detail-foul').append('Foul');
+
+        $('#lbl-tournament-detail-enter-vote').append('Enter your vote');
+        $('#lbl-tournament-detail-roster-vote').append('Roster');
+        $('#btn-submit-vote').append('Vote');
     } else {
         $('#lbl-tournament-detail').append('detaljer');
-        $('#lbl-tournament-detail-roster').append('Roster');
+        $('#lbl-tournament-detail-roster').append('Kampprogram');
         $('#lbl-tournament-detail-stats').append('Statistik');
         $('#lbl-tournament-detail-fine-box').append('fint kasse');
         $('#lbl-tournament-detail-mvp').append('MVP');
+
+        $('#lbl-tournament-detail-opponent').append('Modstander');
+        $('#lbl-tournament-detail-location').append('Beliggenhed');
+        $('#lbl-tournament-detail-date').append('Dato');
+        $('#lbl-tournament-detail-description').append('Beskrivelse');
+        $('#btn-edit-tournament-details').append('edit');
+
+        $('#lbl-tournament-detail-versus').append('Imod');
+        $('#lbl-tournament-detail-score').append('score');
+        $('#lbl-tournament-detail-assist').append('Hjælpe');
+        $('#lbl-tournament-detail-foul').append('foul');
+
+        $('#lbl-tournament-detail-enter-vote').append('Indtast din stemme');
+        $('#lbl-tournament-detail-roster-vote').append('Kampprogram');
+        $('#btn-submit-vote').append('Stemme');
     }
 
     if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
@@ -1647,6 +1678,16 @@ myApp.onPageInit('tournament-detail', function(page) {
 
 /* =====Tournament Detail Page ===== */
 myApp.onPageInit('fine-detail', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-fine-detail').append('Fine Detail');
+        $('#lbl-fine-detail-description').append('Description');
+        $('#lbl-fine-detail-price').append('Price');
+    } else {
+        $('#lbl-fine-detail').append('Fin detalje');
+        $('#lbl-fine-detail-description').append('Beskrivelse');
+        $('#lbl-fine-detail-price').append('Kampprogram');
+    }
+
     $$('#fine-detail-name').prepend(page.query.name);
     $$('#fine-detail-description').prepend(page.query.description);
     $$('#fine-detail-price').prepend(page.query.price);
@@ -1786,6 +1827,20 @@ myApp.onPageInit('tournament-edit', function(page) {
 
 /* =====Administrator List Page ===== */
 myApp.onPageInit('tournament-fine-add', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-create-fine').append('Create Fine');
+        $('#lbl-fine-add-details').append('Details');
+        $('#lbl-fine-add-roster').append('Roster');
+        $('#lbl-fine-add-fine').append('Fine');
+        $('#lbl-fine-add-price').append('Price');
+    } else {
+        $('#lbl-create-fine').append('Opret fint');
+        $('#lbl-fine-add-details').append('Detaljer');
+        $('#lbl-fine-add-roster').append('Kampprogram');
+        $('#lbl-fine-add-fine').append('Bøde');
+        $('#lbl-fine-add-price').append('Pris');
+    }
+
     $("#select-roster-list").empty();
     myApp.showIndicator();
     $.getJSON(ENVYP_API_URL + "get_tournament_roster.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
@@ -2082,6 +2137,12 @@ myApp.onPageInit('edit-tournament-stats', function(page) {
 
 /* =====Administrator List Page ===== */
 myApp.onPageInit('tournament-roster-list', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-tournament-roster-list').append('Roster List');
+    } else {
+        $('#lbl-tournament-roster-list').append('Kampprogram liste');
+    }
+
     var selectedRosters = new Array();
 
     if (checkInternetConnection() == true) {
