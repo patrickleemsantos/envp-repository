@@ -24,6 +24,11 @@ var edit_latitude = '';
 var edit_longitude = '';
 localStorage.setItem('selectedLanguage', '2');
 
+document.addEventListener("backbutton", onBackKeyDown, false);
+function onBackKeyDown() {
+    myApp.alert('Back is clicked!');
+}
+
 $(document).on({
     'DOMNodeInserted': function() {
         $('.pac-item, .pac-item span', this).addClass('no-fastclick');
@@ -130,6 +135,7 @@ $$('#btn-logout').on('click', function() {
     localStorage.setItem('account_id', '');
     $('#div-profile-name').empty();
     $('#img-profile-image').empty();
+    FBLogout();
     mainView.router.loadPage('main.html');
 });
 
@@ -1278,7 +1284,7 @@ myApp.onPageInit('tournament-list', function(page) {
                 },
                 template: '<li>' +
                     '<a href="tournament_detail.html?tournament_id={{tournament_id}}" class="item-link item-content">' +
-                    '<div class="item-media"><img src="{{tournament_image}}" style="width:44px; height:44px;" class="img-circle"/></div>' +
+                    '<div class="item-media"><img data-src="{{tournament_image}}" style="width:44px; height:44px;" class="img-circle lazy lazy-fadein"/></div>' +
                     '<div class="item-inner">' +
                     '<div class="item-title-row">' +
                     '<div class="item-title">{{opponent}}</div>' +
@@ -1287,6 +1293,7 @@ myApp.onPageInit('tournament-list', function(page) {
                     '</div></a></li>',
                 height: 73,
             });
+            myApp.initImagesLazyLoad(page.container);
             myApp.hideIndicator();
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
