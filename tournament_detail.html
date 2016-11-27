@@ -9,9 +9,9 @@
     </div>
     <div class="toolbar tabbar tabbar-scrollable theme-indigo" style="padding-top:190px;">
       <div class="toolbar-inner">
-        <a id="lbl-tournament-detail" href="#detail" style="padding-top:145px;" class="tab-link active"></a>
+        <a id="lbl-tournament-detail-stats" href="#stats" style="padding-top:145px;" class="tab-link active">Statistics</a>
+        <a id="lbl-tournament-detail" href="#detail" style="padding-top:145px;" class="tab-link"></a>
         <a id="lbl-tournament-detail-roster" href="#roster" style="padding-top:145px;" class="tab-link"></a>
-        <a id="lbl-tournament-detail-stats" href="#stats" style="padding-top:145px;" class="tab-link"></a>
         <a id="lbl-tournament-detail-fine-box" href="#fine" style="padding-top:145px;" class="tab-link"></a>
         <a id="lbl-tournament-detail-mvp" href="#mvp" style="padding-top:145px;" class="tab-link"></a>
       </div>
@@ -24,36 +24,6 @@
     </div>
     <div class="tabs-swipeable-wrap">
       <div class="tabs">
-        <div id="detail" class="page-content tab active" style="padding-top:240px;">
-          <!-- <div class="content-block-title" style="padding-top:0px;">Details</div> -->
-          <div id="lbl-tournament-detail-opponent" class="content-block-title"></div>
-          <div class="content-block" style="margin-bottom:0px;">
-            <p id="txt-opponent-name"></p>
-          </div>
-          <div id="lbl-tournament-detail-location" class="content-block-title" style="padding-top:0px; margin-top:0px;"></div>
-          <div class="content-block" style="margin-bottom:0px;">  
-            <p id="txt-tournament-location"></p>
-          </div>
-          <div id="lbl-tournament-detail-date" class="content-block-title" style="padding-top:0px; margin-top:0px;"></div>
-          <div class="content-block" style="margin-bottom:0px;">  
-            <p id="txt-tournament-date"></p>
-          </div>
-          <div id="lbl-tournament-detail-description" class="content-block-title" style="padding-top:0px; margin-top:0px;"></div>
-          <div class="content-block">  
-            <p id="txt-tournament-description"></p>
-          </div>
-          <div class="content-block" style="margin-top:0px;">
-            <p style="margin-top:0px;"><a href="#" id="btn-edit-tournament-details" class="button button-big button-fill button-raised color-teal"></a></p>
-          </div>
-        </div>
-        <div id="roster" class="page-content tab" style="padding-top:250px;">
-          <div class="content-block">
-            <div class="list-block media-list">
-              <ul id="roster_list">
-              </ul>
-            </div>
-          </div>
-        </div>
         <div id="stats" class="page-content tab" style="padding-top:220px;">
         <div class="ks-grid">
             <div class="content-block">
@@ -102,6 +72,36 @@
                 <div class="content-block" style="margin-top:0px;">
                 <p style="margin-top:0px;"><a href="#" id="btn-edit-team-stats" class="button button-big button-fill button-raised color-teal">Edit</a></p>
               </div>
+            </div>
+          </div>
+        </div>
+        <div id="detail" class="page-content tab active" style="padding-top:240px;">
+          <!-- <div class="content-block-title" style="padding-top:0px;">Details</div> -->
+          <div id="lbl-tournament-detail-opponent" class="content-block-title"></div>
+          <div class="content-block" style="margin-bottom:0px;">
+            <p id="txt-opponent-name"></p>
+          </div>
+          <div id="lbl-tournament-detail-location" class="content-block-title" style="padding-top:0px; margin-top:0px;"></div>
+          <div class="content-block" style="margin-bottom:0px;">  
+            <p id="txt-tournament-location"></p>
+          </div>
+          <div id="lbl-tournament-detail-date" class="content-block-title" style="padding-top:0px; margin-top:0px;"></div>
+          <div class="content-block" style="margin-bottom:0px;">  
+            <p id="txt-tournament-date"></p>
+          </div>
+          <div id="lbl-tournament-detail-description" class="content-block-title" style="padding-top:0px; margin-top:0px;"></div>
+          <div class="content-block">  
+            <p id="txt-tournament-description"></p>
+          </div>
+          <div class="content-block" style="margin-top:0px;">
+            <p style="margin-top:0px;"><a href="#" id="btn-edit-tournament-details" class="button button-big button-fill button-raised color-teal"></a></p>
+          </div>
+        </div>
+        <div id="roster" class="page-content tab" style="padding-top:250px;">
+          <div class="content-block">
+            <div class="list-block media-list">
+              <ul id="roster_list">
+              </ul>
             </div>
           </div>
         </div>
