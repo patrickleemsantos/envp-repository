@@ -8,11 +8,11 @@
 		<gap:platform name="android" />
 	</gap:platforms>
 	
-	<icon src="img/icon.png" />
-	<icon src="img/icon.png" gap:platform="android" gap:qualifier="ldpi" />
-	<icon src="img/icon.png" gap:platform="android" gap:qualifier="mdpi" />
-	<icon src="img/icon.png" gap:platform="android" gap:qualifier="hdpi" />
-	<icon src="img/icon.png" gap:platform="android" gap:qualifier="xhdpi" />
+	<icon src="img/envp-icon.png" />
+	<icon src="img/envp-icon.png" gap:platform="android" gap:qualifier="ldpi" />
+	<icon src="img/envp-icon.png" gap:platform="android" gap:qualifier="mdpi" />
+	<icon src="img/envp-icon.png" gap:platform="android" gap:qualifier="hdpi" />
+	<icon src="img/envp-icon.png" gap:platform="android" gap:qualifier="xhdpi" />
 	
 	<preference name="phonegap-version" value="cli-6.3.0" />
 	<preference name="orientation" value="portrait" />
