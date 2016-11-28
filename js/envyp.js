@@ -728,7 +728,7 @@ myApp.onPageInit('roster-list', function(page) {
                     '</div>' +
                     '<div class="item-subtitle">{{roster_position}}</div>' +
                     '</div></a></li>',
-                height: 62,
+                height: 60,
             });
             myApp.initImagesLazyLoad(page.container);
             myApp.hideIndicator();
@@ -2003,7 +2003,8 @@ myApp.onPageInit('roster-tournament-stats', function(page) {
     });
 
     $$('#btn-edit-roster-stats').on('click', function() {
-        mainView.router.loadPage('edit_roster_tournament_stats.html?roster_image=' + page.query.roster_image + '&roster_id=' + page.query.roster_id + '&roster_name=' + page.query.roster_name + '&roster_position=' + page.query.roster_position + '&points=' + points + '&assists=' + assists + '&fouls=' + fouls);
+        // mainView.router.loadPage('edit_roster_tournament_stats.html?roster_image=' + page.query.roster_image + '&roster_id=' + page.query.roster_id + '&roster_name=' + page.query.roster_name + '&roster_position=' + page.query.roster_position + '&points=' + points + '&assists=' + assists + '&fouls=' + fouls);
+        mainView.router.loadPage('edit_roster_tournament_stats.html?roster_id=' + page.query.roster_id + '&roster_name=' + page.query.roster_name + '&roster_position=' + page.query.roster_position + '&points=' + points + '&assists=' + assists + '&fouls=' + fouls);
     });
 });
 
@@ -2021,9 +2022,9 @@ myApp.onPageInit('edit-roster-tournament-stats', function(page) {
         $('#lbl-edit-roster-statistics-fouls').append('foul');
     }
 
-    $$("#edit-roster-image").attr("data-src", (page.query.roster_image == '' || page.query.roster_image == null ? "img/profile.jpg" : page.query.roster_image));
-    $$("#edit-roster-image").addClass('lazy lazy-fadein');
-    myApp.initImagesLazyLoad(page.container);
+    // $$("#edit-roster-image").attr("data-src", (page.query.roster_image == '' || page.query.roster_image == null ? "img/profile.jpg" : page.query.roster_image));
+    // $$("#edit-roster-image").addClass('lazy lazy-fadein');
+    // myApp.initImagesLazyLoad(page.container);
 
     $$('#edit-roster-name').prepend(page.query.roster_name);
     $$('#edit-roster-position').prepend(page.query.roster_position);
@@ -3089,7 +3090,7 @@ function getFBDetails() {
 
         $$('#btn-email-login').attr('disabled', true);
         $$('#btn-signup-page').attr('disabled', true);
-        myApp.alert(result.id + ' ' + result.first_name + ' ' + result.last_name);
+        // myApp.alert(result.id + ' ' + result.first_name + ' ' + result.last_name);
         $$.ajax({
             type: "POST",
             url: ENVYP_API_URL + "add_facebook_user.php",
