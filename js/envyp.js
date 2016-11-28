@@ -2702,6 +2702,9 @@ function chooseLanguage() {
                 $('#lbl-team-administrators').empty();
                 $('#lbl-team-administrators').prepend('Administratorer');
             }   
+        }, {
+            text: 'Cancel',
+            onClick: function() {}
         }]
     });
 }
@@ -3103,6 +3106,7 @@ function getFBDetails() {
                     localStorage.setItem('description', msg.description);
                     localStorage.setItem('account_image', msg.account_image);
 
+                    $$('#div-profile-name').empty();
                     $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
                     $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
 
