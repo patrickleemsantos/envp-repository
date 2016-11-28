@@ -131,7 +131,7 @@ $$('#btn-logout').on('click', function() {
     localStorage.setItem('account_id', '');
     $('#div-profile-name').empty();
     $('#img-profile-image').empty();
-    FBLogout();
+    // FBLogout();
     mainView.router.loadPage('main.html');
 });
 
@@ -141,6 +141,11 @@ $$('#btn-edit-profile').on('click', function() {
 });
 
 myApp.onPageInit('main', function(page) {
+    if (localStorage.getItem('account_id') != '') {
+        // mainView.router.loadPage('choose_sports.html');
+        myApp.alert('Main Back!');
+    }
+
     $$('#btn-email-login').on('click', function() {
         if (checkInternetConnection() == true) {
             $$('#btn-email-login').attr('disabled', true);
