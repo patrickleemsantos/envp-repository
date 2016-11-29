@@ -146,64 +146,64 @@ $$('#btn-edit-profile').on('click', function() {
 myApp.onPageInit('main', function(page) {
     if (localStorage.getItem('account_id') != '') {
         mainView.router.loadPage('choose_sports.html');
-        // myApp.alert('Main Back!');
-    } else {
-        $$('#btn-email-login').on('click', function() {
-            if (checkInternetConnection() == true) {
-                $$('#btn-email-login').attr('disabled', true);
-                $$('#btn-signup-page').attr('disabled', true);
-                var txt_username = $$('#txt-log-email-add').val();
-                var txt_password = $$("#txt-log-email-pass").val();
-
-                if (txt_username == '' || txt_password == '') {
-                    myApp.alert('Username or Password cannot be empty');
-                    $$('#btn-email-login').removeAttr("disabled");
-                    $$('#btn-signup-page').removeAttr("disabled");
-                } else {
-                    myApp.showIndicator();
-                    $$.ajax({
-                        type: "POST",
-                        url: ENVYP_API_URL + "login.php",
-                        data: "account=" + txt_username + "&password=" + txt_password,
-                        dataType: "json",
-                        success: function(msg, string, jqXHR) {
-                            myApp.hideIndicator();
-                            if (msg.status == '0') {
-                                localStorage.setItem('account_id', msg.account_id);
-                                localStorage.setItem('email', msg.email);
-                                localStorage.setItem('first_name', msg.first_name);
-                                localStorage.setItem('last_name', msg.last_name);
-                                localStorage.setItem('age', msg.age);
-                                localStorage.setItem('description', msg.description);
-                                localStorage.setItem('account_image', msg.account_image);
-
-                                $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
-                                $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
-
-                                mainView.router.loadPage('choose_sports.html');
-                            } else {
-                                myApp.alert(msg.message);
-                            }
-                            $$('#btn-email-login').removeAttr("disabled");
-                            $$('#btn-signup-page').removeAttr("disabled");
-                        },
-                        error: function(xhr, ajaxOptions, thrownError) {
-                            myApp.hideIndicator();
-                            myApp.alert(ERROR_ALERT);
-                            $$('#btn-email-login').removeAttr("disabled");
-                            $$('#btn-signup-page').removeAttr("disabled");
-                        }
-                    });
-                }
-            } else {
-                myApp.alert(NO_INTERNET_ALERT);
-            }
-        });
-
-        $$('#btn-signup-page').on('click', function() {
-            mainView.router.loadPage('signup.html');
-        });
     }
+
+    $$('#btn-email-login').on('click', function() {
+        if (checkInternetConnection() == true) {
+            $$('#btn-email-login').attr('disabled', true);
+            $$('#btn-signup-page').attr('disabled', true);
+            var txt_username = $$('#txt-log-email-add').val();
+            var txt_password = $$("#txt-log-email-pass").val();
+
+            if (txt_username == '' || txt_password == '') {
+                myApp.alert('Username or Password cannot be empty');
+                $$('#btn-email-login').removeAttr("disabled");
+                $$('#btn-signup-page').removeAttr("disabled");
+            } else {
+                myApp.showIndicator();
+                $$.ajax({
+                    type: "POST",
+                    url: ENVYP_API_URL + "login.php",
+                    data: "account=" + txt_username + "&password=" + txt_password,
+                    dataType: "json",
+                    success: function(msg, string, jqXHR) {
+                        myApp.hideIndicator();
+                        if (msg.status == '0') {
+                            localStorage.setItem('account_id', msg.account_id);
+                            localStorage.setItem('email', msg.email);
+                            localStorage.setItem('first_name', msg.first_name);
+                            localStorage.setItem('last_name', msg.last_name);
+                            localStorage.setItem('age', msg.age);
+                            localStorage.setItem('description', msg.description);
+                            localStorage.setItem('account_image', msg.account_image);
+
+                            $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
+                            $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
+
+                            mainView.router.loadPage('choose_sports.html');
+                        } else {
+                            myApp.alert(msg.message);
+                        }
+                        $$('#btn-email-login').removeAttr("disabled");
+                        $$('#btn-signup-page').removeAttr("disabled");
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        myApp.hideIndicator();
+                        myApp.alert(ERROR_ALERT);
+                        $$('#btn-email-login').removeAttr("disabled");
+                        $$('#btn-signup-page').removeAttr("disabled");
+                    }
+                });
+            }
+        } else {
+            myApp.alert(NO_INTERNET_ALERT);
+        }
+    });
+
+    $$('#btn-signup-page').on('click', function() {
+        mainView.router.loadPage('signup.html');
+    });
+    
 });
 
 /* ===== Signup Page ===== */
