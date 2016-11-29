@@ -26,6 +26,8 @@ var longitude = '';
 var edit_latitude = '';
 var edit_longitude = '';
 
+callPushBot();
+
 if (localStorage.getItem('selectedLanguage') == '' || localStorage.getItem('selectedLanguage') == null) {
     localStorage.setItem('selectedLanguage', '1');
 }
