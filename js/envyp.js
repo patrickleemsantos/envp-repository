@@ -144,10 +144,6 @@ $$('#btn-edit-profile').on('click', function() {
 });
 
 myApp.onPageInit('main', function(page) {
-    if (localStorage.getItem('account_id') != '') {
-        mainView.router.loadPage('choose_sports.html');
-    }
-
     $$('#btn-email-login').on('click', function() {
         if (checkInternetConnection() == true) {
             $$('#btn-email-login').attr('disabled', true);
@@ -203,7 +199,6 @@ myApp.onPageInit('main', function(page) {
     $$('#btn-signup-page').on('click', function() {
         mainView.router.loadPage('signup.html');
     });
-    
 });
 
 /* ===== Signup Page ===== */
@@ -273,13 +268,13 @@ myApp.onPageInit('signup', function(page) {
                 myApp.alert("character ivalid");
                 $$('#btn-signup').removeAttr("disabled");
                 return false;
-            } else {
+            } 
 
-            // if ($('#chkbox-terms').is(':checked') == false) {
-            //     myApp.alert("Please agree with the terms and conditions");
-            //     $$('#btn-signup').removeAttr("disabled");
-            //     return false;
-            // } else {
+            if ($('#chkbox-terms').is(':checked') == false) {
+                myApp.alert("Please agree with the terms and conditions");
+                $$('#btn-signup').removeAttr("disabled");
+                return false;
+            } else {
                 myApp.showIndicator();
                 $$.ajax({
                     type: "POST",
@@ -308,6 +303,14 @@ myApp.onPageInit('signup', function(page) {
         } else {
             myApp.alert(NO_INTERNET_ALERT);
         }
+    });
+
+    $$('#btn-terms').on('click', function() {
+        myApp.popup('.popup-terms');
+    });
+
+    $$('#btn-close-terms').on('click', function() {
+        myApp.closeModal('.popup-terms');
     });
 });
 
