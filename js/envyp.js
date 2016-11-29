@@ -17,6 +17,8 @@ const ENVYP_API_URL = 'http://envp.dk/api/';
 const NO_INTERNET_ALERT = 'Please check your internet connection';
 const AJAX_ERROR_ALERT = 'Network error, please try again.';
 const ERROR_ALERT = 'An error occured, please try again.';
+const PUSHBOT_APP_ID = "583d247f4a9efa72608b4567";
+const PUSHBOT_SENDER_ID = "583042657387";
 
 var imgfile = '';
 var latitude = '';
@@ -3146,5 +3148,51 @@ function getFBDetails() {
 function calcAge(dateString) {
     var birthday = +new Date(dateString);
     return ~~((Date.now() - birthday) / (31557600000));
+}
+
+function callPushBot() {
+    // if (localStorage.getItem("device_token") == "" || localStorage.getItem("device_token") == null) {
+        if (checkInternetConnection() == true ) {
+            window.plugins.PushbotsPlugin.initialize(PUSHBOT_APP_ID, {"android":{"sender_id":PUSHBOT_SENDER_ID}});
+
+            // First time registration
+            // This will be called on token registration/refresh with Android and with every runtime with iOS
+            window.plugins.PushbotsPlugin.on("registered", function(token){
+                // alert("PushbotsPlugin.on: " + token);
+
+                if (token != '' || token != null) {
+                    localStorage.setItem("device_token",token);    
+
+                    $$.ajax({
+                        type: "POST",
+                        url: GOFISH_API_URL + "add_push_token.php",
+                        data: "account_id=" + localStorage.getItem('account_id') + "&device_token=" + localStorage.getItem("device_token") + "&platform=" + PLATFORM,
+                        dataType: "json",
+                        success: function(msg, string, jqXHR) {
+                            if (msg.status == '0') {
+                                // myApp.alert(msg.message);
+                            } else {
+                                // myApp.alert(msg.message);
+                            }
+                        },
+                        error: function(xhr, ajaxOptions, thrownError) {
+                            myApp.alert("Error when adding push notification");
+                        }
+                    });  
+                } else {
+                    // alert("Token is not empty");
+                }
+                
+            });
+
+            // window.plugins.PushbotsPlugin.getRegistrationId(function(token){
+            //     alert("PushbotsPlugin.getRegistrationId: " + token);
+            // });
+        } else {
+            alert("Unable to register push notification, please check internet connection.");
+        }
+    // } else {
+    //     // alert("Token already exist in local storage");
+    // }
 }
 

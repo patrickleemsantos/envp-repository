@@ -59,5 +59,8 @@
 	    <gap:param name="APP_ID" value="1697861963864459" />
 	    <gap:param name="APP_NAME" value="Envp" />
 	</gap:plugin>
-	
+
+	<gap:plugin name="cordova-plugin-admobpro" source="npm" />
+	<gap:plugin name="pushbots-cordova-plugin" source="npm" />
+
 </widget>
