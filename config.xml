@@ -33,31 +33,30 @@
 	<feature name="http://api.phonegap.com/1.0/camera"/>
 	<feature name="http://api.phonegap.com/1.0/file"/>
 	<feature name="http://api.phonegap.com/1.0/geolocation"/>
-	
-	<plugin name="cordova-plugin-file" source="npm" />
-	<plugin name="cordova-plugin-file-transfer" source="npm" />
-	<plugin name="cordova-plugin-inappbrowser"/>
-	<plugin name="org.apache.cordova.camera" spec="0.3.6" source="npm" />
-	<plugin name="cordova-plugin-media" source="npm" />
-	<plugin name="org.apache.cordova.media-capture" spec="0.3.6" source="npm" />
-	<plugin name="org.apache.cordova.geolocation" spec="0.3.12" source="npm" />
-	<plugin name="org.apache.cordova.network-information" source="npm" />
+
+	<plugin name="com.telerik.plugins.nativepagetransitions" spec="0.6.5" />
+	<plugin name="cordova-plugin-admobpro" spec="2.24.0" />
+	<plugin name="cordova-plugin-file" spec="4.3.0" />
+	<plugin name="cordova-plugin-file-transfer" spec="1.6.0" />
+	<plugin name="cordova-plugin-inappbrowser" spec="1.5.0" />
+	<plugin name="cordova-plugin-media" spec="2.4.0" />
+	<plugin name="cordova-plugin-whitelist" spec="1.3.0" />
+	<plugin name="org.apache.cordova.camera" spec="0.3.6" />
+	<plugin name="org.apache.cordova.geolocation" spec="0.3.12" />
+	<plugin name="org.apache.cordova.media-capture" spec="0.3.6" />
+	<plugin name="org.apache.cordova.network-information" spec="1.3.0" />
+	<plugin name="pushbots-cordova-plugin" spec="1.4.1" />	
 	<!-- <gap:plugin name="cordova-plugin-crosswalk-webview-pgb-adapt" source="npm" version="1.4.0-dev-5"/> -->
 
 	<preference name="android-build-tool" value="gradle" />
 	<!-- <gap:plugin name="cordova-plugin-crosswalk-webview-pgb-adapt" source="npm" version="1.4.0-dev-11"/> -->
-	<plugin name="com.telerik.plugins.nativepagetransitions" source="npm" />
-
 	<preference name="android-minSdkVersion" value="15" />
 	
 	<gap:config-file platform="android" parent="/manifest/application">
         android:windowSoftInputMode="stateVisible"
 	</gap:config-file> 
 
-	<gap:plugin name="cordova-plugin-admobpro" source="npm" />
-	<gap:plugin name="pushbots-cordova-plugin" source="npm" />
-
-	<gap:plugin name="cordova-plugin-facebook4" source="npm">
+	<gap:plugin name="cordova-plugin-facebook4" source="npm" spec="1.7.4">
 	    <gap:param name="APP_ID" value="1697861963864459" />
 	    <gap:param name="APP_NAME" value="Envp" />
 	</gap:plugin>
