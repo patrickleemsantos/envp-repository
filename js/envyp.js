@@ -3174,22 +3174,22 @@ function callPushBot() {
                 if (token != '' || token != null) {
                     localStorage.setItem("device_token",token);    
 
-                    $$.ajax({
-                        type: "POST",
-                        url: GOFISH_API_URL + "add_push_token.php",
-                        data: "account_id=" + localStorage.getItem('account_id') + "&device_token=" + localStorage.getItem("device_token") + "&platform=" + PLATFORM,
-                        dataType: "json",
-                        success: function(msg, string, jqXHR) {
-                            if (msg.status == '0') {
-                                // myApp.alert(msg.message);
-                            } else {
-                                // myApp.alert(msg.message);
-                            }
-                        },
-                        error: function(xhr, ajaxOptions, thrownError) {
-                            myApp.alert("Error when adding push notification");
-                        }
-                    });  
+                    // $$.ajax({
+                    //     type: "POST",
+                    //     url: GOFISH_API_URL + "add_push_token.php",
+                    //     data: "account_id=" + localStorage.getItem('account_id') + "&device_token=" + localStorage.getItem("device_token") + "&platform=" + PLATFORM,
+                    //     dataType: "json",
+                    //     success: function(msg, string, jqXHR) {
+                    //         if (msg.status == '0') {
+                    //             // myApp.alert(msg.message);
+                    //         } else {
+                    //             // myApp.alert(msg.message);
+                    //         }
+                    //     },
+                    //     error: function(xhr, ajaxOptions, thrownError) {
+                    //         myApp.alert("Error when adding push notification");
+                    //     }
+                    // });  
                 } else {
                     // alert("Token is not empty");
                 }
