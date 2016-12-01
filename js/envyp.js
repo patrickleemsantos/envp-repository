@@ -3162,48 +3162,48 @@ function calcAge(dateString) {
 }
 
 function callPushBot() {
-    // // if (localStorage.getItem("device_token") == "" || localStorage.getItem("device_token") == null) {
-    //     if (checkInternetConnection() == true ) {
-    //         window.plugins.PushbotsPlugin.initialize(PUSHBOT_APP_ID, {"android":{"sender_id":PUSHBOT_SENDER_ID}});
+    // if (localStorage.getItem("device_token") == "" || localStorage.getItem("device_token") == null) {
+        if (checkInternetConnection() == true ) {
+            window.plugins.PushbotsPlugin.initialize(PUSHBOT_APP_ID, {"android":{"sender_id":PUSHBOT_SENDER_ID}});
 
-    //         // First time registration
-    //         // This will be called on token registration/refresh with Android and with every runtime with iOS
-    //         window.plugins.PushbotsPlugin.on("registered", function(token){
-    //             // alert("PushbotsPlugin.on: " + token);
+            // First time registration
+            // This will be called on token registration/refresh with Android and with every runtime with iOS
+            window.plugins.PushbotsPlugin.on("registered", function(token){
+                // alert("PushbotsPlugin.on: " + token);
 
-    //             if (token != '' || token != null) {
-    //                 localStorage.setItem("device_token",token);    
+                if (token != '' || token != null) {
+                    localStorage.setItem("device_token",token);    
 
-    //                 $$.ajax({
-    //                     type: "POST",
-    //                     url: GOFISH_API_URL + "add_push_token.php",
-    //                     data: "account_id=" + localStorage.getItem('account_id') + "&device_token=" + localStorage.getItem("device_token") + "&platform=" + PLATFORM,
-    //                     dataType: "json",
-    //                     success: function(msg, string, jqXHR) {
-    //                         if (msg.status == '0') {
-    //                             // myApp.alert(msg.message);
-    //                         } else {
-    //                             // myApp.alert(msg.message);
-    //                         }
-    //                     },
-    //                     error: function(xhr, ajaxOptions, thrownError) {
-    //                         myApp.alert("Error when adding push notification");
-    //                     }
-    //                 });  
-    //             } else {
-    //                 // alert("Token is not empty");
-    //             }
+                    $$.ajax({
+                        type: "POST",
+                        url: GOFISH_API_URL + "add_push_token.php",
+                        data: "account_id=" + localStorage.getItem('account_id') + "&device_token=" + localStorage.getItem("device_token") + "&platform=" + PLATFORM,
+                        dataType: "json",
+                        success: function(msg, string, jqXHR) {
+                            if (msg.status == '0') {
+                                // myApp.alert(msg.message);
+                            } else {
+                                // myApp.alert(msg.message);
+                            }
+                        },
+                        error: function(xhr, ajaxOptions, thrownError) {
+                            myApp.alert("Error when adding push notification");
+                        }
+                    });  
+                } else {
+                    // alert("Token is not empty");
+                }
                 
-    //         });
+            });
 
-    //         // window.plugins.PushbotsPlugin.getRegistrationId(function(token){
-    //         //     alert("PushbotsPlugin.getRegistrationId: " + token);
-    //         // });
-    //     } else {
-    //         alert("Unable to register push notification, please check internet connection.");
-    //     }
-    // // } else {
-    // //     // alert("Token already exist in local storage");
-    // // }
+            // window.plugins.PushbotsPlugin.getRegistrationId(function(token){
+            //     alert("PushbotsPlugin.getRegistrationId: " + token);
+            // });
+        } else {
+            alert("Unable to register push notification, please check internet connection.");
+        }
+    // } else {
+    //     // alert("Token already exist in local storage");
+    // }
 }
 
