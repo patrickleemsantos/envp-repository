@@ -1641,6 +1641,15 @@ myApp.onPageInit('tournament-detail', function(page) {
 
         $$('#btn-submit-vote').on('click', function() {
             $$('#btn-submit-vote').attr('disabled', true);
+
+            var roster_id = $$('#select-vote-list').val();
+
+            if (roster_id == '' || roster_id == null) {
+                myApp.alert('Please select a roster!');
+                $$('#btn-submit-vote').removeAttr("disabled");
+                return false;
+            }
+
             myApp.showIndicator();
             $$.ajax({
                 type: "POST",
