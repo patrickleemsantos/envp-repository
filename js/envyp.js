@@ -3169,7 +3169,7 @@ function callPushBot() {
             // First time registration
             // This will be called on token registration/refresh with Android and with every runtime with iOS
             window.plugins.PushbotsPlugin.on("registered", function(token){
-                // alert("PushbotsPlugin.on: " + token);
+                alert("PushbotsPlugin.on: " + token);
 
                 if (token != '' || token != null) {
                     localStorage.setItem("device_token",token);    
