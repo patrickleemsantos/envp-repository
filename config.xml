@@ -48,8 +48,6 @@
 	<!-- <gap:plugin name="cordova-plugin-crosswalk-webview-pgb-adapt" source="npm" version="1.4.0-dev-11"/> -->
 	
 	<preference name="android-build-tool" value="gradle" />
-	<gap:plugin name="pushbots-cordova-plugin" spec="^1.4.0" source="npm" />
-	<!-- <plugin name="pushbots-cordova-plugin" spec="1.4.1" />	 -->
 	<preference name="android-minSdkVersion" value="15" />
 	
 	<gap:config-file platform="android" parent="/manifest/application">
@@ -60,5 +58,8 @@
 	    <gap:param name="APP_ID" value="1697861963864459" />
 	    <gap:param name="APP_NAME" value="Envp" />
 	</gap:plugin>
+
+	<!-- <plugin name="pushbots-cordova-plugin" spec="1.4.1" />	 -->
+	<gap:plugin name="pushbots-cordova-plugin" spec="^1.4.0" source="npm" />
 
 </widget>
