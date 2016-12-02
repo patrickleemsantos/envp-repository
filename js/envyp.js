@@ -3161,16 +3161,16 @@ function calcAge(dateString) {
 }
 
 function callPushBot() {
-        alert('Call Pushbot!');
+        myApp.alert('Call Pushbot!');
     // if (localStorage.getItem("device_token") == "" || localStorage.getItem("device_token") == null) {
         if (checkInternetConnection() == true ) {
-            alert('Initialize Pushbot!');
+            myApp.alert('Initialize Pushbot!');
             window.plugins.PushbotsPlugin.initialize(PUSHBOT_APP_ID, {"android":{"sender_id":PUSHBOT_SENDER_ID}});
 
             // First time registration
             // This will be called on token registration/refresh with Android and with every runtime with iOS
             window.plugins.PushbotsPlugin.on("registered", function(token){
-                alert("PushbotsPlugin.on: " + token);
+                myApp.alert("PushbotsPlugin.on: " + token);
 
                 if (token != '' || token != null) {
                     localStorage.setItem("device_token",token);    
