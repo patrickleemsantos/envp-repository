@@ -3161,8 +3161,10 @@ function calcAge(dateString) {
 }
 
 function callPushBot() {
+        alert('Call Pushbot!');
     // if (localStorage.getItem("device_token") == "" || localStorage.getItem("device_token") == null) {
         if (checkInternetConnection() == true ) {
+            alert('Initialize Pushbot!');
             window.plugins.PushbotsPlugin.initialize(PUSHBOT_APP_ID, {"android":{"sender_id":PUSHBOT_SENDER_ID}});
 
             // First time registration
