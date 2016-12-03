@@ -1243,11 +1243,11 @@ myApp.onPageInit('tournament-add', function(page) {
                 return false;
             }
 
-            if (latitude == '' || longitude == '') {
-                myApp.alert('Please enter a valid location!');
-                $$('#btn-add-tournament').removeAttr("disabled");
-                return false;
-            }
+            // if (latitude == '' || longitude == '') {
+            //     myApp.alert('Please enter a valid location!');
+            //     $$('#btn-add-tournament').removeAttr("disabled");
+            //     return false;
+            // }
 
             if (imgfile == '') {
                 myApp.showIndicator();
@@ -1307,9 +1307,9 @@ myApp.onPageInit('tournament-add', function(page) {
 /* =====Tournament List Page ===== */
 myApp.onPageInit('tournament-list', function(page) {
     if (localStorage.getItem('selectedLanguage') == '1') {
-        $('#lbl-tournament-list').append('Tournament List');
+        $('#lbl-tournament-list').append('Tournament Plan');
     } else {
-        $('#lbl-tournament-list').append('Tournament liste');
+        $('#lbl-tournament-list').append('Turnerings plan');
     }
 
     if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
@@ -1833,11 +1833,11 @@ myApp.onPageInit('tournament-edit', function(page) {
                 return false;
             }
 
-            if (edit_latitude == '' || edit_longitude == '') {
-                myApp.alert('Please enter a valid location!');
-                $$('#btn-update-tournament').removeAttr("disabled");
-                return false;
-            }
+            // if (edit_latitude == '' || edit_longitude == '') {
+            //     myApp.alert('Please enter a valid location!');
+            //     $$('#btn-update-tournament').removeAttr("disabled");
+            //     return false;
+            // }
 
             if (imgfile == '') {
                 myApp.showIndicator();
