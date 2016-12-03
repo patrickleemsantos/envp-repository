@@ -96,6 +96,7 @@ $$('#btn-email-login').on('click', function() {
                 success: function(msg, string, jqXHR) {
                     myApp.hideIndicator();
                     if (msg.status == '0') {
+                        localStorage.setItem('isFbLogin', 0);
                         localStorage.setItem('account_id', msg.account_id);
                         localStorage.setItem('email', msg.email);
                         localStorage.setItem('first_name', msg.first_name);
@@ -137,13 +138,36 @@ $$('#btn-logout').on('click', function() {
     localStorage.setItem('account_id', '');
     $('#div-profile-name').empty();
     $('#img-profile-image').empty();
-    // FBLogout();
+    if (localStorage.getItem('isFbLogin') == 1) {
+        FBLogout();
+    }
     mainView.router.loadPage('main.html');
 });
 
 $$('#btn-edit-profile').on('click', function() {
     myApp.closePanel('left');
     mainView.router.loadPage('profile_add.html?account_id=' + localStorage.getItem('account_id') + '&first_name=' + localStorage.getItem('first_name') + '&last_name=' + localStorage.getItem('last_name') + '&age=' + localStorage.getItem('age') + '&description=' + localStorage.getItem('description') + '&image_url=' + localStorage.getItem('account_image'));
+});
+
+$$('#btn-forgot-pass').on('click', function() {
+    myApp.prompt('Please enter your email', function (value) {
+        if (validateEmail(value) == false) {
+            myApp.alert('Invalid email format');
+            return false;
+        }
+        $$.ajax({
+            type: "POST",
+            url: ENVYP_API_URL + "send_password.php",
+            data: "email=" + value,
+            dataType: "json",
+            success: function(msg, string, jqXHR) {
+                myApp.alert(msg.status);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                myApp.alert("An error occured, please try again.");
+            }
+        });
+    });
 });
 
 myApp.onPageInit('main', function(page) {
@@ -201,6 +225,27 @@ myApp.onPageInit('main', function(page) {
 
     $$('#btn-signup-page').on('click', function() {
         mainView.router.loadPage('signup.html');
+    });
+
+    $$('#btn-forgot-pass').on('click', function() {
+        myApp.prompt('Please enter your email', function (value) {
+            if (validateEmail(value) == false) {
+                myApp.alert('Invalid email format');
+                return false;
+            }
+            $$.ajax({
+                type: "POST",
+                url: ENVYP_API_URL + "send_password.php",
+                data: "email=" + value,
+                dataType: "json",
+                success: function(msg, string, jqXHR) {
+                    myApp.alert(msg.status);
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    myApp.alert("An error occured, please try again.");
+                }
+            });
+        });
     });
 });
 
@@ -324,7 +369,12 @@ myApp.onPageInit('profile-add', function(page) {
         $$('#txt-lastname').val(page.query.last_name);
         $$('#txt-age').val(page.query.age);
         $$('#txt-description').val(page.query.description);
-        $$('#profile-image').attr('src', (page.query.image_url == '' || page.query.image_url == null ? "img/profile.jpg" : page.query.image_url));
+        if (localStorage.getItem('isFbLogin') == 1) {
+            $$('#profile-image').attr('src', localStorage.getItem('fb_image'));
+        } else {
+            $$('#profile-image').attr('src', (page.query.image_url == '' || page.query.image_url == null ? "img/profile.jpg" : page.query.image_url));
+        }  
+
         localStorage.setItem('account_id', page.query.account_id);
     }
 
@@ -3113,7 +3163,6 @@ function getFBDetails() {
 
         $$('#btn-email-login').attr('disabled', true);
         $$('#btn-signup-page').attr('disabled', true);
-        // myApp.alert(result.id + ' ' + result.first_name + ' ' + result.last_name);
         $$.ajax({
             type: "POST",
             url: ENVYP_API_URL + "add_facebook_user.php",
@@ -3121,6 +3170,7 @@ function getFBDetails() {
             dataType: "json",
             success: function(msg, string, jqXHR) {
                 // myApp.alert('status: ' + msg.status);
+                localStorage.setItem('isFbLogin', 1);
                 if (msg.status == 1) {
                     localStorage.setItem('account_id', msg.account_id);
                     localStorage.setItem('email', msg.email);
@@ -3138,7 +3188,8 @@ function getFBDetails() {
                 } else if (msg.status == 0) {
                     var age = calcAge(result.birthday);
                     var fb_image = 'https://graph.facebook.com/' + result.id + '/picture?type=large';
-                    mainView.router.loadPage('profile_add.html?account_id=' + msg.account_id + '&first_name=' + result.first_name + '&last_name=' + result.last_name + '&age=' + age + '&description=&image_url=' + fb_image);
+                    localStorage.setItem('fb_image', fb_image);
+                    mainView.router.loadPage('profile_add.html?account_id=' + msg.account_id + '&first_name=' + result.first_name + '&last_name=' + result.last_name + '&age=' + age + '&description=')
                 }
                 $$('#btn-email-login').removeAttr("disabled");
                 $$('#btn-signup-page').removeAttr("disabled");
