@@ -364,7 +364,8 @@ myApp.onPageInit('signup', function(page) {
 
 /* ===== Add Profile Page ===== */
 myApp.onPageInit('profile-add', function(page) {
-    if (page.query.account_id != '' || page.query.account_id != null) {
+    // alert('localstorate: '+localStorage.getItem('account_id')+'; page.query: '+page.query.account_id);
+    if (page.query.account_id != undefined) {
         $$('#txt-firstname').val(page.query.first_name);
         $$('#txt-lastname').val(page.query.last_name);
         $$('#txt-age').val(page.query.age);
@@ -409,17 +410,14 @@ myApp.onPageInit('profile-add', function(page) {
                 $$.ajax({
                     type: "POST",
                     url: ENVYP_API_URL + "update_user.php",
-                    data: "account_id=" + localStorage.getItem('account_id') + "&first_name=" + first_name + "&last_name=" + last_name + "&age=" + age + "&description=" + description + "&image_url=" + page.query.image_url,
+                    data: "account_id=" + localStorage.getItem('account_id') + "&first_name=" + first_name + "&last_name=" + last_name + "&age=" + age + "&description=" + description + "&image_url=" + (page.query.image_url ==  undefined ? '' : page.query.image_url),
                     dataType: "json",
                     success: function(msg, string, jqXHR) {
                         myApp.hideIndicator();
                         if (msg.status == '0') {
                             myApp.alert('Success');
                             clearLogInDetails();
-                            if (msg.account_image != '') {
-                                localStorage.setItem('account_image', msg.account_image);
-                                $$('#img-profile-image').attr('src', msg.account_image);
-                            }
+                            localStorage.setItem('account_image', msg.account_image);
                             mainView.router.loadPage('choose_sports.html');
                         } else {
                             myApp.alert(msg.message);
@@ -455,8 +453,6 @@ myApp.onPageInit('profile-add', function(page) {
 
                 clearLogInDetails();
                 myApp.hideIndicator();
-
-                // localStorage.setItem('account_image', imgfile);
 
                 mainView.router.loadPage('choose_sports.html');
                 $$('#btn-continue').removeAttr("disabled");
@@ -2824,6 +2820,7 @@ function win(r) {
 }
 
 function winUpdateUser(r) {
+    alert('winUpdateUser');
     var resp = JSON.parse(r.response);
     myApp.alert(resp.message);
     if (resp.status == '0') {
