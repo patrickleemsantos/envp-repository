@@ -137,7 +137,7 @@ $$('#btn-logout').on('click', function() {
     localStorage.setItem('account_id', '');
     $('#div-profile-name').empty();
     $('#img-profile-image').empty();
-    FBLogout();
+    // FBLogout();
     mainView.router.loadPage('main.html');
 });
 
@@ -3120,7 +3120,7 @@ function getFBDetails() {
             data: "facebook_id=" + result.id,
             dataType: "json",
             success: function(msg, string, jqXHR) {
-                myApp.alert('status: ' + msg.status);
+                // myApp.alert('status: ' + msg.status);
                 if (msg.status == 1) {
                     localStorage.setItem('account_id', msg.account_id);
                     localStorage.setItem('email', msg.email);
@@ -3130,7 +3130,7 @@ function getFBDetails() {
                     localStorage.setItem('description', msg.description);
                     localStorage.setItem('account_image', msg.account_image);
 
-                    $$('#div-profile-name').empty();
+                    $('#div-profile-name').empty();
                     $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
                     $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
 
@@ -3138,7 +3138,6 @@ function getFBDetails() {
                 } else if (msg.status == 0) {
                     var age = calcAge(result.birthday);
                     var fb_image = 'https://graph.facebook.com/' + result.id + '/picture?type=large';
-                    $$('#img-profile-image').attr('src', fb_image);
                     mainView.router.loadPage('profile_add.html?account_id=' + msg.account_id + '&first_name=' + result.first_name + '&last_name=' + result.last_name + '&age=' + age + '&description=&image_url=' + fb_image);
                 }
                 $$('#btn-email-login').removeAttr("disabled");
