@@ -23,7 +23,6 @@
 	<access uri="*" subdomains="true" />
 	
 	<access origin="*" />
-    <plugin name="cordova-plugin-whitelist" version="1" />
 	<allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-navigation href="http://www.facebook.com/*" />
