@@ -192,6 +192,7 @@ myApp.onPageInit('main', function(page) {
                     success: function(msg, string, jqXHR) {
                         myApp.hideIndicator();
                         if (msg.status == '0') {
+                            localStorage.setItem('isFbLogin', 0);
                             localStorage.setItem('account_id', msg.account_id);
                             localStorage.setItem('email', msg.email);
                             localStorage.setItem('first_name', msg.first_name);
@@ -367,6 +368,7 @@ myApp.onPageInit('signup', function(page) {
 myApp.onPageInit('profile-add', function(page) {
     // alert('localstorate: '+localStorage.getItem('account_id')+'; page.query: '+page.query.account_id);
     var account_image = '';
+    alert('is fb login', localStorage.getItem('isFbLogin'));
     if (page.query.account_id != undefined) {
         $$('#txt-firstname').val(page.query.first_name);
         $$('#txt-lastname').val(page.query.last_name);
