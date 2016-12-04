@@ -373,16 +373,20 @@ myApp.onPageInit('profile-add', function(page) {
         $$('#txt-age').val(page.query.age);
         $$('#txt-description').val(page.query.description);
         if (localStorage.getItem('isFbLogin') == 1) {
+            alert('fb login');
             account_image = localStorage.getItem('fb_image');
             $$('#profile-image').attr('src', account_image);
             // localStorage.setItem('account_image', localStorage.getItem('fb_image'));
         } else {
+            alert('not fb login');
             account_image = page.query.image_url;
             $$('#profile-image').attr('src', (account_image == '' || account_image == null ? "img/profile.jpg" : account_image));
         }  
 
         localStorage.setItem('account_id', page.query.account_id);
     }
+
+    alert('account image: ' + localStorage.getItem('account_image'));
 
     $$('#btn-continue').on('click', function() {
         if (checkInternetConnection() == true) {
