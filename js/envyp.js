@@ -368,7 +368,7 @@ myApp.onPageInit('signup', function(page) {
 myApp.onPageInit('profile-add', function(page) {
     // alert('localstorate: '+localStorage.getItem('account_id')+'; page.query: '+page.query.account_id);
     var account_image = '';
-    alert('is fb login', localStorage.getItem('isFbLogin'));
+    alert('is fb login: ' + localStorage.getItem('isFbLogin'));
     if (page.query.account_id != undefined) {
         $$('#txt-firstname').val(page.query.first_name);
         $$('#txt-lastname').val(page.query.last_name);
@@ -387,8 +387,6 @@ myApp.onPageInit('profile-add', function(page) {
 
         localStorage.setItem('account_id', page.query.account_id);
     }
-
-    alert('account image: ' + localStorage.getItem('account_image'));
 
     $$('#btn-continue').on('click', function() {
         if (checkInternetConnection() == true) {
@@ -478,6 +476,7 @@ myApp.onPageInit('profile-add', function(page) {
             $('#div-profile-name').empty();
             $('#img-profile-image').empty();
             $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
+            alert('account image: ' + localStorage.getItem('account_image'));
             $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
         } else {
             myApp.alert(NO_INTERNET_ALERT);
