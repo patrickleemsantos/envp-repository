@@ -333,6 +333,7 @@ myApp.onPageInit('signup', function(page) {
                         myApp.hideIndicator();
                         if (msg.status == '0') {
                             localStorage.setItem('account_id', msg.account_id);
+                            localStorage.setItem('isFbLogin', 0);
                             mainView.router.loadPage('profile_add.html');
                         } else {
                             $$('#txt-password').val('');
@@ -365,15 +366,19 @@ myApp.onPageInit('signup', function(page) {
 /* ===== Add Profile Page ===== */
 myApp.onPageInit('profile-add', function(page) {
     // alert('localstorate: '+localStorage.getItem('account_id')+'; page.query: '+page.query.account_id);
+    var account_image = '';
     if (page.query.account_id != undefined) {
         $$('#txt-firstname').val(page.query.first_name);
         $$('#txt-lastname').val(page.query.last_name);
         $$('#txt-age').val(page.query.age);
         $$('#txt-description').val(page.query.description);
         if (localStorage.getItem('isFbLogin') == 1) {
-            $$('#profile-image').attr('src', localStorage.getItem('fb_image'));
+            account_image = localStorage.getItem('fb_image');
+            $$('#profile-image').attr('src', account_image);
+            // localStorage.setItem('account_image', localStorage.getItem('fb_image'));
         } else {
-            $$('#profile-image').attr('src', (page.query.image_url == '' || page.query.image_url == null ? "img/profile.jpg" : page.query.image_url));
+            account_image = page.query.image_url;
+            $$('#profile-image').attr('src', (account_image == '' || account_image == null ? "img/profile.jpg" : account_image));
         }  
 
         localStorage.setItem('account_id', page.query.account_id);
@@ -410,7 +415,7 @@ myApp.onPageInit('profile-add', function(page) {
                 $$.ajax({
                     type: "POST",
                     url: ENVYP_API_URL + "update_user.php",
-                    data: "account_id=" + localStorage.getItem('account_id') + "&first_name=" + first_name + "&last_name=" + last_name + "&age=" + age + "&description=" + description + "&image_url=" + (page.query.image_url ==  undefined ? '' : page.query.image_url),
+                    data: "account_id=" + localStorage.getItem('account_id') + "&first_name=" + first_name + "&last_name=" + last_name + "&age=" + age + "&description=" + description + "&image_url=" + (account_image == undefined ? '' : account_image),
                     dataType: "json",
                     success: function(msg, string, jqXHR) {
                         myApp.hideIndicator();
