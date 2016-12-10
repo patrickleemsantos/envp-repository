@@ -12,8 +12,8 @@ var mainView = myApp.addView('.view-main', {
     dynamicNavbar: false
 });
 
-// const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
-const ENVYP_API_URL = 'http://envp.dk/api/';
+const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
+// const ENVYP_API_URL = 'http://envp.dk/api/';
 const NO_INTERNET_ALERT = 'Please check your internet connection';
 const AJAX_ERROR_ALERT = 'Network error, please try again.';
 const ERROR_ALERT = 'An error occured, please try again.';
@@ -1385,10 +1385,10 @@ myApp.onPageInit('tournament-detail', function(page) {
         $('#lbl-tournament-detail-fine-box').append('Fine Box');
         $('#lbl-tournament-detail-mvp').append('MVP');
 
-        $('#lbl-tournament-detail-opponent').append('Opponent');
-        $('#lbl-tournament-detail-location').append('Location');
-        $('#lbl-tournament-detail-date').append('Date');
-        $('#lbl-tournament-detail-description').append('Description');
+        $('#lbl-tournament-detail-opponent').append('<b>Opponent</b>');
+        $('#lbl-tournament-detail-location').append('<b>Location</b>');
+        $('#lbl-tournament-detail-date').append('<b>Date</b>');
+        $('#lbl-tournament-detail-description').append('<b>Description</b>');
         $('#btn-edit-tournament-details').append('Edit');
 
         $('#lbl-tournament-detail-versus').append('Versus');
@@ -1407,10 +1407,10 @@ myApp.onPageInit('tournament-detail', function(page) {
         $('#lbl-tournament-detail-fine-box').append('fint kasse');
         $('#lbl-tournament-detail-mvp').append('MVP');
 
-        $('#lbl-tournament-detail-opponent').append('Modstander');
-        $('#lbl-tournament-detail-location').append('Beliggenhed');
-        $('#lbl-tournament-detail-date').append('Dato');
-        $('#lbl-tournament-detail-description').append('Beskrivelse');
+        $('#lbl-tournament-detail-opponent').append('<b>Modstander</b>');
+        $('#lbl-tournament-detail-location').append('<b>Beliggenhed</b>');
+        $('#lbl-tournament-detail-date').append('<b>Dato</b>');
+        $('#lbl-tournament-detail-description').append('<b>Beskrivelse</b>');
         $('#btn-edit-tournament-details').append('edit');
 
         $('#lbl-tournament-detail-versus').append('Imod');
@@ -1475,6 +1475,10 @@ myApp.onPageInit('tournament-detail', function(page) {
             opponent_points = field.opponent_points;
             opponent_assists = field.opponent_assists;
             opponent_fouls = field.opponent_fouls;
+            win = field.win;
+            lose = field.lose;
+            draw = field.draw;
+            status = field.tournament_status;
         });
 
         $$('#team-name').prepend(team_name);
@@ -1485,6 +1489,13 @@ myApp.onPageInit('tournament-detail', function(page) {
         $$('#opponent-assists').prepend(opponent_assists);
         $$('#team-fouls').prepend(team_fouls);
         $$('#opponent-fouls').prepend(opponent_fouls);
+        $$('#tournament-win-lose').prepend('W ' + win + ' - L ' + lose + ' - D ' + draw);
+        $$('#tournament-score').prepend(team_points + ' - ' + opponent_points);
+        if (status == '0') {
+            $$('#tournament-status').prepend('Ongoing');
+        } else {
+            $$('#tournament-status').prepend('Final');   
+        }
 
         myApp.hideIndicator();
     })
@@ -1512,7 +1523,7 @@ myApp.onPageInit('tournament-detail', function(page) {
             tournament_formatted_date = field.formatted_date;
         });
 
-        $$("#tournament-background-image").css("background-image", "url(" + (tournament_image_url == '' || tournament_image_url == null ? "img/envyp_logo.png" : tournament_image_url) + ")");
+        // $$("#tournament-background-image").css("background-image", "url(" + (tournament_image_url == '' || tournament_image_url == null ? "img/envyp_logo.png" : tournament_image_url) + ")");
 
         $$('#txt-opponent-name').prepend(tournament_opponent);
         $$('#txt-tournament-location').prepend(tournament_location);
@@ -1760,6 +1771,72 @@ myApp.onPageInit('tournament-detail', function(page) {
                 }
             });
         });
+    });
+
+    $$('.popop-tournament-options').on('click', function () {
+      var clickedLink = this;
+      var popoverHTML = '<div id="popover-tournament" class="popover">'+
+                          '<div class="popover-inner">'+
+                            '<div class="list-block">'+
+                              '<ul>'+
+                              '<li><a id="btn-end-tournament" href="#" onClick="endTournamentConfirmation();" class="item-link list-button">End game</li>'+
+                              '<li><a id="btn-end-vote" href="#" onClick="endVoteConfirmation();" class="item-link list-button">End vote</li>'+
+                              '</ul>'+
+                            '</div>'+
+                          '</div>'+
+                        '</div>'
+      myApp.popover(popoverHTML, clickedLink);
+    });
+});
+
+function endTournamentConfirmation() {
+    if (checkInternetConnection() == true) {
+        myApp.closeModal('#popover-tournament');
+        $$.ajax({
+            type: "POST",
+            url: ENVYP_API_URL + "end_tournament.php",
+            data: "tournament_id=" + localStorage.getItem('selectedTournamentId'),
+            dataType: "json",
+            success: function(msg, string, jqXHR) {
+                myApp.hideIndicator();
+                if (msg.status == 0) {
+                    $('#tournament-win-lose').empty();
+                    $$('#tournament-win-lose').prepend('W ' + msg.win + ' - L ' + msg.lose + ' - D ' + msg.draw);
+                    $('#tournament-status').empty();
+                    $$('#tournament-status').prepend('Final');
+                }
+                myApp.alert(msg.message);
+            },
+            error: function(msg, string, jqXHR) {
+                myApp.hideIndicator();
+                myApp.alert(ERROR_ALERT);
+            }
+        });
+    } else {
+        myApp.alert(NO_INTERNET_ALERT);
+    }
+}
+
+function endVoteConfirmation() {
+    myApp.closeModal('#popover-tournament');
+    mainView.router.loadPage('voting_result.html');
+}
+
+/* ===== Voting Result ===== */
+myApp.onPageInit('voting-result', function(page) {
+    $$('.popop-voting-result').on('click', function () {
+      var clickedLink = this;
+      var popoverHTML = '<div id="popover-tournament" class="popover">'+
+                          '<div class="popover-inner">'+
+                            '<div class="list-block">'+
+                              '<ul>'+
+                              '<li><a id="btn-fb-share href="#" onClick="" class="item-link list-button"><img src="img/icon-fb-share.png" style="width:20px; height:20px" /> Facebook</li>'+
+                              '<li><a id="btn-twitter-share" href="#" onClick="" class="item-link list-button"><img src="img/icon-twitter-share.png" style="width:20px; height:20px" /> Twitter</li>'+
+                              '</ul>'+
+                            '</div>'+
+                          '</div>'+
+                        '</div>'
+      myApp.popover(popoverHTML, clickedLink);
     });
 });
 
@@ -3114,20 +3191,20 @@ function validateEmail(sEmail) {
 }
 
 function checkInternetConnection() {
-    try {
-        if (DEBUG == false) {
-            var state = navigator.connection.type;
-            if (state == 'none') {
-                return false;
-            } else {
-                return true;
-            }
-        } else {
-            return true;
-        }
-    } catch (err) {
-        return true;
-    }
+    // try {
+    //     if (DEBUG == false) {
+    //         var state = navigator.connection.type;
+    //         if (state == 'none') {
+    //             return false;
+    //         } else {
+    //             return true;
+    //         }
+    //     } else {
+    //         return true;
+    //     }
+    // } catch (err) {
+    //     return true;
+    // }
     return true;
 }
 
