@@ -901,6 +901,26 @@ myApp.onPageInit('roster-detail', function(page) {
         $('#lbl-roster-detail').append('Roster detalje');
     }
 
+    if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('selectedSportID') == 4) {
+        $('#li-roster-det-fouls').hide();
+        $('#lbl-roster-det-score').append('goals/mål');
+        $('#lbl-roster-det-assists').append('assists');
+        $('#lbl-roster-det-yellowcard').append('yellow card');
+        $('#lbl-roster-det-redcard').append('red card');
+    } else if (localStorage.getItem('selectedSportID') == 2 || localStorage.getItem('selectedSportID') == 5) {
+        $('#li-roster-det-yellowcard').hide();
+        $('#li-roster-det-redcard').hide();
+        $('#lbl-roster-det-score').append('goals/mål');
+        $('#lbl-roster-det-assists').append('assists');
+        $('#lbl-roster-det-fouls').append('fouls/minutes');
+    } else if (localStorage.getItem('selectedSportID') == 1 || localStorage.getItem('selectedSportID') == 6) {
+        $('#li-roster-det-yellowcard').hide();
+        $('#li-roster-det-redcard').hide();
+        $('#lbl-roster-det-score').append('points');
+        $('#lbl-roster-det-assists').append('assists');
+        $('#lbl-roster-det-fouls').append('fouls');
+    }
+
     if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
         $('#btn-edit-roster-detail').hide();
     }
@@ -918,6 +938,8 @@ myApp.onPageInit('roster-detail', function(page) {
             $('#roster-ppg').prepend(field.ppg);
             $('#roster-apg').prepend(field.apg);
             $('#roster-fpg').prepend(field.fpg);
+            $('#roster-yellowcard').prepend(field.yellowcard);
+            $('#roster-redcard').prepend(field.redcard);
         });
         myApp.hideIndicator();
     })
@@ -1392,9 +1414,11 @@ myApp.onPageInit('tournament-detail', function(page) {
         $('#btn-edit-tournament-details').append('Edit');
 
         $('#lbl-tournament-detail-versus').append('Versus');
-        $('#lbl-tournament-detail-score').append('Score');
-        $('#lbl-tournament-detail-assist').append('Assist');
-        $('#lbl-tournament-detail-foul').append('Foul');
+        // $('#lbl-tournament-detail-score').append('Score');
+        // $('#lbl-tournament-detail-assist').append('Assist');
+        // $('#lbl-tournament-detail-foul').append('Foul');
+        // $('#lbl-tournament-detail-yellowcard').append('Yellow Card');
+        // $('#lbl-tournament-detail-redcard').append('Red Card');
 
         $('#lbl-tournament-detail-enter-vote').append('Enter your vote');
         $('#lbl-tournament-detail-roster-vote').append('Roster');
@@ -1414,13 +1438,35 @@ myApp.onPageInit('tournament-detail', function(page) {
         $('#btn-edit-tournament-details').append('edit');
 
         $('#lbl-tournament-detail-versus').append('Imod');
-        $('#lbl-tournament-detail-score').append('score');
-        $('#lbl-tournament-detail-assist').append('Hjælpe');
-        $('#lbl-tournament-detail-foul').append('foul');
+        // $('#lbl-tournament-detail-score').append('score');
+        // $('#lbl-tournament-detail-assist').append('Hjælpe');
+        // $('#lbl-tournament-detail-foul').append('foul');
+        // $('#lbl-tournament-detail-yellowcard').append('Yellow Card');
+        // $('#lbl-tournament-detail-redcard').append('Red Card');
 
         $('#lbl-tournament-detail-enter-vote').append('Indtast din stemme');
         $('#lbl-tournament-detail-roster-vote').append('Kampprogram');
         $('#btn-submit-vote').append('Stemme');
+    }
+
+    if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('selectedSportID') == 4) {
+        $('.col-team-fouls').hide();
+        $('#lbl-tournament-detail-score').append('goals/mål');
+        $('#lbl-tournament-detail-assist').append('assists');
+        $('#lbl-tournament-detail-yellowcard').append('yellow card');
+        $('#lbl-tournament-detail-redcard').append('red card');
+    } else if (localStorage.getItem('selectedSportID') == 2 || localStorage.getItem('selectedSportID') == 5) {
+        $('.col-yellowcard').hide();
+        $('.col-redcard').hide();
+        $('#lbl-tournament-detail-score').append('goals/mål');
+        $('#lbl-tournament-detail-assist').append('assists');
+        $('#lbl-tournament-detail-foul').append('fouls/minutes');
+    } else if (localStorage.getItem('selectedSportID') == 1 || localStorage.getItem('selectedSportID') == 6) {
+        $('.col-yellowcard').hide();
+        $('.col-redcard').hide();
+        $('#lbl-tournament-detail-score').append('score');
+        $('#lbl-tournament-detail-assist').append('assists');
+        $('#lbl-tournament-detail-foul').append('foul');
     }
 
     if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
@@ -1450,10 +1496,14 @@ myApp.onPageInit('tournament-detail', function(page) {
     var team_points = 0;
     var team_assists = 0;
     var team_fouls = 0;
+    var team_yellowcard = 0;
+    var team_redcard = 0;
     var opponent_name = '';
     var opponent_points = 0;
     var opponent_assists = 0;
     var opponent_fouls = 0;
+    var opponent_yellowcard = 0;
+    var opponent_redcard = 0;
 
     $('#team-name').empty();
     $('#opponent-name').empty();
@@ -1463,6 +1513,10 @@ myApp.onPageInit('tournament-detail', function(page) {
     $('#opponent-assists').empty();
     $('#team-fouls').empty();
     $('#opponent-fouls').empty();
+    $('#team-yellowcard').empty();
+    $('#opponent-yellowcard').empty();
+    $('#team-redcard').empty();
+    $('#opponent-redcard').empty();
 
     myApp.showIndicator();
     $.getJSON(ENVYP_API_URL + "get_tournament_stats.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
@@ -1471,10 +1525,14 @@ myApp.onPageInit('tournament-detail', function(page) {
             team_points = field.team_points;
             team_assists = field.team_assists;
             team_fouls = field.team_fouls;
+            team_yellowcard = field.team_yellowcard;
+            team_redcard = field.team_redcard;
             opponent_name = field.opponent;
             opponent_points = field.opponent_points;
             opponent_assists = field.opponent_assists;
             opponent_fouls = field.opponent_fouls;
+            opponent_yellowcard = field.opponent_yellowcard;
+            opponent_redcard = field.opponent_redcard;
             win = field.win;
             lose = field.lose;
             draw = field.draw;
@@ -1489,6 +1547,10 @@ myApp.onPageInit('tournament-detail', function(page) {
         $$('#opponent-assists').prepend(opponent_assists);
         $$('#team-fouls').prepend(team_fouls);
         $$('#opponent-fouls').prepend(opponent_fouls);
+        $$('#team-yellowcard').prepend(team_yellowcard);
+        $$('#opponent-yellowcard').prepend(opponent_yellowcard);
+        $$('#team-redcard').prepend(team_redcard);
+        $$('#opponent-redcard').prepend(opponent_redcard);
         $$('#tournament-win-lose').prepend('W ' + win + ' - L ' + lose + ' - D ' + draw);
         $$('#tournament-score').prepend(team_points + ' - ' + opponent_points);
         if (status == '0') {
@@ -1505,7 +1567,7 @@ myApp.onPageInit('tournament-detail', function(page) {
     });
 
     $$('#btn-edit-team-stats').on('click', function() {
-        mainView.router.loadPage('edit_tournament_stats.html?team_name=' + team_name + '&opponent_name=' + opponent_name + '&team_points=' + team_points + '&opponent_points=' + opponent_points + '&team_assists=' + team_assists + '&opponent_assists=' + opponent_assists + '&team_fouls=' + team_fouls + '&opponent_fouls=' + opponent_fouls);
+        mainView.router.loadPage('edit_tournament_stats.html?team_name=' + team_name + '&opponent_name=' + opponent_name + '&team_points=' + team_points + '&opponent_points=' + opponent_points + '&team_assists=' + team_assists + '&opponent_assists=' + opponent_assists + '&team_fouls=' + team_fouls + '&opponent_fouls=' + opponent_fouls + '&team_yellowcard=' + team_yellowcard + '&team_redcard=' + team_redcard + '&opponent_yellowcard=' + opponent_yellowcard + '&opponent_redcard=' + opponent_redcard);
     });
     // End Preload game stats
 
@@ -1830,7 +1892,7 @@ myApp.onPageInit('voting-result', function(page) {
                           '<div class="popover-inner">'+
                             '<div class="list-block">'+
                               '<ul>'+
-                              '<li><a id="btn-fb-share href="#" onClick="" class="item-link list-button"><img src="img/icon-fb-share.png" style="width:20px; height:20px" /> Facebook</li>'+
+                              '<li><a id="btn-fb-share href="#" onClick="shareMVPOnFacebook();" class="item-link list-button"><img src="img/icon-fb-share.png" style="width:20px; height:20px" /> Facebook</li>'+
                               '<li><a id="btn-twitter-share" href="#" onClick="" class="item-link list-button"><img src="img/icon-twitter-share.png" style="width:20px; height:20px" /> Twitter</li>'+
                               '</ul>'+
                             '</div>'+
@@ -1839,6 +1901,25 @@ myApp.onPageInit('voting-result', function(page) {
       myApp.popover(popoverHTML, clickedLink);
     });
 });
+
+function shareMVPOnFacebook() {
+    if (localStorage.getItem('isFbLogin') == 0) {
+        FBLogin();
+    }
+    facebookConnectPlugin.showDialog({
+        method: "share",
+        picture:'https://www.google.co.jp/logos/doodles/2014/doodle-4-google-2014-japan-winner-5109465267306496.2-hp.png',
+        name:'Test Post',
+        message:'First photo post',
+        caption: 'Testing using phonegap plugin',
+        description: 'Posting photo using phonegap facebook plugin'
+      }, function (response) {
+        console.log(response)
+      }, function (response) {
+        console.log(response)
+      }
+    );
+}
 
 /* =====Tournament Detail Page ===== */
 myApp.onPageInit('fine-detail', function(page) {
@@ -2109,16 +2190,31 @@ myApp.onPageInit('tournament-fine-add', function(page) {
 myApp.onPageInit('roster-tournament-stats', function(page) {
     if (localStorage.getItem('selectedLanguage') == '1') {
         $('#lbl-roster-statistics').append('Roster Statistics');
-        $('#lbl-roster-tournament-points').append('Points');
-        $('#lbl-roster-tournament-assists').append('Assists');
-        $('#lbl-roster-tournament-fouls').append('Fouls');
-        $('#lbl-roster-tournament-votes').append('Votes');
     } else {
         $('#lbl-roster-statistics').append('Kampprogram statistik');
-        $('#lbl-roster-tournament-points').append('Points');
-        $('#lbl-roster-tournament-assists').append('Hjælpe');
-        $('#lbl-roster-tournament-fouls').append('foul');
-        $('#lbl-roster-tournament-votes').append('Stemme');
+    }
+
+    if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('selectedSportID') == 4) {
+        $('#li-roster-fouls').hide();
+        $('#lbl-roster-tournament-points').append('goals/mål');
+        $('#lbl-roster-tournament-assists').append('assists');
+        $('#lbl-roster-tournament-yellowcard').append('yellow card');
+        $('#lbl-roster-tournament-redcard').append('red card');
+        $('#lbl-roster-tournament-votes').append('votes');
+    } else if (localStorage.getItem('selectedSportID') == 2 || localStorage.getItem('selectedSportID') == 5) {
+        $('#li-roster-yellowcard').hide();
+        $('#li-roster-redcard').hide();
+        $('#lbl-roster-tournament-points').append('goals/mål');
+        $('#lbl-roster-tournament-assists').append('assists');
+        $('#lbl-roster-tournament-fouls').append('fouls');
+        $('#lbl-roster-tournament-votes').append('votes');
+    } else if (localStorage.getItem('selectedSportID') == 1 || localStorage.getItem('selectedSportID') == 6) {
+        $('#li-roster-yellowcard').hide();
+        $('#li-roster-redcard').hide();
+        $('#lbl-roster-tournament-points').append('points');
+        $('#lbl-roster-tournament-assists').append('assists');
+        $('#lbl-roster-tournament-fouls').append('fouls');
+        $('#lbl-roster-tournament-votes').append('votes');
     }
 
      if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
@@ -2128,6 +2224,8 @@ myApp.onPageInit('roster-tournament-stats', function(page) {
     var points = 0;
     var assists = 0;
     var fouls = 0;
+    var yellowcard = 0;
+    var redcard = 0;
     var votes = 0;
 
     $$("#roster-image").attr("data-src", (page.query.roster_image == '' || page.query.roster_image == null ? "img/profile.jpg" : page.query.roster_image));
@@ -2143,12 +2241,16 @@ myApp.onPageInit('roster-tournament-stats', function(page) {
             points = field.points
             assists = field.assists
             fouls = field.fouls
+            yellowcard = field.yellowcard
+            redcard = field.redcard
             votes = field.votes
         });
 
         $$('#roster-points').prepend(points);
         $$('#roster-assists').prepend(assists);
         $$('#roster-fouls').prepend(fouls);
+        $$('#roster-yellowcard').prepend(yellowcard);
+        $$('#roster-redcard').prepend(redcard);
         $$('#roster-votes').prepend(votes);
 
         myApp.hideIndicator();
@@ -2160,7 +2262,7 @@ myApp.onPageInit('roster-tournament-stats', function(page) {
 
     $$('#btn-edit-roster-stats').on('click', function() {
         // mainView.router.loadPage('edit_roster_tournament_stats.html?roster_image=' + page.query.roster_image + '&roster_id=' + page.query.roster_id + '&roster_name=' + page.query.roster_name + '&roster_position=' + page.query.roster_position + '&points=' + points + '&assists=' + assists + '&fouls=' + fouls);
-        mainView.router.loadPage('edit_roster_tournament_stats.html?roster_id=' + page.query.roster_id + '&roster_name=' + page.query.roster_name + '&roster_position=' + page.query.roster_position + '&points=' + points + '&assists=' + assists + '&fouls=' + fouls);
+        mainView.router.loadPage('edit_roster_tournament_stats.html?roster_id=' + page.query.roster_id + '&roster_name=' + page.query.roster_name + '&roster_position=' + page.query.roster_position + '&points=' + points + '&assists=' + assists + '&fouls=' + fouls + '&yellowcard=' + yellowcard + '&redcard=' + redcard);
     });
 });
 
@@ -2168,14 +2270,28 @@ myApp.onPageInit('roster-tournament-stats', function(page) {
 myApp.onPageInit('edit-roster-tournament-stats', function(page) {
     if (localStorage.getItem('selectedLanguage') == '1') {
         $('#lbl-edit-statistics').append('Roster Statistics');
-        $('#lbl-edit-roster-statistics-points').append('Points');
-        $('#lbl-edit-roster-statistics-assists').append('Assists');
-        $('#lbl-edit-roster-statistics-fouls').append('Fouls');
     } else {
         $('#lbl-roster-statistics').append('Kampprogram statistik');
-        $('#lbl-edit-roster-statistics-points').append('Points');
-        $('#lbl-edit-roster-statistics-assists').append('Hjælpe');
-        $('#lbl-edit-roster-statistics-fouls').append('foul');
+    }
+
+    if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('selectedSportID') == 4) {
+        $('#li-edit-roster-fouls').hide();
+        $('#lbl-edit-roster-statistics-points').append('goals/mål');
+        $('#lbl-edit-roster-statistics-assists').append('assists');
+        $('#lbl-edit-roster-statistics-yellowcard').append('yellow card');
+        $('#lbl-edit-roster-statistics-redcard').append('red card');
+    } else if (localStorage.getItem('selectedSportID') == 2 || localStorage.getItem('selectedSportID') == 5) {
+        $('#li-edit-roster-yellowcard').hide();
+        $('#li-edit-roster-redcard').hide();
+        $('#lbl-edit-roster-statistics-points').append('goals/mål');
+        $('#lbl-edit-roster-statistics-assists').append('assists');
+        $('#lbl-edit-roster-statistics-fouls').append('fouls');
+    } else if (localStorage.getItem('selectedSportID') == 1 || localStorage.getItem('selectedSportID') == 6) {
+        $('#li-edit-roster-yellowcard').hide();
+        $('#li-edit-roster-redcard').hide();
+        $('#lbl-edit-roster-statistics-points').append('points');
+        $('#lbl-edit-roster-statistics-assists').append('assists');
+        $('#lbl-edit-roster-statistics-fouls').append('fouls');
     }
 
     // $$("#edit-roster-image").attr("data-src", (page.query.roster_image == '' || page.query.roster_image == null ? "img/profile.jpg" : page.query.roster_image));
@@ -2188,6 +2304,8 @@ myApp.onPageInit('edit-roster-tournament-stats', function(page) {
     $$("#edit-roster-points").attr("value", page.query.points);
     $$("#edit-roster-assists").attr("value", page.query.assists);
     $$("#edit-roster-fouls").attr("value", page.query.fouls);
+    $$("#edit-roster-yellowcard").attr("value", page.query.yellowcard);
+    $$("#edit-roster-redcard").attr("value", page.query.redcard);
 
     $$('#btn-update-roster-stats').on('click', function() {
         if (checkInternetConnection() == true) {
@@ -2195,6 +2313,8 @@ myApp.onPageInit('edit-roster-tournament-stats', function(page) {
             var roster_points = $$('#edit-roster-points').val();
             var roster_assists = $$('#edit-roster-assists').val();
             var roster_fouls = $$('#edit-roster-fouls').val();
+            var roster_yellowcard = $$('#edit-roster-yellowcard').val();
+            var roster_redcard = $$('#edit-roster-redcard').val();
 
             if (roster_points == '' || roster_points == null) {
                 myApp.alert('Please enter points!');
@@ -2214,11 +2334,23 @@ myApp.onPageInit('edit-roster-tournament-stats', function(page) {
                 return false;
             }
 
+            if (roster_yellowcard == '' || roster_yellowcard == null) {
+                myApp.alert('Please enter yellow card!');
+                $$('#btn-update-roster-stats').removeAttr("disabled");
+                return false;
+            }
+
+            if (roster_redcard == '' || roster_redcard == null) {
+                myApp.alert('Please enter red card!');
+                $$('#btn-update-roster-stats').removeAttr("disabled");
+                return false;
+            }
+
             myApp.showIndicator();
             $$.ajax({
                 type: "POST",
                 url: ENVYP_API_URL + "update_roster_tournament_stats.php",
-                data: "account_id=" + localStorage.getItem('account_id') + "&tournament_id=" + localStorage.getItem('selectedTournamentId') + "&roster_id=" + page.query.roster_id + "&points=" + roster_points + "&assists=" + roster_assists + "&fouls=" + roster_fouls,
+                data: "account_id=" + localStorage.getItem('account_id') + "&tournament_id=" + localStorage.getItem('selectedTournamentId') + "&roster_id=" + page.query.roster_id + "&points=" + roster_points + "&assists=" + roster_assists + "&fouls=" + roster_fouls + "&yellowcard=" + roster_yellowcard + "&redcard=" + roster_redcard,
                 dataType: "json",
                 success: function(msg, string, jqXHR) {
                     myApp.hideIndicator();
@@ -2242,20 +2374,28 @@ myApp.onPageInit('edit-roster-tournament-stats', function(page) {
 myApp.onPageInit('edit-tournament-stats', function(page) {
     if (localStorage.getItem('selectedLanguage') == '1') {
         $('#lbl-edit-team-statistics').append('Edit Statistics');
-        $('#lbl-edit-team-points').append('Points');
-        $('#lbl-edit-team-assists').append('Assists');
-        $('#lbl-edit-team-fouls').append('Fouls');
-        $('#lbl-edit-opp-points').append('Points');
-        $('#lbl-edit-opp-assists').append('Assists');
-        $('#lbl-edit-opp-fouls').append('Fouls');
+        // $('#lbl-edit-team-points').append('Points');
+        // $('#lbl-edit-team-assists').append('Assists');
+        // $('#lbl-edit-team-fouls').append('Fouls');
+        // $('#lbl-edit-team-yellowcard').append('Yellow card');
+        // $('#lbl-edit-team-redcard').append('Red card');
+        // $('#lbl-edit-opp-points').append('Points');
+        // $('#lbl-edit-opp-assists').append('Assists');
+        // $('#lbl-edit-opp-fouls').append('Fouls');
+        // $('#lbl-edit-opp-yellowcard').append('Yellow card');
+        // $('#lbl-edit-opp-redcard').append('Red card');
     } else {
         $('#lbl-edit-team-statistics').append('Rediger statistik');
-        $('#lbl-edit-team-points').append('Points');
-        $('#lbl-edit-team-assists').append('Hjælpe');
-        $('#lbl-edit-team-fouls').append('foul');
-        $('#lbl-edit-opp-points').append('Points');
-        $('#lbl-edit-opp-assists').append('Hjælpe');
-        $('#lbl-edit-opp-fouls').append('foul');
+        // $('#lbl-edit-team-points').append('Points');
+        // $('#lbl-edit-team-assists').append('Hjælpe');
+        // $('#lbl-edit-team-fouls').append('foul');
+        // $('#lbl-edit-team-yellowcard').append('Yellow card');
+        // $('#lbl-edit-team-redcard').append('Red card');
+        // $('#lbl-edit-opp-points').append('Points');
+        // $('#lbl-edit-opp-assists').append('Hjælpe');
+        // $('#lbl-edit-opp-fouls').append('foul');
+        // $('#lbl-edit-opp-yellowcard').append('Yellow card');
+        // $('#lbl-edit-opp-redcard').append('Red card');
     }
 
     $$('#txt-edit-team-name').prepend("Team: <b>" + page.query.team_name + "</b>");
@@ -2263,9 +2403,48 @@ myApp.onPageInit('edit-tournament-stats', function(page) {
     $$('#txt-edit-team-points').attr("value", page.query.team_points);
     $$('#txt-edit-team-assists').attr("value", page.query.team_assists);
     $$('#txt-edit-team-fouls').attr("value", page.query.team_fouls);
+    $$('#txt-edit-team-yellowcard').attr("value", page.query.team_yellowcard);
+    $$('#txt-edit-team-redcard').attr("value", page.query.team_redcard);
     $$('#txt-edit-opponent-points').attr("value", page.query.opponent_points);
     $$('#txt-edit-opponent-assists').attr("value", page.query.opponent_assists);
     $$('#txt-edit-opponent-fouls').attr("value", page.query.opponent_fouls);
+    $$('#txt-edit-opponent-yellowcard').attr("value", page.query.opponent_yellowcard);
+    $$('#txt-edit-opponent-redcard').attr("value", page.query.opponent_redcard);
+
+    if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('selectedSportID') == 4) {
+        $('#li-team-fouls').hide();
+        $('#li-opp-fouls').hide();
+        $('#lbl-edit-team-points').append('goals/mål');
+        $('#lbl-edit-team-assists').append('assists');
+        $('#lbl-edit-team-yellowcard').append('Yellow card');
+        $('#lbl-edit-team-redcard').append('Red card');
+        $('#lbl-edit-opp-points').append('goals/mål');
+        $('#lbl-edit-opp-assists').append('assists');
+        $('#lbl-edit-opp-yellowcard').append('yellow card');
+        $('#lbl-edit-opp-redcard').append('red card');
+    } else if (localStorage.getItem('selectedSportID') == 2 || localStorage.getItem('selectedSportID') == 5) {
+        $('#li-team-yellowcard').hide();
+        $('#li-team-redcard').hide();
+        $('#li-opp-yellowcard').hide();
+        $('#li-opp-redcard').hide();
+        $('#lbl-edit-team-points').append('goals/mål');
+        $('#lbl-edit-team-assists').append('assists');
+        $('#lbl-edit-team-fouls').append('fouls/minutes');
+        $('#lbl-edit-opp-points').append('goals/mål');
+        $('#lbl-edit-opp-assists').append('assists');
+        $('#lbl-edit-opp-fouls').append('fouls/minutes');
+    } else if (localStorage.getItem('selectedSportID') == 1 || localStorage.getItem('selectedSportID') == 6) {
+        $('#li-team-yellowcard').hide();
+        $('#li-team-redcard').hide();
+        $('#li-opp-yellowcard').hide();
+        $('#li-opp-redcard').hide();
+        $('#lbl-edit-team-points').append('points');
+        $('#lbl-edit-team-assists').append('assists');
+        $('#lbl-edit-team-fouls').append('fouls');
+        $('#lbl-edit-opp-points').append('points');
+        $('#lbl-edit-opp-assists').append('assists');
+        $('#lbl-edit-opp-fouls').append('fouls');
+    }
 
     $$('#btn-update-tournament-stats').on('click', function() {
         if (checkInternetConnection() == true) {
@@ -2273,9 +2452,13 @@ myApp.onPageInit('edit-tournament-stats', function(page) {
             var team_points = $$('#txt-edit-team-points').val();
             var team_assists = $$('#txt-edit-team-assists').val();
             var team_fouls = $$('#txt-edit-team-fouls').val();
+            var team_yellowcard = $$('#txt-edit-team-yellowcard').val();
+            var team_redcard = $$('#txt-edit-team-redcard').val();
             var opponent_points = $$('#txt-edit-opponent-points').val();
             var opponent_assists = $$('#txt-edit-opponent-assists').val();
             var opponent_fouls = $$('#txt-edit-opponent-fouls').val();
+            var opponent_yellowcard = $$('#txt-edit-opponent-yellowcard').val();
+            var opponent_redcard = $$('#txt-edit-opponent-redcard').val();
 
             if (team_points == '' || team_points == null) {
                 myApp.alert('Please enter team points!');
@@ -2291,6 +2474,18 @@ myApp.onPageInit('edit-tournament-stats', function(page) {
 
             if (team_fouls == '' || team_fouls == null) {
                 myApp.alert('Please enter team fouls!');
+                $$('#btn-update-tournament-stats').removeAttr("disabled");
+                return false;
+            }
+
+            if (team_yellowcard == '' || team_yellowcard == null) {
+                myApp.alert('Please enter team yellow card!');
+                $$('#btn-update-tournament-stats').removeAttr("disabled");
+                return false;
+            }
+
+            if (team_redcard == '' || team_redcard == null) {
+                myApp.alert('Please enter team red card!');
                 $$('#btn-update-tournament-stats').removeAttr("disabled");
                 return false;
             }
@@ -2313,6 +2508,18 @@ myApp.onPageInit('edit-tournament-stats', function(page) {
                 return false;
             }
 
+            if (opponent_yellowcard == '' || opponent_yellowcard == null) {
+                myApp.alert('Please enter opponent yellow card!');
+                $$('#btn-update-tournament-stats').removeAttr("disabled");
+                return false;
+            }
+
+            if (opponent_redcard == '' || opponent_redcard == null) {
+                myApp.alert('Please enter opponent red card!');
+                $$('#btn-update-tournament-stats').removeAttr("disabled");
+                return false;
+            }
+
             myApp.showIndicator();
             $$.ajax({
                 type: "POST",
@@ -2322,9 +2529,13 @@ myApp.onPageInit('edit-tournament-stats', function(page) {
                     "&team_points=" + team_points +
                     "&team_assists=" + team_assists +
                     "&team_fouls=" + team_fouls +
+                    "&team_yellowcard=" + team_yellowcard +
+                    "&team_redcard=" + team_redcard +
                     "&opponent_points=" + opponent_points +
                     "&opponent_assists=" + opponent_assists +
-                    "&opponent_fouls=" + opponent_fouls,
+                    "&opponent_fouls=" + opponent_fouls +
+                    "&opponent_yellowcard=" + opponent_yellowcard +
+                    "&opponent_redcard=" + opponent_redcard,
                 dataType: "json",
                 success: function(msg, string, jqXHR) {
                     myApp.hideIndicator();
