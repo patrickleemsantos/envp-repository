@@ -12,8 +12,8 @@ var mainView = myApp.addView('.view-main', {
     dynamicNavbar: false
 });
 
-const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
-// const ENVYP_API_URL = 'http://envp.dk/api/';
+// const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
+const ENVYP_API_URL = 'http://envp.dk/api/';
 const NO_INTERNET_ALERT = 'Please check your internet connection';
 const AJAX_ERROR_ALERT = 'Network error, please try again.';
 const ERROR_ALERT = 'An error occured, please try again.';
@@ -679,9 +679,31 @@ myApp.onPageInit('team-stats', function(page) {
         $('#lbl-team-stats').prepend('Team statistik');
     }
 
+    if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('selectedSportID') == 4) {
+        $('#li-team-stats-fouls').hide();
+        $('#lbl-team-stats-points').append('goals/mål');
+        $('#lbl-team-stats-assists').append('assists');
+        $('#lbl-team-stats-yellowcard').append('yellow card');
+        $('#lbl-team-stats-redcard').append('red card');
+    } else if (localStorage.getItem('selectedSportID') == 2 || localStorage.getItem('selectedSportID') == 5) {
+        $('#li-team-stats-yellowcard').hide();
+        $('#li-team-stats-redcard').hide();
+        $('#lbl-team-stats-points').append('goals/mål');
+        $('#lbl-team-stats-assists').append('assists');
+        $('#lbl-team-stats-fouls').append('fouls/minutes');
+    } else if (localStorage.getItem('selectedSportID') == 1 || localStorage.getItem('selectedSportID') == 6) {
+        $('#li-team-stats-yellowcard').hide();
+        $('#li-team-stats-redcard').hide();
+        $('#lbl-team-stats-points').append('points');
+        $('#lbl-team-stats-assists').append('assists');
+        $('#lbl-team-stats-fouls').append('fouls');
+    }
+
     var ppg = 0;
     var apg = 0;
     var fpg = 0;
+    var yellowcard = 0;
+    var redcard = 0;
 
     $$("#img-team-image").attr("data-src", (localStorage.getItem('selectedTeamImage') == '' || localStorage.getItem('selectedTeamImage') == null ? "img/profile.jpg" : localStorage.getItem('selectedTeamImage')));
     $$("#img-team-image").addClass('lazy lazy-fadein');
@@ -695,11 +717,15 @@ myApp.onPageInit('team-stats', function(page) {
             ppg = field.ppg
             apg = field.apg
             fpg = field.fpg
+            yellowcard = field.yellowcard
+            redcard = field.redcard
         });
 
         $('#team-ppg').prepend(ppg);
         $('#team-apg').prepend(apg);
         $('#team-fpg').prepend(fpg);
+        $('#team-yellowcard').prepend(yellowcard);
+        $('#team-redcard').prepend(redcard);
 
         myApp.hideIndicator();
     })
@@ -887,7 +913,8 @@ myApp.onPageInit('roster-add', function(page) {
                 clearRosterDetails();
                 myApp.hideIndicator();
                 $$('#btn-add-roster').removeAttr("disabled");
-                mainView.router.loadPage('roster_list.html');
+                // mainView.router.loadPage('roster_list.html');
+                mainView.router.loadPage('roster_add.html');
             }
         }
     });
@@ -1414,11 +1441,6 @@ myApp.onPageInit('tournament-detail', function(page) {
         $('#btn-edit-tournament-details').append('Edit');
 
         $('#lbl-tournament-detail-versus').append('Versus');
-        // $('#lbl-tournament-detail-score').append('Score');
-        // $('#lbl-tournament-detail-assist').append('Assist');
-        // $('#lbl-tournament-detail-foul').append('Foul');
-        // $('#lbl-tournament-detail-yellowcard').append('Yellow Card');
-        // $('#lbl-tournament-detail-redcard').append('Red Card');
 
         $('#lbl-tournament-detail-enter-vote').append('Enter your vote');
         $('#lbl-tournament-detail-roster-vote').append('Roster');
@@ -1438,11 +1460,6 @@ myApp.onPageInit('tournament-detail', function(page) {
         $('#btn-edit-tournament-details').append('edit');
 
         $('#lbl-tournament-detail-versus').append('Imod');
-        // $('#lbl-tournament-detail-score').append('score');
-        // $('#lbl-tournament-detail-assist').append('Hjælpe');
-        // $('#lbl-tournament-detail-foul').append('foul');
-        // $('#lbl-tournament-detail-yellowcard').append('Yellow Card');
-        // $('#lbl-tournament-detail-redcard').append('Red Card');
 
         $('#lbl-tournament-detail-enter-vote').append('Indtast din stemme');
         $('#lbl-tournament-detail-roster-vote').append('Kampprogram');
@@ -1504,6 +1521,9 @@ myApp.onPageInit('tournament-detail', function(page) {
     var opponent_fouls = 0;
     var opponent_yellowcard = 0;
     var opponent_redcard = 0;
+    var win = 0;
+    var lose = 0;
+    var status = 0;
 
     $('#team-name').empty();
     $('#opponent-name').empty();
@@ -1841,7 +1861,7 @@ myApp.onPageInit('tournament-detail', function(page) {
                           '<div class="popover-inner">'+
                             '<div class="list-block">'+
                               '<ul>'+
-                              '<li><a id="btn-end-tournament" href="#" onClick="endTournamentConfirmation();" class="item-link list-button">End game</li>'+
+                              '<li><a id="btn-end-tournament" href="#" onClick="endTournamentConfirmation('+status+');" class="item-link list-button">End game</li>'+
                               '<li><a id="btn-end-vote" href="#" onClick="endVoteConfirmation();" class="item-link list-button">End vote</li>'+
                               '</ul>'+
                             '</div>'+
@@ -1851,37 +1871,54 @@ myApp.onPageInit('tournament-detail', function(page) {
     });
 });
 
-function endTournamentConfirmation() {
-    if (checkInternetConnection() == true) {
-        myApp.closeModal('#popover-tournament');
-        $$.ajax({
-            type: "POST",
-            url: ENVYP_API_URL + "end_tournament.php",
-            data: "tournament_id=" + localStorage.getItem('selectedTournamentId'),
-            dataType: "json",
-            success: function(msg, string, jqXHR) {
-                myApp.hideIndicator();
-                if (msg.status == 0) {
-                    $('#tournament-win-lose').empty();
-                    $$('#tournament-win-lose').prepend('W ' + msg.win + ' - L ' + msg.lose + ' - D ' + msg.draw);
-                    $('#tournament-status').empty();
-                    $$('#tournament-status').prepend('Final');
+function endTournamentConfirmation(status) {
+    myApp.closeModal('#popover-tournament');
+    if (status == 0) {
+        if (checkInternetConnection() == true) {
+            $$.ajax({
+                type: "POST",
+                url: ENVYP_API_URL + "end_tournament.php",
+                data: "tournament_id=" + localStorage.getItem('selectedTournamentId'),
+                dataType: "json",
+                success: function(msg, string, jqXHR) {
+                    myApp.hideIndicator();
+                    if (msg.status == 0) {
+                        $('#tournament-win-lose').empty();
+                        $$('#tournament-win-lose').prepend('W ' + msg.win + ' - L ' + msg.lose + ' - D ' + msg.draw);
+                        $('#tournament-status').empty();
+                        $$('#tournament-status').prepend('Final');
+                    }
+                    myApp.alert(msg.message);
+                },
+                error: function(msg, string, jqXHR) {
+                    myApp.hideIndicator();
+                    myApp.alert(ERROR_ALERT);
                 }
-                myApp.alert(msg.message);
-            },
-            error: function(msg, string, jqXHR) {
-                myApp.hideIndicator();
-                myApp.alert(ERROR_ALERT);
-            }
-        });
+            });
+        } else {
+            myApp.alert(NO_INTERNET_ALERT);
+        }
     } else {
-        myApp.alert(NO_INTERNET_ALERT);
+        myApp.alert('Tournament is already ended!');
     }
 }
 
 function endVoteConfirmation() {
     myApp.closeModal('#popover-tournament');
-    mainView.router.loadPage('voting_result.html');
+    // mainView.router.loadPage('voting_result.html');
+    facebookConnectPlugin.showDialog({
+        method: "share",
+        picture:'https://www.google.co.jp/logos/doodles/2014/doodle-4-google-2014-japan-winner-5109465267306496.2-hp.png',
+        name:'Test Post',
+        message:'First photo post',
+        caption: 'Testing using phonegap plugin',
+        description: 'Posting photo using phonegap facebook plugin'
+      }, function (response) {
+        console.log(response)
+      }, function (response) {
+        console.log(response)
+      }
+    );
 }
 
 /* ===== Voting Result ===== */
