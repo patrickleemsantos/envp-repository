@@ -368,19 +368,19 @@ myApp.onPageInit('signup', function(page) {
 myApp.onPageInit('profile-add', function(page) {
     // alert('localstorate: '+localStorage.getItem('account_id')+'; page.query: '+page.query.account_id);
     var account_image = '';
-    alert('is fb login: ' + localStorage.getItem('isFbLogin'));
+    // alert('is fb login: ' + localStorage.getItem('isFbLogin'));
     if (page.query.account_id != undefined) {
         $$('#txt-firstname').val(page.query.first_name);
         $$('#txt-lastname').val(page.query.last_name);
         $$('#txt-age').val(page.query.age);
         $$('#txt-description').val(page.query.description);
         if (localStorage.getItem('isFbLogin') == 1) {
-            alert('fb login');
+            // alert('fb login');
             account_image = localStorage.getItem('fb_image');
             $$('#profile-image').attr('src', account_image);
             // localStorage.setItem('account_image', localStorage.getItem('fb_image'));
         } else {
-            alert('not fb login');
+            // alert('not fb login');
             account_image = page.query.image_url;
             $$('#profile-image').attr('src', (account_image == '' || account_image == null ? "img/profile.jpg" : account_image));
         }  
@@ -476,7 +476,7 @@ myApp.onPageInit('profile-add', function(page) {
             $('#div-profile-name').empty();
             $('#img-profile-image').empty();
             $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
-            alert('account image: ' + localStorage.getItem('account_image'));
+            // alert('account image: ' + localStorage.getItem('account_image'));
             $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
         } else {
             myApp.alert(NO_INTERNET_ALERT);
@@ -824,7 +824,7 @@ myApp.onPageInit('roster-list', function(page) {
                     '</div>' +
                     '<div class="item-subtitle">{{roster_position}}</div>' +
                     '</div></a></li>',
-                height: 60,
+                height: 63,
             });
             myApp.initImagesLazyLoad(page.container);
             myApp.hideIndicator();
@@ -1911,7 +1911,7 @@ function endVoteConfirmation() {
         href: "https://www.google.co.jp/logos/doodles/2014/doodle-4-google-2014-japan-winner-5109465267306496.2-hp.png",
         caption: "Such caption, very feed.",
         description: "Much description",
-        picture: 'https://www.google.co.jp/logos/doodles/2014/doodle-4-google-2014-japan-winner-5109465267306496.2-hp.png'
+        picture: 'https://www.google.co.jp/logos/doodles/2014/doodle-4-google-2014-japan-winner-5109465267306496.2-hp.png',
         share_feedWeb: true
       }, function (response) {
         console.log(response)
@@ -3155,9 +3155,9 @@ function win(r) {
 }
 
 function winUpdateUser(r) {
-    alert('winUpdateUser');
+    // alert('winUpdateUser');
     var resp = JSON.parse(r.response);
-    myApp.alert(resp.message);
+    // myApp.alert(resp.message);
     if (resp.status == '0') {
         localStorage.setItem('account_image', resp.account_image);
         $$('#img-profile-image').attr('src', resp.account_image);
