@@ -1907,7 +1907,7 @@ function endVoteConfirmation() {
     myApp.closeModal('#popover-tournament');
     // mainView.router.loadPage('voting_result.html');
     facebookConnectPlugin.showDialog({
-        method: "share",
+        method: "feed",
         picture:'https://www.google.co.jp/logos/doodles/2014/doodle-4-google-2014-japan-winner-5109465267306496.2-hp.png',
         name:'Test Post',
         message:'First photo post',
