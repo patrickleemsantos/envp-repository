@@ -1907,12 +1907,12 @@ function endVoteConfirmation() {
     myApp.closeModal('#popover-tournament');
     // mainView.router.loadPage('voting_result.html');
     facebookConnectPlugin.showDialog({
-        method: "feed",
-        picture:'https://www.google.co.jp/logos/doodles/2014/doodle-4-google-2014-japan-winner-5109465267306496.2-hp.png',
-        name:'Test Post',
-        message:'First photo post',
-        caption: 'Testing using phonegap plugin',
-        description: 'Posting photo using phonegap facebook plugin'
+        method: "share",
+        href: "https://www.google.co.jp/logos/doodles/2014/doodle-4-google-2014-japan-winner-5109465267306496.2-hp.png",
+        caption: "Such caption, very feed.",
+        description: "Much description",
+        picture: 'https://www.google.co.jp/logos/doodles/2014/doodle-4-google-2014-japan-winner-5109465267306496.2-hp.png'
+        share_feedWeb: true
       }, function (response) {
         console.log(response)
       }, function (response) {
