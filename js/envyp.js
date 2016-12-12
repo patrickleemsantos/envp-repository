@@ -1524,6 +1524,9 @@ myApp.onPageInit('tournament-detail', function(page) {
     var win = 0;
     var lose = 0;
     var status = 0;
+    var voting_status = 0;
+    var team_image = '';
+    var opponent_image = '';
 
     $('#team-name').empty();
     $('#opponent-name').empty();
@@ -1557,6 +1560,27 @@ myApp.onPageInit('tournament-detail', function(page) {
             lose = field.lose;
             draw = field.draw;
             status = field.tournament_status;
+            voting_status = field.voting_status;
+            team_image = field.team_image;
+            opponent_image = field.opponent_image;
+        });
+
+        var lbl_game = (status == 0 ? "End game" : "Game ended");
+        var lbl_voting = (voting_status == 0 ? "End vote" : "Vote result");
+
+        $$('.popop-tournament-options').on('click', function () {
+        var clickedLink = this;
+        var popoverHTML = '<div id="popover-tournament" class="popover">'+
+                          '<div class="popover-inner">'+
+                            '<div class="list-block">'+
+                              '<ul>'+
+                              '<li><a id="btn-end-tournament" href="#" onClick="endTournamentConfirmation('+status+');" class="item-link list-button">'+lbl_game+'</li>'+
+                              '<li><a id="btn-end-vote" href="#" onClick="endVoteConfirmation('+voting_status+');" class="item-link list-button">'+lbl_voting+'</li>'+
+                              '</ul>'+
+                            '</div>'+
+                          '</div>'+
+                        '</div>'
+            myApp.popover(popoverHTML, clickedLink);
         });
 
         $$('#team-name').prepend(team_name);
@@ -1573,6 +1597,18 @@ myApp.onPageInit('tournament-detail', function(page) {
         $$('#opponent-redcard').prepend(opponent_redcard);
         $$('#tournament-win-lose').prepend('W ' + win + ' - L ' + lose + ' - D ' + draw);
         $$('#tournament-score').prepend(team_points + ' - ' + opponent_points);
+
+        if (team_image != '' && team_image != undefined) {
+            alert('change image');
+            $$("#img-tournament-det-team-image").attr("src", team_image);
+        } 
+
+        if (opponent_image != '' && opponent_image != undefined) {
+            $$("#img-tournament-det-opp-image").attr("src", opponent_image);
+        }
+
+        myApp.initImagesLazyLoad(page.container);
+
         if (status == '0') {
             $$('#tournament-status').prepend('Ongoing');
         } else {
@@ -1622,7 +1658,6 @@ myApp.onPageInit('tournament-detail', function(page) {
     $$('#btn-edit-tournament-details').on('click', function() {
         mainView.router.loadPage('tournament_edit.html?tournament_id=' + page.query.tournament_id + '&opponent=' + tournament_opponent + '&location=' + tournament_location + '&date=' + tournament_date + '&description=' + tournament_description + '&image_url=' + tournament_image_url + '&longitude=' + tournament_longitude + '&latitude=' + tournament_latitude + '&formatted_date=' + tournament_formatted_date);
     });
-
     // End preload game details
 
     // Preload roster list
@@ -1854,21 +1889,6 @@ myApp.onPageInit('tournament-detail', function(page) {
             });
         });
     });
-
-    $$('.popop-tournament-options').on('click', function () {
-      var clickedLink = this;
-      var popoverHTML = '<div id="popover-tournament" class="popover">'+
-                          '<div class="popover-inner">'+
-                            '<div class="list-block">'+
-                              '<ul>'+
-                              '<li><a id="btn-end-tournament" href="#" onClick="endTournamentConfirmation('+status+');" class="item-link list-button">End game</li>'+
-                              '<li><a id="btn-end-vote" href="#" onClick="endVoteConfirmation();" class="item-link list-button">End vote</li>'+
-                              '</ul>'+
-                            '</div>'+
-                          '</div>'+
-                        '</div>'
-      myApp.popover(popoverHTML, clickedLink);
-    });
 });
 
 function endTournamentConfirmation(status) {
@@ -1898,38 +1918,110 @@ function endTournamentConfirmation(status) {
         } else {
             myApp.alert(NO_INTERNET_ALERT);
         }
-    } else {
-        myApp.alert('Tournament is already ended!');
-    }
+    } 
+    // else {
+    //     myApp.alert('Tournament is already ended!');
+    // }
 }
 
-function endVoteConfirmation() {
+function endVoteConfirmation(status) {
     myApp.closeModal('#popover-tournament');
-    // mainView.router.loadPage('voting_result.html');
-    facebookConnectPlugin.showDialog({
-        method: "share",
-        href: "http://envp.dk",
-        caption: "Chicago Bulls vs Cleveland Cavaliers MVP",
-        description: "Michael Jordan \nPoints: 25\nAssists:12\nFouls:3",
-        picture: 'http://meanstars.com/profile/134.jpg',
-        share_feedWeb: true
-      }, function (response) {
-        console.log(response)
-      }, function (response) {
-        console.log(response)
-      }
-    );
+    // if (status == 1) {  
+    //     myApp.alert('Voting already ended!');
+    // }
+    mainView.router.loadPage('voting_result.html');
 }
 
 /* ===== Voting Result ===== */
 myApp.onPageInit('voting-result', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-mvp-result').append('MVP Result');
+    } else {
+        $('#lbl-mvp-result').append('MVP Resultat');
+    }
+
+    if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('selectedSportID') == 4) {
+        $('#li-mvp-fouls').hide();
+        $('#lbl-mvp-points').append('goals/mål');
+        $('#lbl-mvp-assists').append('assists');
+        $('#lbl-mvp-yellowcard').append('yellow card');
+        $('#lbl-mvp-redcard').append('red card');
+        $('#lbl-mvp-votes').append('votes');
+    } else if (localStorage.getItem('selectedSportID') == 2 || localStorage.getItem('selectedSportID') == 5) {
+        $('#li-mvp-yellowcard').hide();
+        $('#li-mvp-redcard').hide();
+        $('#lbl-mvp-points').append('goals/mål');
+        $('#lbl-mvp-assists').append('assists');
+        $('#lbl-mvp-fouls').append('fouls');
+        $('#lbl-mvp-votes').append('votes');
+    } else if (localStorage.getItem('selectedSportID') == 1 || localStorage.getItem('selectedSportID') == 6) {
+        $('#li-mvp-yellowcard').hide();
+        $('#li-mvp-redcard').hide();
+        $('#lbl-mvp-points').append('points');
+        $('#lbl-mvp-assists').append('assists');
+        $('#lbl-mvp-fouls').append('fouls');
+        $('#lbl-mvp-votes').append('votes');
+    }
+
+    var team_name = '';
+    var opponent_name = '';
+    var roster_name = '';
+    var roster_image = '';
+    var points = 0;
+    var assists = 0;
+    var fouls = 0;
+    var yellowcard = 0;
+    var redcard = 0;
+    var votes = 0;
+
+    myApp.showIndicator();
+    $.getJSON(ENVYP_API_URL + "get_mvp.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
+        $.each(result, function(i, field) {
+            team_name = field.team_name
+            opponent_name = field.opponent_name
+            roster_name = field.roster_name
+            points = field.points
+            assists = field.assists
+            fouls = field.fouls
+            yellowcard = field.yellowcard
+            redcard = field.redcard
+            votes = field.votes
+            roster_image = field.roster_image
+        });
+
+        $$("#img-mvp-image").attr("data-src", (roster_image == '' || roster_image == null ? "img/profile.jpg" : roster_image));
+        $$("#img-mvp-image").addClass('lazy lazy-fadein');
+        myApp.initImagesLazyLoad(page.container);
+
+        $$('#mvp-name').prepend(roster_name);
+        $$('#mvp-opponent').prepend('vs ' + opponent_name);
+
+        $$('#mvp-points').prepend(points);
+        $$('#mvp-assists').prepend(assists);
+        $$('#mvp-fouls').prepend(fouls);
+        $$('#mvp-yellowcard').prepend(yellowcard);
+        $$('#mvp-redcard').prepend(redcard);
+        $$('#mvp-votes').prepend(votes);
+
+        localStorage.setItem('mvp_team_name',team_name);
+        localStorage.setItem('mvp_opponent_name',opponent_name);
+        localStorage.setItem('mvp_roster_name',roster_name);
+        localStorage.setItem('mvp_roster_image',roster_image);
+
+        myApp.hideIndicator();
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+        myApp.hideIndicator(); 
+        myApp.alert(AJAX_ERROR_ALERT); 
+    });
+
     $$('.popop-voting-result').on('click', function () {
       var clickedLink = this;
       var popoverHTML = '<div id="popover-tournament" class="popover">'+
                           '<div class="popover-inner">'+
                             '<div class="list-block">'+
                               '<ul>'+
-                              '<li><a id="btn-fb-share href="#" onClick="shareMVPOnFacebook();" class="item-link list-button"><img src="img/icon-fb-share.png" style="width:20px; height:20px" /> Facebook</li>'+
+                              '<li><a id="btn-fb-share href="#" onClick="shareMVPOnFacebook('+points+','+assists+','+fouls+','+yellowcard+','+redcard+','+votes+');" class="item-link list-button"><img src="img/icon-fb-share.png" style="width:20px; height:20px" /> Facebook</li>'+
                               '<li><a id="btn-twitter-share" href="#" onClick="" class="item-link list-button"><img src="img/icon-twitter-share.png" style="width:20px; height:20px" /> Twitter</li>'+
                               '</ul>'+
                             '</div>'+
@@ -1939,17 +2031,51 @@ myApp.onPageInit('voting-result', function(page) {
     });
 });
 
-function shareMVPOnFacebook() {
-    if (localStorage.getItem('isFbLogin') == 0) {
-        FBLogin();
+ if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('selectedSportID') == 4) {
+        $('#li-mvp-fouls').hide();
+        $('#lbl-mvp-points').append('goals/mål');
+        $('#lbl-mvp-assists').append('assists');
+        $('#lbl-mvp-yellowcard').append('yellow card');
+        $('#lbl-mvp-redcard').append('red card');
+        $('#lbl-mvp-votes').append('votes');
+    } else if (localStorage.getItem('selectedSportID') == 2 || localStorage.getItem('selectedSportID') == 5) {
+        $('#li-mvp-yellowcard').hide();
+        $('#li-mvp-redcard').hide();
+        $('#lbl-mvp-points').append('goals/mål');
+        $('#lbl-mvp-assists').append('assists');
+        $('#lbl-mvp-fouls').append('fouls');
+        $('#lbl-mvp-votes').append('votes');
+    } else if (localStorage.getItem('selectedSportID') == 1 || localStorage.getItem('selectedSportID') == 6) {
+        $('#li-mvp-yellowcard').hide();
+        $('#li-mvp-redcard').hide();
+        $('#lbl-mvp-points').append('points');
+        $('#lbl-mvp-assists').append('assists');
+        $('#lbl-mvp-fouls').append('fouls');
+        $('#lbl-mvp-votes').append('votes');
     }
+
+function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) {
+    var description = '';
+    var team_name = localStorage.getItem('mvp_team_name');
+    var opponent_name = localStorage.getItem('mvp_opponent_name');
+    var roster_name = localStorage.getItem('mvp_roster_name');
+    var roster_image = localStorage.getItem('mvp_roster_image');
+
+    if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('selectedSportID') == 4) {
+        description = roster_name + ":\nvotes: "+votes+"\ngoals/mål: "+points+"\nassists: "+assists+"\nyellow card: "+yellowcard+"red card: "+redcard;
+    } else if (localStorage.getItem('selectedSportID') == 2 || localStorage.getItem('selectedSportID') == 5) {
+        description = roster_name + ":\nvotes: "+votes+"\ngoals/mål: "+points+"\nassists: "+assists+"\nfouls: "+fouls;
+    } else if (localStorage.getItem('selectedSportID') == 1 || localStorage.getItem('selectedSportID') == 6) {
+        description = roster_name + ":\nvotes: "+votes+"\npoints: "+points+"\nassists: "+assists+"\nfouls: "+fouls;
+    }
+
     facebookConnectPlugin.showDialog({
-        method: "share",
-        picture:'https://www.google.co.jp/logos/doodles/2014/doodle-4-google-2014-japan-winner-5109465267306496.2-hp.png',
-        name:'Test Post',
-        message:'First photo post',
-        caption: 'Testing using phonegap plugin',
-        description: 'Posting photo using phonegap facebook plugin'
+        method: "feed",
+        href: "http://envp.dk",
+        caption: team_name + " vs " + opponent_name,
+        description: description,
+        picture: 'http://meanstars.com/profile/134.jpg',
+        share_feedWeb: true
       }, function (response) {
         console.log(response)
       }, function (response) {
@@ -2331,10 +2457,6 @@ myApp.onPageInit('edit-roster-tournament-stats', function(page) {
         $('#lbl-edit-roster-statistics-fouls').append('fouls');
     }
 
-    // $$("#edit-roster-image").attr("data-src", (page.query.roster_image == '' || page.query.roster_image == null ? "img/profile.jpg" : page.query.roster_image));
-    // $$("#edit-roster-image").addClass('lazy lazy-fadein');
-    // myApp.initImagesLazyLoad(page.container);
-
     $$('#edit-roster-name').prepend(page.query.roster_name);
     $$('#edit-roster-position').prepend(page.query.roster_position);
 
@@ -2411,28 +2533,8 @@ myApp.onPageInit('edit-roster-tournament-stats', function(page) {
 myApp.onPageInit('edit-tournament-stats', function(page) {
     if (localStorage.getItem('selectedLanguage') == '1') {
         $('#lbl-edit-team-statistics').append('Edit Statistics');
-        // $('#lbl-edit-team-points').append('Points');
-        // $('#lbl-edit-team-assists').append('Assists');
-        // $('#lbl-edit-team-fouls').append('Fouls');
-        // $('#lbl-edit-team-yellowcard').append('Yellow card');
-        // $('#lbl-edit-team-redcard').append('Red card');
-        // $('#lbl-edit-opp-points').append('Points');
-        // $('#lbl-edit-opp-assists').append('Assists');
-        // $('#lbl-edit-opp-fouls').append('Fouls');
-        // $('#lbl-edit-opp-yellowcard').append('Yellow card');
-        // $('#lbl-edit-opp-redcard').append('Red card');
     } else {
         $('#lbl-edit-team-statistics').append('Rediger statistik');
-        // $('#lbl-edit-team-points').append('Points');
-        // $('#lbl-edit-team-assists').append('Hjælpe');
-        // $('#lbl-edit-team-fouls').append('foul');
-        // $('#lbl-edit-team-yellowcard').append('Yellow card');
-        // $('#lbl-edit-team-redcard').append('Red card');
-        // $('#lbl-edit-opp-points').append('Points');
-        // $('#lbl-edit-opp-assists').append('Hjælpe');
-        // $('#lbl-edit-opp-fouls').append('foul');
-        // $('#lbl-edit-opp-yellowcard').append('Yellow card');
-        // $('#lbl-edit-opp-redcard').append('Red card');
     }
 
     $$('#txt-edit-team-name').prepend("Team: <b>" + page.query.team_name + "</b>");
@@ -3439,21 +3541,21 @@ function validateEmail(sEmail) {
 }
 
 function checkInternetConnection() {
-    // try {
-    //     if (DEBUG == false) {
-    //         var state = navigator.connection.type;
-    //         if (state == 'none') {
-    //             return false;
-    //         } else {
-    //             return true;
-    //         }
-    //     } else {
-    //         return true;
-    //     }
-    // } catch (err) {
-    //     return true;
-    // }
-    return true;
+    try {
+        if (DEBUG == false) {
+            var state = navigator.connection.type;
+            if (state == 'none') {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+    } catch (err) {
+        return true;
+    }
+    // return true;
 }
 
 var fbLoginSuccess = function (userData) {   
