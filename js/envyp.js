@@ -908,10 +908,10 @@ myApp.onPageInit('roster-add', function(page) {
                 options.params = params;
 
                 var ft = new FileTransfer();
-                ft.upload(imgfile, ENVYP_API_URL + "add_roster.php", win, fail, options);
+                ft.upload(imgfile, ENVYP_API_URL + "add_roster.php", winRoster, fail, options);
 
                 clearRosterDetails();
-                myApp.hideIndicator();
+                // myApp.hideIndicator();
                 $$('#btn-add-roster').removeAttr("disabled");
                 // mainView.router.loadPage('roster_list.html');
                 mainView.router.loadPage('roster_add.html');
@@ -3270,6 +3270,12 @@ function attachProfileImage(imageURI) {
 }
 
 function win(r) {
+    var resp = JSON.parse(r.response);
+    myApp.alert(resp.message);
+}
+
+function winRoster(r) {
+    myApp.hideIndicator();
     var resp = JSON.parse(r.response);
     myApp.alert(resp.message);
 }
