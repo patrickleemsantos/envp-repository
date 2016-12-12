@@ -1568,6 +1568,11 @@ myApp.onPageInit('tournament-detail', function(page) {
         var lbl_game = (status == 0 ? "End game" : "Game ended");
         var lbl_voting = (voting_status == 0 ? "End vote" : "Vote result");
 
+        if (voting_status == 1) {
+            $$('#div-vote-add').hide();
+            $$('#div-vote-result').show();
+        } 
+
         $$('.popop-tournament-options').on('click', function () {
         var clickedLink = this;
         var popoverHTML = '<div id="popover-tournament" class="popover">'+
@@ -2072,7 +2077,7 @@ function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) 
     facebookConnectPlugin.showDialog({
         method: "feed",
         href: "http://envp.dk",
-        caption: team_name + " vs " + opponent_name,
+        caption: "MVP Result: " + team_name + " vs " + opponent_name,
         description: description,
         picture: 'http://meanstars.com/profile/134.jpg',
         share_feedWeb: true
