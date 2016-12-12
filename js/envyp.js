@@ -1908,10 +1908,10 @@ function endVoteConfirmation() {
     // mainView.router.loadPage('voting_result.html');
     facebookConnectPlugin.showDialog({
         method: "share",
-        href: "https://www.google.co.jp/logos/doodles/2014/doodle-4-google-2014-japan-winner-5109465267306496.2-hp.png",
-        caption: "Such caption, very feed.",
-        description: "Much description",
-        picture: 'https://www.google.co.jp/logos/doodles/2014/doodle-4-google-2014-japan-winner-5109465267306496.2-hp.png',
+        href: "http://envp.dk",
+        caption: "Chicago Bulls vs Cleveland Cavaliers MVP",
+        description: "Michael Jordan \nPoints: 25\nAssists:12\nFouls:3",
+        picture: 'http://meanstars.com/profile/134.jpg',
         share_feedWeb: true
       }, function (response) {
         console.log(response)
