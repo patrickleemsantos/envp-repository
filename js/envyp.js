@@ -3157,7 +3157,7 @@ function win(r) {
 function winUpdateUser(r) {
     // alert('winUpdateUser');
     var resp = JSON.parse(r.response);
-    // myApp.alert(resp.message);
+    myApp.alert(resp.message);
     if (resp.status == '0') {
         localStorage.setItem('account_image', resp.account_image);
         $$('#img-profile-image').attr('src', resp.account_image);
