@@ -1568,11 +1568,6 @@ myApp.onPageInit('tournament-detail', function(page) {
         var lbl_game = (status == 0 ? "End game" : "Game ended");
         var lbl_voting = (voting_status == 0 ? "End vote" : "Vote result");
 
-        if (voting_status == 1) {
-            $$('#div-vote-add').hide();
-            $$('#div-vote-result').show();
-        } 
-
         $$('.popop-tournament-options').on('click', function () {
         var clickedLink = this;
         var popoverHTML = '<div id="popover-tournament" class="popover">'+
@@ -1743,6 +1738,11 @@ myApp.onPageInit('tournament-detail', function(page) {
                 $$('#div-vote-result').hide();
             }
         });
+
+        if (voting_status == 1) {
+            $$('#div-vote-add').hide();
+            $$('#div-vote-result').show();
+        } 
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
         myApp.hideIndicator(); 
