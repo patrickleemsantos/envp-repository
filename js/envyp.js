@@ -1898,32 +1898,39 @@ myApp.onPageInit('tournament-detail', function(page) {
 
 function endTournamentConfirmation(status) {
     myApp.closeModal('#popover-tournament');
-    if (status == 0) {
-        if (checkInternetConnection() == true) {
-            $$.ajax({
-                type: "POST",
-                url: ENVYP_API_URL + "end_tournament.php",
-                data: "tournament_id=" + localStorage.getItem('selectedTournamentId'),
-                dataType: "json",
-                success: function(msg, string, jqXHR) {
-                    myApp.hideIndicator();
-                    if (msg.status == 0) {
-                        $('#tournament-win-lose').empty();
-                        $$('#tournament-win-lose').prepend('W ' + msg.win + ' - L ' + msg.lose + ' - D ' + msg.draw);
-                        $('#tournament-status').empty();
-                        $$('#tournament-status').prepend('Final');
+    
+    if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
+        myApp.alert('You are not allowed to end the game');
+    } else {
+        if (status == 0) {
+            if (checkInternetConnection() == true) {
+                $$.ajax({
+                    type: "POST",
+                    url: ENVYP_API_URL + "end_tournament.php",
+                    data: "tournament_id=" + localStorage.getItem('selectedTournamentId'),
+                    dataType: "json",
+                    success: function(msg, string, jqXHR) {
+                        myApp.hideIndicator();
+                        if (msg.status == 0) {
+                            $('#tournament-win-lose').empty();
+                            $$('#tournament-win-lose').prepend('W ' + msg.win + ' - L ' + msg.lose + ' - D ' + msg.draw);
+                            $('#tournament-status').empty();
+                            $$('#tournament-status').prepend('Final');
+                        }
+                        myApp.alert(msg.message);
+                    },
+                    error: function(msg, string, jqXHR) {
+                        myApp.hideIndicator();
+                        myApp.alert(ERROR_ALERT);
                     }
-                    myApp.alert(msg.message);
-                },
-                error: function(msg, string, jqXHR) {
-                    myApp.hideIndicator();
-                    myApp.alert(ERROR_ALERT);
-                }
-            });
-        } else {
-            myApp.alert(NO_INTERNET_ALERT);
-        }
-    } 
+                });
+            } else {
+                myApp.alert(NO_INTERNET_ALERT);
+            }
+        } 
+    }
+
+    
     // else {
     //     myApp.alert('Tournament is already ended!');
     // }
@@ -1931,10 +1938,16 @@ function endTournamentConfirmation(status) {
 
 function endVoteConfirmation(status) {
     myApp.closeModal('#popover-tournament');
-    // if (status == 1) {  
-    //     myApp.alert('Voting already ended!');
-    // }
-    mainView.router.loadPage('voting_result.html');
+    if (status == 0) {  
+         if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
+            myApp.alert('You are not allowed to end the vote');
+        } else {
+            mainView.router.loadPage('voting_result.html');
+        }
+    } else {
+        mainView.router.loadPage('voting_result.html');
+    }
+    
 }
 
 /* ===== Voting Result ===== */
