@@ -1410,7 +1410,7 @@ myApp.onPageInit('tournament-list', function(page) {
                     '</div>' +
                     '<div class="item-subtitle">{{tournament_date}}</div>' +
                     '</div></a></li>',
-                height: 73,
+                height: 76,
             });
             myApp.initImagesLazyLoad(page.container);
             myApp.hideIndicator();
