@@ -880,7 +880,7 @@ myApp.onPageInit('roster-add', function(page) {
                         myApp.hideIndicator();
                         if (msg.status == '0') {
                             clearRosterDetails();
-                            mainView.router.loadPage('roster_list.html');
+                            mainView.router.loadPage('roster_add.html');
                         }
                         myApp.alert(msg.message);
                         $$('#btn-add-roster').removeAttr("disabled");
@@ -2040,7 +2040,7 @@ myApp.onPageInit('voting-result', function(page) {
                             '<div class="list-block">'+
                               '<ul>'+
                               '<li><a id="btn-fb-share href="#" onClick="shareMVPOnFacebook('+points+','+assists+','+fouls+','+yellowcard+','+redcard+','+votes+');" class="item-link list-button"><img src="img/icon-fb-share.png" style="width:20px; height:20px" /> Facebook</li>'+
-                              '<li><a id="btn-twitter-share" href="#" onClick="" class="item-link list-button"><img src="img/icon-twitter-share.png" style="width:20px; height:20px" /> Twitter</li>'+
+                              // '<li><a id="btn-twitter-share" href="#" onClick="" class="item-link list-button"><img src="img/icon-twitter-share.png" style="width:20px; height:20px" /> Twitter</li>'+
                               '</ul>'+
                             '</div>'+
                           '</div>'+
@@ -3526,12 +3526,14 @@ function clearEditTeamDetails() {
 function clearRosterDetails() {
     $$('#txt-roster-name').val('');
     $$('#txt-roster-position').val('');
+    $$('#roster-image').attr('src','img/profile.jpg');
     imgfile = '';
 }
 
 function clearEditRosterDetails() {
     $$('#edit-txt-roster-name').val('');
     $$('#edit-txt-roster-position').val('');
+    $$('#edit-roster-image').attr('src','img/profile.jpg');
     imgfile = '';
 }
 
