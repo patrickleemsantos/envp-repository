@@ -3277,7 +3277,8 @@ function win(r) {
 function winRoster(r) {
     myApp.hideIndicator();
     var resp = JSON.parse(r.response);
-    myApp.alert(resp.message);
+    // myApp.alert(resp.message);
+    alert(resp.message);
 }
 
 function winUpdateUser(r) {
