@@ -914,7 +914,7 @@ myApp.onPageInit('roster-add', function(page) {
                 // myApp.hideIndicator();
                 $$('#btn-add-roster').removeAttr("disabled");
                 // mainView.router.loadPage('roster_list.html');
-                mainView.router.loadPage('roster_add.html');
+                // mainView.router.loadPage('roster_add.html');
             }
         }
     });
