@@ -2489,6 +2489,12 @@ myApp.onPageInit('edit-roster-tournament-stats', function(page) {
     $$("#edit-roster-yellowcard").attr("value", page.query.yellowcard);
     $$("#edit-roster-redcard").attr("value", page.query.redcard);
 
+    $('#edit-roster-assists').focusTextToEnd();
+    $('#edit-roster-fouls').focusTextToEnd();
+    $('#edit-roster-yellowcard').focusTextToEnd();
+    $('#edit-roster-redcard').focusTextToEnd();
+    $('#edit-roster-points').focusTextToEnd();
+
     $$('#btn-update-roster-stats').on('click', function() {
         if (checkInternetConnection() == true) {
             $$('#btn-update-roster-stats').attr('disabled', true);
@@ -2572,6 +2578,19 @@ myApp.onPageInit('edit-tournament-stats', function(page) {
     $$('#txt-edit-opponent-fouls').attr("value", page.query.opponent_fouls);
     $$('#txt-edit-opponent-yellowcard').attr("value", page.query.opponent_yellowcard);
     $$('#txt-edit-opponent-redcard').attr("value", page.query.opponent_redcard);
+
+    $('#txt-edit-team-name').focusTextToEnd();
+    $('#txt-edit-opponent-name').focusTextToEnd();
+    $('#txt-edit-team-points').focusTextToEnd();
+    $('#txt-edit-team-assists').focusTextToEnd();
+    $('#txt-edit-team-fouls').focusTextToEnd();
+    $('#txt-edit-team-yellowcard').focusTextToEnd();
+    $('#txt-edit-team-redcard').focusTextToEnd();
+    $('#txt-edit-opponent-points').focusTextToEnd();
+    $('#txt-edit-opponent-assists').focusTextToEnd();
+    $('#txt-edit-opponent-fouls').focusTextToEnd();
+    $('#txt-edit-opponent-yellowcard').focusTextToEnd();
+    $('#txt-edit-opponent-redcard').focusTextToEnd();
 
     if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('selectedSportID') == 4) {
         $('#li-team-fouls').hide();
@@ -3724,3 +3743,11 @@ function callPushBot() {
     // // }
 }
 
+(function ($) {
+    $.fn.focusTextToEnd = function () {
+        this.focus();
+        var $thisVal = this.val();
+        this.val('').val($thisVal);
+        return this;
+    }
+}(jQuery));
