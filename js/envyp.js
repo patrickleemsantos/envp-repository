@@ -1910,15 +1910,14 @@ function endTournamentConfirmation(status) {
                     dataType: "json",
                     success: function(msg, string, jqXHR) {
                         myApp.hideIndicator();
-                        if (msg.status == 0) {
-                            $('#tournament-win-lose').empty();
-                            $$('#tournament-win-lose').prepend('W ' + msg.win + ' - L ' + msg.lose + ' - D ' + msg.draw);
-                            $('#tournament-status').empty();
-                            $$('#tournament-status').prepend('Final');
-                            $('#btn-end-tournament').empty();
-                            $$('#btn-end-tournament').prepend('Game Ended');
-                        }
                         myApp.alert(msg.message);
+                        if (msg.status == 0) {
+                            // $('#tournament-win-lose').empty();
+                            // $$('#tournament-win-lose').prepend('W ' + msg.win + ' - L ' + msg.lose + ' - D ' + msg.draw);
+                            // $('#tournament-status').empty();
+                            // $$('#tournament-status').prepend('Final');
+                            mainView.router.reloadPage('tournament_detail.html?tournament_id=' + localStorage.getItem('selectedTournamentId'));
+                        }
                     },
                     error: function(msg, string, jqXHR) {
                         myApp.hideIndicator();
@@ -1943,9 +1942,8 @@ function endVoteConfirmation(status) {
          if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
             myApp.alert('You are not allowed to end the vote');
         } else {
-            $('#btn-end-vote').empty();
-            $$('#btn-end-vote').prepend('Vote result');
             mainView.router.loadPage('voting_result.html');
+            myApp.alert('Vote ended successfully');
         }
     } else {
         mainView.router.loadPage('voting_result.html');
@@ -2049,6 +2047,10 @@ myApp.onPageInit('voting-result', function(page) {
                           '</div>'+
                         '</div>'
       myApp.popover(popoverHTML, clickedLink);
+    });
+
+    $$('#btn-back-tour-det').on('click', function() {
+        mainView.router.loadPage('tournament_detail.html?tournament_id=' + localStorage.getItem('selectedTournamentId'));
     });
 });
 
