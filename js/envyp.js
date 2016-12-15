@@ -1319,7 +1319,7 @@ myApp.onPageInit('tournament-add', function(page) {
                         myApp.hideIndicator();
                         if (msg.status == '0') {
                             clearTournamentDetails();
-                            mainView.router.loadPage('tournament_list.html');
+                            // mainView.router.loadPage('tournament_list.html');
                         }
                         myApp.alert(msg.message);
                         $$('#btn-add-tournament').removeAttr("disabled");
@@ -1356,7 +1356,7 @@ myApp.onPageInit('tournament-add', function(page) {
                 clearTournamentDetails();
                 myApp.hideIndicator();
                 $$('#btn-add-tournament').removeAttr("disabled");
-                mainView.router.loadPage('tournament_list.html');
+                // mainView.router.loadPage('tournament_list.html');
             }
 
         }
@@ -1599,7 +1599,6 @@ myApp.onPageInit('tournament-detail', function(page) {
         $$('#tournament-score').prepend(team_points + ' - ' + opponent_points);
 
         if (team_image != '' && team_image != undefined) {
-            alert('change image');
             $$("#img-tournament-det-team-image").attr("src", team_image);
         } 
 
@@ -1916,6 +1915,8 @@ function endTournamentConfirmation(status) {
                             $$('#tournament-win-lose').prepend('W ' + msg.win + ' - L ' + msg.lose + ' - D ' + msg.draw);
                             $('#tournament-status').empty();
                             $$('#tournament-status').prepend('Final');
+                            $('#btn-end-tournament').empty();
+                            $$('#btn-end-tournament').prepend('Game Ended');
                         }
                         myApp.alert(msg.message);
                     },
@@ -1942,6 +1943,8 @@ function endVoteConfirmation(status) {
          if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
             myApp.alert('You are not allowed to end the vote');
         } else {
+            $('#btn-end-vote').empty();
+            $$('#btn-end-vote').prepend('Vote result');
             mainView.router.loadPage('voting_result.html');
         }
     } else {
@@ -3519,6 +3522,7 @@ function clearLogInDetails() {
 function clearTeamDetails() {
     $$('#txt-team-name').val('');
     $$('#txt-team-description').val('');
+    $$('#txt-team-password').val('');
     imgfile = '';
 }
 
@@ -3546,6 +3550,7 @@ function clearTournamentDetails() {
     $("#txt-tournament-date").val(new Date().toJSON().slice(0, 16));
     $$('#txt-opponent-name').val('');
     $$('#txt-tournament-description').val('');
+    $$('#roster-image').attr('src','img/camera-flat.png');
     imgfile = '';
 }
 
