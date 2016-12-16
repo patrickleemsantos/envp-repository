@@ -3729,23 +3729,36 @@ function onBackKeyDown(){
         // }else if(view.history.length){
         //     view.router.back();
         // }
-        alert(mainView.activePage.name);
 
-        var view=myApp.getCurrentView();
-        // alert(view);
-        if($$('.popup.popup-login').length){
-            return false;
-        } else if($$('.popover, .actions-modal, .picker-modal').length){
-            myApp.closeModal('.popover, .actions-modal, .picker-modal'); 
-        } else if($$('.searchbar.searchbar-active').length){
-            $$('.searchbar.searchbar-active')[0].f7Searchbar.disable();
-        } else if($$('.photo-browser').length){
-            $$('.photo-browser .photo-browser-close-link, .photo-browser .close-popup').trigger('click');
-        } else if($$('.popup').length){
-            myApp.closeModal('.popup'); 
-        } else if(view.history.length){
-            view.router.back();
+        if (mainView.activePage.name == 'choose-sports') {
+            alert('exit');
+            myApp.confirm('Do you want to Exit?', 'Exit App',function () {
+                navigator.app.clearHistory(); 
+                navigator.app.exitApp();
+            });
+        } else {
+            if ($$('.popup').length) {
+                myApp.closeModal('.popup'); 
+            } else {
+                view.router.back();
+            }
         }
+
+        // var view=myApp.getCurrentView();
+        // // alert(view);
+        // if($$('.popup.popup-login').length){
+        //     return false;
+        // } else if($$('.popover, .actions-modal, .picker-modal').length){
+        //     myApp.closeModal('.popover, .actions-modal, .picker-modal'); 
+        // } else if($$('.searchbar.searchbar-active').length){
+        //     $$('.searchbar.searchbar-active')[0].f7Searchbar.disable();
+        // } else if($$('.photo-browser').length){
+        //     $$('.photo-browser .photo-browser-close-link, .photo-browser .close-popup').trigger('click');
+        // } else if($$('.popup').length){
+        //     myApp.closeModal('.popup'); 
+        // } else if(view.history.length){
+        //     view.router.back();
+        // }
     } catch (err) {
         myApp.alert('back error: ' + err.message);
     }
