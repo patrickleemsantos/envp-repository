@@ -3731,7 +3731,7 @@ function onBackKeyDown(){
         // }
 
         var view=myApp.getCurrentView();
-        alert(view);
+        // alert(view);
         if($$('.popup.popup-login').length){
             return false;
         } else if($$('.popover, .actions-modal, .picker-modal').length){
