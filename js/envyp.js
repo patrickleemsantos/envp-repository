@@ -3705,27 +3705,29 @@ function calcAge(dateString) {
 }
 
 function onBackKeyDown(){
-  var view=myApp.getCurrentView();
-  if($$('.popup.popup-login').length){
-    return false;
-  }else if($$('.popover, .actions-modal, .picker-modal').length){
-    myApp.closeModal('.popover, .actions-modal, .picker-modal'); 
-  }else if($$('.searchbar.searchbar-active').length){
-    $$('.searchbar.searchbar-active')[0].f7Searchbar.disable();
-  }else if($$('.photo-browser').length){
-    $$('.photo-browser .photo-browser-close-link, .photo-browser .close-popup')
-    .trigger('click');
-  }else if($$('.popup').length && $$('.popup .view')[0].f7View){
-    if($$('.popup .view')[0].f7View.history.length>1){
-      view.router.back();
-    }else{
-      myApp.closeModal('.popup');
-    }
-  }else if($$('.popup').length){
-    myApp.closeModal('.popup'); 
-  }else if(view.history.length){
+    var view=myApp.getCurrentView();
     view.router.back();
-  }
+  // var view=myApp.getCurrentView();
+  // if($$('.popup.popup-login').length){
+  //   return false;
+  // }else if($$('.popover, .actions-modal, .picker-modal').length){
+  //   myApp.closeModal('.popover, .actions-modal, .picker-modal'); 
+  // }else if($$('.searchbar.searchbar-active').length){
+  //   $$('.searchbar.searchbar-active')[0].f7Searchbar.disable();
+  // }else if($$('.photo-browser').length){
+  //   $$('.photo-browser .photo-browser-close-link, .photo-browser .close-popup')
+  //   .trigger('click');
+  // }else if($$('.popup').length && $$('.popup .view')[0].f7View){
+  //   if($$('.popup .view')[0].f7View.history.length>1){
+  //     view.router.back();
+  //   }else{
+  //     myApp.closeModal('.popup');
+  //   }
+  // }else if($$('.popup').length){
+  //   myApp.closeModal('.popup'); 
+  // }else if(view.history.length){
+  //   view.router.back();
+  // }
   alert('Back is clicked!');
 }
 
