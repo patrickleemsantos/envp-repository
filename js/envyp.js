@@ -3736,7 +3736,16 @@ function onBackKeyDown(){
                 navigator.app.exitApp();
             });
         } else {
-            if ($('.popup.modal-in').length > 0) {
+            // alert(view);
+            if($$('.popup.popup-login').length > 0){
+                return false;
+            } else if($$('.popover, .actions-modal, .picker-modal').length > 0){
+                myApp.closeModal('.popover, .actions-modal, .picker-modal'); 
+            } else if($$('.searchbar.searchbar-active').length > 0){
+                $$('.searchbar.searchbar-active')[0].f7Searchbar.disable();
+            } else if($$('.photo-browser').length > 0){
+                $$('.photo-browser .photo-browser-close-link, .photo-browser .close-popup').trigger('click');
+            } else if($$('.popup').length > 0){
                 myApp.closeModal('.popup'); 
             } else {
                 var view=myApp.getCurrentView();
@@ -3745,7 +3754,7 @@ function onBackKeyDown(){
         }
 
         // var view=myApp.getCurrentView();
-        // // alert(view);
+        // alert(view);
         // if($$('.popup.popup-login').length){
         //     return false;
         // } else if($$('.popover, .actions-modal, .picker-modal').length){
