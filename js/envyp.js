@@ -3737,19 +3737,19 @@ function onBackKeyDown(){
             });
         } else {
             // alert(view);
-            if($$('.popup.popup-login').length > 0){
+            if($$('.popup.popup-login').length > 0) {
                 alert('1');
                 return false;
-            } else if($$('.popover, .actions-modal, .picker-modal').length > 0){
+            } else if($$('.popover, .actions-modal, .picker-modal').length > 0) {
                 alert('2');
                 myApp.closeModal('.popover, .actions-modal, .picker-modal'); 
-            } else if($$('.searchbar.searchbar-active').length > 0){
+            } else if($$('.searchbar.searchbar-active').length > 0) {
                 alert('3');
                 $$('.searchbar.searchbar-active')[0].f7Searchbar.disable();
-            } else if($$('.photo-browser').length > 0){
+            } else if($$('.photo-browser').length > 0) {
                 alert('4');
                 $$('.photo-browser .photo-browser-close-link, .photo-browser .close-popup').trigger('click');
-            } else if($$('.popup').length > 0){
+            } else if($$('.popup.modal-in').length > 0) {
                 alert('5');
                 myApp.closeModal('.popup'); 
             } else {
