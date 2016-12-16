@@ -3730,18 +3730,17 @@ function onBackKeyDown(){
         //     view.router.back();
         // }
 
-        if (mainView.activePage.name == 'choose-sports') {
-            alert('exit');
+        if (mainView.activePage.name == 'choose-sports' || mainView.activePage.name == 'main') {
             myApp.confirm('Do you want to Exit?', 'Exit App',function () {
                 navigator.app.clearHistory(); 
                 navigator.app.exitApp();
             });
         } else {
-            if ($$('.popup').length) {
-                myApp.closeModal('.popup'); 
-            } else {
+            // if ($$('.popup').length) {
+            //     myApp.closeModal('.popup'); 
+            // } else {
                 view.router.back();
-            }
+            // }
         }
 
         // var view=myApp.getCurrentView();
