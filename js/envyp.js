@@ -3739,6 +3739,7 @@ function onBackKeyDown(){
             // if ($$('.popup').length) {
             //     myApp.closeModal('.popup'); 
             // } else {
+                var view=myApp.getCurrentView();
                 view.router.back();
             // }
         }
