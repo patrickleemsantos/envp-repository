@@ -1,5 +1,3 @@
-document.addEventListener('backbutton', onBackKeyDown, false);
-
 // var myApp = new Framework7({
 //     modalTitle: 'Envp',
 //     material: true,
@@ -20,6 +18,8 @@ var $$ = Dom7;
 var mainView = myApp.addView('.view-main', {
     dynamicNavbar: false
 });
+
+document.addEventListener('backbutton', onBackKeyDown, false);
 
 // const ENVYP_API_URL = 'http://patricks-macbook-air.local/envyp/api/';
 const ENVYP_API_URL = 'http://envp.dk/api/';
