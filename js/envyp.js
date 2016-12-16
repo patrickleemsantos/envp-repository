@@ -3754,6 +3754,7 @@ function onBackKeyDown(){
                 myApp.closeModal('.popup'); 
             } else {
                 alert('6');
+                myApp.closeModal('.popup'); 
                 var view=myApp.getCurrentView();
                 view.router.back();
             }
