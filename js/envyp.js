@@ -1,9 +1,18 @@
+document.addEventListener('backbutton', onBackKeyDown, false);
+
+// var myApp = new Framework7({
+//     modalTitle: 'Envp',
+//     material: true,
+//     preloadPreviousPage: false,
+//     fastClicks: true,
+//     pushState: true
+// });
+
 var myApp = new Framework7({
     modalTitle: 'Envp',
     material: true,
     preloadPreviousPage: false,
-    fastClicks: true,
-    pushState: true
+    fastClicks: true
 });
 
 var $$ = Dom7;
@@ -3693,6 +3702,31 @@ function getFBDetails() {
 function calcAge(dateString) {
     var birthday = +new Date(dateString);
     return ~~((Date.now() - birthday) / (31557600000));
+}
+
+function onBackKeyDown(){
+  // var view=myApp.getCurrentView();
+  // if($$('.popup.popup-login').length){
+  //   return false;
+  // }else if($$('.popover, .actions-modal, .picker-modal').length){
+  //   myApp.closeModal('.popover, .actions-modal, .picker-modal'); 
+  // }else if($$('.searchbar.searchbar-active').length){
+  //   $$('.searchbar.searchbar-active')[0].f7Searchbar.disable();
+  // }else if($$('.photo-browser').length){
+  //   $$('.photo-browser .photo-browser-close-link, .photo-browser .close-popup')
+  //   .trigger('click');
+  // }else if($$('.popup').length && $$('.popup .view')[0].f7View){
+  //   if($$('.popup .view')[0].f7View.history.length>1){
+  //     view.router.back();
+  //   }else{
+  //     myApp.closeModal('.popup');
+  //   }
+  // }else if($$('.popup').length){
+  //   myApp.closeModal('.popup'); 
+  // }else if(view.history.length){
+  //   view.router.back();
+  // }
+  alert('Back is clicked!');
 }
 
 function callPushBot() {
