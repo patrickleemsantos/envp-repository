@@ -3749,12 +3749,12 @@ function onBackKeyDown(){
             } else if($$('.photo-browser').length > 0) {
                 alert('4');
                 $$('.photo-browser .photo-browser-close-link, .photo-browser .close-popup').trigger('click');
-            } else if($$('.popup.modal-in').length > 1) {
+            } else if($$('.popup').length > 0) {
                 alert('5');
-                myApp.closeModal('.popup'); 
+                myApp.closeModal(); 
             } else {
                 alert('6');
-                myApp.closeModal('.popup'); 
+                myApp.closeModal(); 
                 var view=myApp.getCurrentView();
                 view.router.back();
             }
