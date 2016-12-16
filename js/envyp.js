@@ -3736,12 +3736,12 @@ function onBackKeyDown(){
                 navigator.app.exitApp();
             });
         } else {
-            // if ($$('.popup').length) {
-            //     myApp.closeModal('.popup'); 
-            // } else {
+            if ($('.popup.modal-in').length > 0) {
+                myApp.closeModal('.popup'); 
+            } else {
                 var view=myApp.getCurrentView();
                 view.router.back();
-            // }
+            }
         }
 
         // var view=myApp.getCurrentView();
