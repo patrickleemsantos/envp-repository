@@ -3729,6 +3729,7 @@ function onBackKeyDown(){
         // }else if(view.history.length){
         //     view.router.back();
         // }
+        alert(mainView.activePage.name);
 
         var view=myApp.getCurrentView();
         // alert(view);
