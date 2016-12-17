@@ -3651,52 +3651,49 @@ function FBLogout() {
 }
 
 function getFBDetails() {
-    // facebookConnectPlugin.api("me/?fields=id,last_name,first_name,email,birthday",["public_profile","email"],
     facebookConnectPlugin.api("me/?fields=id,last_name,first_name,email,birthday",["public_profile"],
         function (result) {
+            $$('#btn-email-login').attr('disabled', true);
+            $$('#btn-signup-page').attr('disabled', true);
+            $$.ajax({
+                type: "POST",
+                url: ENVYP_API_URL + "add_facebook_user.php",
+                data: "facebook_id=" + result.id,
+                dataType: "json",
+                success: function(msg, string, jqXHR) {
+                    localStorage.setItem('isFbLogin', 1);
+                    if (msg.status == 1) {
+                        localStorage.setItem('account_id', msg.account_id);
+                        localStorage.setItem('email', msg.email);
+                        localStorage.setItem('first_name', msg.first_name);
+                        localStorage.setItem('last_name', msg.last_name);
+                        localStorage.setItem('age', msg.age);
+                        localStorage.setItem('description', msg.description);
+                        localStorage.setItem('account_image', msg.account_image);
 
-        $$('#btn-email-login').attr('disabled', true);
-        $$('#btn-signup-page').attr('disabled', true);
-        $$.ajax({
-            type: "POST",
-            url: ENVYP_API_URL + "add_facebook_user.php",
-            data: "facebook_id=" + result.id,
-            dataType: "json",
-            success: function(msg, string, jqXHR) {
-                // myApp.alert('status: ' + msg.status);
-                localStorage.setItem('isFbLogin', 1);
-                if (msg.status == 1) {
-                    localStorage.setItem('account_id', msg.account_id);
-                    localStorage.setItem('email', msg.email);
-                    localStorage.setItem('first_name', msg.first_name);
-                    localStorage.setItem('last_name', msg.last_name);
-                    localStorage.setItem('age', msg.age);
-                    localStorage.setItem('description', msg.description);
-                    localStorage.setItem('account_image', msg.account_image);
+                        $('#div-profile-name').empty();
+                        $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
+                        $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
 
-                    $('#div-profile-name').empty();
-                    $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
-                    $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
-
-                    mainView.router.loadPage('choose_sports.html');
-                } else if (msg.status == 0) {
-                    var age = calcAge(result.birthday);
-                    var fb_image = 'https://graph.facebook.com/' + result.id + '/picture?type=large';
-                    localStorage.setItem('fb_image', fb_image);
-                    mainView.router.loadPage('profile_add.html?account_id=' + msg.account_id + '&first_name=' + result.first_name + '&last_name=' + result.last_name + '&age=' + age + '&description=')
+                        mainView.router.loadPage('choose_sports.html');
+                    } else if (msg.status == 0) {
+                        var age = calcAge(result.birthday);
+                        var fb_image = 'https://graph.facebook.com/' + result.id + '/picture?type=large';
+                        localStorage.setItem('fb_image', fb_image);
+                        mainView.router.loadPage('profile_add.html?account_id=' + msg.account_id + '&first_name=' + result.first_name + '&last_name=' + result.last_name + '&age=' + age + '&description=')
+                    }
+                    $$('#btn-email-login').removeAttr("disabled");
+                    $$('#btn-signup-page').removeAttr("disabled");
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    myApp.alert("[ERROR] " + xhr.thrownError);
+                    $$('#btn-email-login').removeAttr("disabled");
+                    $$('#btn-signup-page').removeAttr("disabled");
                 }
-                $$('#btn-email-login').removeAttr("disabled");
-                $$('#btn-signup-page').removeAttr("disabled");
-            },
-            error: function(xhr, ajaxOptions, thrownError) {
-                myApp.alert("[ERROR] " + xhr.thrownError);
-                $$('#btn-email-login').removeAttr("disabled");
-                $$('#btn-signup-page').removeAttr("disabled");
-            }
+            });
+        }, function (error) {
+            myApp.alert("[ERROR] " + error);
         });
-    }, function (error) {
-        myApp.alert("[ERROR] " + error);
-    });
 }
 
 function calcAge(dateString) {
@@ -3705,9 +3702,6 @@ function calcAge(dateString) {
 }
 
 function onBackKeyDown(){
-    // var view=myApp.getCurrentView();
-    // view.router.back();
-
     try {
         // var view=myApp.getCurrentView();
         // if($$('.popup.popup-login').length){
@@ -3736,7 +3730,6 @@ function onBackKeyDown(){
                 navigator.app.exitApp();
             });
         } else {
-            // alert(view);
             if($$('.popup.popup-login').length > 0) {
                 return false;
             } else if($$('.popover, .actions-modal, .picker-modal').length > 0) {
@@ -3751,22 +3744,6 @@ function onBackKeyDown(){
                 view.router.back();
             }
         }
-
-        // var view=myApp.getCurrentView();
-        // alert(view);
-        // if($$('.popup.popup-login').length){
-        //     return false;
-        // } else if($$('.popover, .actions-modal, .picker-modal').length){
-        //     myApp.closeModal('.popover, .actions-modal, .picker-modal'); 
-        // } else if($$('.searchbar.searchbar-active').length){
-        //     $$('.searchbar.searchbar-active')[0].f7Searchbar.disable();
-        // } else if($$('.photo-browser').length){
-        //     $$('.photo-browser .photo-browser-close-link, .photo-browser .close-popup').trigger('click');
-        // } else if($$('.popup').length){
-        //     myApp.closeModal('.popup'); 
-        // } else if(view.history.length){
-        //     view.router.back();
-        // }
     } catch (err) {
         myApp.alert('back error: ' + err.message);
     }
@@ -3775,51 +3752,51 @@ function onBackKeyDown(){
 }
 
 function callPushBot() {
-    //     myApp.alert('Call Pushbot!');
-    // // if (localStorage.getItem("device_token") == "" || localStorage.getItem("device_token") == null) {
-    //     if (checkInternetConnection() == true ) {
-    //         myApp.alert('Initialize Pushbot!');
-    //         window.plugins.PushbotsPlugin.initialize(PUSHBOT_APP_ID, {"android":{"sender_id":PUSHBOT_SENDER_ID}});
+        myApp.alert('Call Pushbot!');
+    // if (localStorage.getItem("device_token") == "" || localStorage.getItem("device_token") == null) {
+        if (checkInternetConnection() == true ) {
+            myApp.alert('Initialize Pushbot!');
+            window.plugins.PushbotsPlugin.initialize(PUSHBOT_APP_ID, {"android":{"sender_id":PUSHBOT_SENDER_ID}});
 
-    //         // First time registration
-    //         // This will be called on token registration/refresh with Android and with every runtime with iOS
-    //         window.plugins.PushbotsPlugin.on("registered", function(token){
-    //             myApp.alert("PushbotsPlugin.on: " + token);
+            // First time registration
+            // This will be called on token registration/refresh with Android and with every runtime with iOS
+            window.plugins.PushbotsPlugin.on("registered", function(token){
+                myApp.alert("PushbotsPlugin.on: " + token);
 
-    //             if (token != '' || token != null) {
-    //                 localStorage.setItem("device_token",token);    
+                if (token != '' || token != null) {
+                    localStorage.setItem("device_token",token);    
 
-    //                 // $$.ajax({
-    //                 //     type: "POST",
-    //                 //     url: GOFISH_API_URL + "add_push_token.php",
-    //                 //     data: "account_id=" + localStorage.getItem('account_id') + "&device_token=" + localStorage.getItem("device_token") + "&platform=" + PLATFORM,
-    //                 //     dataType: "json",
-    //                 //     success: function(msg, string, jqXHR) {
-    //                 //         if (msg.status == '0') {
-    //                 //             // myApp.alert(msg.message);
-    //                 //         } else {
-    //                 //             // myApp.alert(msg.message);
-    //                 //         }
-    //                 //     },
-    //                 //     error: function(xhr, ajaxOptions, thrownError) {
-    //                 //         myApp.alert("Error when adding push notification");
-    //                 //     }
-    //                 // });  
-    //             } else {
-    //                 // alert("Token is not empty");
-    //             }
+                    // $$.ajax({
+                    //     type: "POST",
+                    //     url: GOFISH_API_URL + "add_push_token.php",
+                    //     data: "account_id=" + localStorage.getItem('account_id') + "&device_token=" + localStorage.getItem("device_token") + "&platform=" + PLATFORM,
+                    //     dataType: "json",
+                    //     success: function(msg, string, jqXHR) {
+                    //         if (msg.status == '0') {
+                    //             // myApp.alert(msg.message);
+                    //         } else {
+                    //             // myApp.alert(msg.message);
+                    //         }
+                    //     },
+                    //     error: function(xhr, ajaxOptions, thrownError) {
+                    //         myApp.alert("Error when adding push notification");
+                    //     }
+                    // });  
+                } else {
+                    // alert("Token is not empty");
+                }
                 
-    //         });
+            });
 
-    //         // window.plugins.PushbotsPlugin.getRegistrationId(function(token){
-    //         //     alert("PushbotsPlugin.getRegistrationId: " + token);
-    //         // });
-    //     } else {
-    //         alert("Unable to register push notification, please check internet connection.");
-    //     }
-    // // } else {
-    // //     // alert("Token already exist in local storage");
-    // // }
+            // window.plugins.PushbotsPlugin.getRegistrationId(function(token){
+            //     alert("PushbotsPlugin.getRegistrationId: " + token);
+            // });
+        } else {
+            alert("Unable to register push notification, please check internet connection.");
+        }
+    // } else {
+    //     // alert("Token already exist in local storage");
+    // }
 }
 
 (function ($) {
