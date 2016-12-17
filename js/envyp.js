@@ -214,7 +214,7 @@ myApp.onPageInit('main', function(page) {
                             $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
 
                             callPushBot();
-                            
+
                             mainView.router.loadPage('choose_sports.html');
                         } else {
                             myApp.alert(msg.message);
@@ -3636,11 +3636,11 @@ function FBLogin() {
             facebookConnectPlugin.login(["public_profile"],
                 fbLoginSuccess,
                 function (error) { 
-                    myApp.alert("[ERROR] " + error);
+                    myApp.alert("[ERROR] fb error 1: " + error);
                 }
             );
         } catch(err) {
-            myApp.alert('[ERROR] ' + err.message);
+            myApp.alert('[ERROR] fb error 2: ' + err.message);
         } 
     } else {
         myApp.alert(NO_INTERNET_ALERT);
@@ -3689,14 +3689,12 @@ function getFBDetails() {
                     $$('#btn-signup-page').removeAttr("disabled");
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
-                    myApp.alert("[ERROR] Ajax Error");
                     myApp.alert("[ERROR] " + xhr.thrownError);
                     $$('#btn-email-login').removeAttr("disabled");
                     $$('#btn-signup-page').removeAttr("disabled");
                 }
             });
         }, function (error) {
-            myApp.alert("[ERROR] Get FB details");
             myApp.alert("[ERROR] " + error);
         });
 }
@@ -3757,7 +3755,9 @@ function onBackKeyDown(){
 }
 
 function callPushBot() {
+    try {
         myApp.alert('Call Pushbot!');
+    
     // if (localStorage.getItem("device_token") == "" || localStorage.getItem("device_token") == null) {
         if (checkInternetConnection() == true ) {
             myApp.alert('Initialize Pushbot!');
@@ -3802,6 +3802,9 @@ function callPushBot() {
     // } else {
     //     // alert("Token already exist in local storage");
     // }
+    } catch (err) {
+        myApp.alert('Pushbot error: ' + err.message);
+    }
 }
 
 (function ($) {
