@@ -213,6 +213,8 @@ myApp.onPageInit('main', function(page) {
                             $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
                             $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
 
+                            callPushBot();
+                            
                             mainView.router.loadPage('choose_sports.html');
                         } else {
                             myApp.alert(msg.message);
@@ -3694,6 +3696,7 @@ function getFBDetails() {
                 }
             });
         }, function (error) {
+            myApp.alert("[ERROR] Get FB details");
             myApp.alert("[ERROR] " + error);
         });
 }
