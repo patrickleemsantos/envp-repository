@@ -25,12 +25,15 @@ document.addEventListener('deviceready', function () {
   alert('One signal!');
   var notificationOpenedCallback = function(jsonData) {
     console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
-    alert(JSON.stringify(jsonData));
+    alert('notificationOpenedCallback: ' + JSON.stringify(jsonData));
   };
 
   window.plugins.OneSignal
     .startInit("536dcb4f-f5f0-4327-adb5-2f70746e20bf", "280176703234")
-    .handleNotificationOpened(notificationOpenedCallback)
+    .handleNotificationReceived(function(jsonData) {
+        alert("Notification received:\n" + JSON.stringify(jsonData));
+        console.log('Did I receive a notification: ' + JSON.stringify(jsonData));
+      })
     .endInit();
   
   // Sync hashed email if you have a login system or collect it.
