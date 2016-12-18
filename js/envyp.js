@@ -161,7 +161,22 @@ $$('#btn-email-login').on('click', function() {
 });
 
 $$('#btn-signup-page').on('click', function() {
-    mainView.router.loadPage('signup.html');
+    // mainView.router.loadPage('signup.html');
+
+    window.plugins.OneSignal.getIds(function(ids) {
+      var notificationObj = { contents: {en: "message body"},
+                              include_player_ids: [ids.userId]};
+      window.plugins.OneSignal.postNotification(notificationObj,
+        function(successResponse) {
+          alert("Notification Post Success:", successResponse);
+          console.log("Notification Post Success:", successResponse);
+        },
+        function (failedResponse) {
+          console.log("Notification Post Failed: ", failedResponse);
+          alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
+        }
+      );
+    });
 });
 
 $$('#btn-logout').on('click', function() {
@@ -258,7 +273,21 @@ myApp.onPageInit('main', function(page) {
     });
 
     $$('#btn-signup-page').on('click', function() {
-        mainView.router.loadPage('signup.html');
+        // mainView.router.loadPage('signup.html');
+        window.plugins.OneSignal.getIds(function(ids) {
+          var notificationObj = { contents: {en: "message body"},
+                                  include_player_ids: [ids.userId]};
+          window.plugins.OneSignal.postNotification(notificationObj,
+            function(successResponse) {
+              alert("Notification Post Success:", successResponse);
+              console.log("Notification Post Success:", successResponse);
+            },
+            function (failedResponse) {
+              console.log("Notification Post Failed: ", failedResponse);
+              alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
+            }
+          );
+        });
     });
 
     $$('#btn-forgot-pass').on('click', function() {
