@@ -3792,7 +3792,7 @@ function callPushBot() {
                 }
                 
             });
-            myApp.alert("PushbotsPlugin.on: " + token);
+            // myApp.alert("PushbotsPlugin.on: " + token);
             // window.plugins.PushbotsPlugin.getRegistrationId(function(token){
             //     alert("PushbotsPlugin.getRegistrationId: " + token);
             // });
