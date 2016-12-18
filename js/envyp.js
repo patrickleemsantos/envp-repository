@@ -24,7 +24,7 @@ document.addEventListener('deviceready', function () {
         console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
     };
 
-    if (localStorage.getItem('oneSignalUserId') == '') {
+    if (localStorage.getItem('oneSignalUserId') == '' || localStorage.getItem('oneSignalUserId') == undefined) {
         alert('register one signal');
         window.plugins.OneSignal
             .startInit("536dcb4f-f5f0-4327-adb5-2f70746e20bf", "280176703234")
