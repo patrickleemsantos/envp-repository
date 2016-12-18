@@ -26,8 +26,8 @@ const ENVYP_API_URL = 'http://envp.dk/api/';
 const NO_INTERNET_ALERT = 'Please check your internet connection';
 const AJAX_ERROR_ALERT = 'Network error, please try again.';
 const ERROR_ALERT = 'An error occured, please try again.';
-const PUSHBOT_APP_ID = "583d247f4a9efa72608b4567";
-const PUSHBOT_SENDER_ID = "583042657387";
+const PUSHBOT_APP_ID = "AIzaSyAOZYq0NYO7KAXpgfVg05QeR3jCL0piiCc";
+const PUSHBOT_SENDER_ID = "280176703234";
 
 var imgfile = '';
 var latitude = '';
