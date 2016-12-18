@@ -34,7 +34,13 @@ document.addEventListener('deviceready', function () {
         alert("Notification received:\n" + JSON.stringify(jsonData));
         console.log('Did I receive a notification: ' + JSON.stringify(jsonData));
       })
+
     .endInit();
+
+    window.plugins.OneSignal.getIds(function(ids) {
+      console.log('getIds: ' + JSON.stringify(ids));
+      alert("userId = " + ids.userId + ", pushToken = " + ids.pushToken);
+    });
   
   // Sync hashed email if you have a login system or collect it.
   //   Will be used to reach the user at the most optimal time of day.
