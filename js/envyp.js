@@ -20,31 +20,30 @@ var mainView = myApp.addView('.view-main', {
 });
 
 document.addEventListener('deviceready', function () {
-  // Enable to debug issues.
-  // window.plugins.OneSignal.setLogLevel({logLevel: 4, visualLevel: 4});
-  alert('One signal!');
-  var notificationOpenedCallback = function(jsonData) {
-    console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
-    alert('notificationOpenedCallback: ' + JSON.stringify(jsonData));
-  };
+    var notificationOpenedCallback = function(jsonData) {
+        console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
+    };
 
-  window.plugins.OneSignal
-    .startInit("536dcb4f-f5f0-4327-adb5-2f70746e20bf", "280176703234")
-    .handleNotificationReceived(function(jsonData) {
-        alert("Notification received:\n" + JSON.stringify(jsonData));
-        console.log('Did I receive a notification: ' + JSON.stringify(jsonData));
-      })
+    if (localStorage.getItem('oneSignalUserId') == '') {
+        alert('register one signal');
+        window.plugins.OneSignal
+            .startInit("536dcb4f-f5f0-4327-adb5-2f70746e20bf", "280176703234")
+            .handleNotificationReceived(function(jsonData) {
+                alert("Notification received:\n" + JSON.stringify(jsonData));
+                console.log('Did I receive a notification: ' + JSON.stringify(jsonData));
+                })
 
-    .endInit();
+            .endInit();
 
-    window.plugins.OneSignal.getIds(function(ids) {
-      console.log('getIds: ' + JSON.stringify(ids));
-      alert("userId = " + ids.userId + ", pushToken = " + ids.pushToken);
-    });
-  
-  // Sync hashed email if you have a login system or collect it.
-  //   Will be used to reach the user at the most optimal time of day.
-  // window.plugins.OneSignal.syncHashedEmail(userEmail);
+        window.plugins.OneSignal.getIds(function(ids) {
+            localStorage.setItem('oneSignalUserId', ids.userId);
+            localStorage.setItem('oneSignalPushToken', ids.pushToken);
+            // console.log('getIds: ' + JSON.stringify(ids));
+            // alert("userId = " + ids.userId + ", pushToken = " + ids.pushToken);
+        });
+    } else {
+        alert('one signal is already registered');
+    }
 }, false);
 
 document.addEventListener('backbutton', onBackKeyDown, false);
