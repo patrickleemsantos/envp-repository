@@ -168,10 +168,10 @@ $$('#btn-email-login').on('click', function() {
 
 $$('#btn-signup-page').on('click', function() {
     // mainView.router.loadPage('signup.html');
-
+    var ids = ["95052a6c-0361-441b-8b53-2ab1e2ea82a8"];
     // window.plugins.OneSignal.getIds(function(ids) {
       var notificationObj = { contents: {en: "message body"},
-                              include_player_ids: "95052a6c-0361-441b-8b53-2ab1e2ea82a8"};
+                              include_player_ids: ids};
       window.plugins.OneSignal.postNotification(notificationObj,
         function(successResponse) {
           alert("Notification Post Success:", successResponse);
@@ -281,8 +281,9 @@ myApp.onPageInit('main', function(page) {
     $$('#btn-signup-page').on('click', function() {
         // mainView.router.loadPage('signup.html');
         // window.plugins.OneSignal.getIds(function(ids) {
+        var ids = ["95052a6c-0361-441b-8b53-2ab1e2ea82a8"];
           var notificationObj = { contents: {en: "message body"},
-                              include_player_ids: "95052a6c-0361-441b-8b53-2ab1e2ea82a8"};
+                              include_player_ids: ids};
           window.plugins.OneSignal.postNotification(notificationObj,
             function(successResponse) {
               alert("Notification Post Success:", successResponse);
