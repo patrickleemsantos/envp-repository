@@ -1292,7 +1292,7 @@ myApp.onPageInit('account-list', function(page) {
                     if (msg.status == 0) {
                         if (msg.push_ids != '') {
                               var notificationObj = { contents: {en: "You are invited to join " + localStorage.getItem('selectedTeamName') + " team"},
-                                                  include_player_ids: msg.push_ids};
+                                                  include_player_ids: [msg.push_ids]};
                               window.plugins.OneSignal.postNotification(notificationObj,
                                 function(successResponse) {
                                   alert("Notification Post Success:", successResponse);
@@ -3690,7 +3690,7 @@ function removeAsAdministrator(account_id) {
 }
 
 function addPushNotificationID() {
-   if (localStorage.getItem('oneSignalUserId') != '' || localStorage.getItem('oneSignalUserId') != undefined) {
+   if (localStorage.getItem('oneSignalUserId') != '' && localStorage.getItem('oneSignalUserId') != undefined) {
        $$.ajax({
             type: "POST",
             url: ENVYP_API_URL + "add_push_notification_id.php",
