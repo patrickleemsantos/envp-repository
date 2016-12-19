@@ -3694,7 +3694,7 @@ function addPushNotificationID() {
        $$.ajax({
             type: "POST",
             url: ENVYP_API_URL + "add_push_notification_id.php",
-            data: "account_id=" + localStorage.getItem('account_id') + "&team_id=" + localStorage.getItem('oneSignalUserId'),
+            data: "account_id=" + localStorage.getItem('account_id') + "&push_id=" + localStorage.getItem('oneSignalUserId'),
             dataType: "json",
             success: function(msg, string, jqXHR) {
             },
