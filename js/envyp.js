@@ -1,16 +1,9 @@
-// var myApp = new Framework7({
-//     modalTitle: 'Envp',
-//     material: true,
-//     preloadPreviousPage: false,
-//     fastClicks: true,
-//     pushState: true
-// });
-
 var myApp = new Framework7({
     modalTitle: 'Envp',
     material: true,
     preloadPreviousPage: false,
-    fastClicks: true
+    fastClicks: true,
+    pushState: true
 });
 
 var $$ = Dom7;
@@ -89,6 +82,8 @@ if (localStorage.getItem('selectedLanguage') == '1') {
     $('#lbl-profile').prepend('Profile');
     $('#btn-edit-profile').empty();
     $('#btn-edit-profile').prepend('Edit Profile');
+    $('#btn-inbox').empty();
+    $('#btn-inbox').prepend('Inbox');
     $('#btn-choose-language').empty();
     $('#btn-choose-language').prepend('Language');
     $('#btn-logout').empty();
@@ -104,6 +99,8 @@ if (localStorage.getItem('selectedLanguage') == '1') {
     $('#lbl-profile').prepend('Profil');
     $('#btn-edit-profile').empty();
     $('#btn-edit-profile').prepend('Rediger profil');
+    $('#btn-inbox').empty();
+    $('#btn-inbox').prepend('Indbakke');
     $('#btn-choose-language').empty();
     $('#btn-choose-language').prepend('Sprog');
     $('#btn-logout').empty();
@@ -171,23 +168,23 @@ $$('#btn-email-login').on('click', function() {
 });
 
 $$('#btn-signup-page').on('click', function() {
-    // mainView.router.loadPage('signup.html');
-    var ids = ["d932d617-a897-4d3a-a1a7-9cfcfb0b1b77"];
-    // window.plugins.OneSignal.getIds(function(ids) {
-      var notificationObj = { contents: {en: "message body"},
-                              include_player_ids: ids,
-                               data: {"abc": "123", "foo": "bar"}};
-      window.plugins.OneSignal.postNotification(notificationObj,
-        function(successResponse) {
-          alert("Notification Post Success:", successResponse);
-          console.log("Notification Post Success:", successResponse);
-        },
-        function (failedResponse) {
-          console.log("Notification Post Failed: ", failedResponse);
-          alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
-        }
-      );
-    // });
+    mainView.router.loadPage('signup.html');
+    // var ids = ["d932d617-a897-4d3a-a1a7-9cfcfb0b1b77"];
+    // // window.plugins.OneSignal.getIds(function(ids) {
+    //   var notificationObj = { contents: {en: "message body"},
+    //                           include_player_ids: ids,
+    //                            data: {"abc": "123", "foo": "bar"}};
+    //   window.plugins.OneSignal.postNotification(notificationObj,
+    //     function(successResponse) {
+    //       alert("Notification Post Success:", successResponse);
+    //       console.log("Notification Post Success:", successResponse);
+    //     },
+    //     function (failedResponse) {
+    //       console.log("Notification Post Failed: ", failedResponse);
+    //       alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
+    //     }
+    //   );
+    // // });
 });
 
 $$('#btn-logout').on('click', function() {
@@ -284,23 +281,23 @@ myApp.onPageInit('main', function(page) {
     });
 
     $$('#btn-signup-page').on('click', function() {
-        // mainView.router.loadPage('signup.html');
-        // window.plugins.OneSignal.getIds(function(ids) {
-        var ids = ["d932d617-a897-4d3a-a1a7-9cfcfb0b1b77"];
-          var notificationObj = { contents: {en: "message body"},
-                              include_player_ids: ids,
-                               data: {"abc": "123", "foo": "bar"}};
-          window.plugins.OneSignal.postNotification(notificationObj,
-            function(successResponse) {
-              alert("Notification Post Success:", successResponse);
-              console.log("Notification Post Success:", successResponse);
-            },
-            function (failedResponse) {
-              console.log("Notification Post Failed: ", failedResponse);
-              alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
-            }
-          );
-        // });
+        mainView.router.loadPage('signup.html');
+        // // window.plugins.OneSignal.getIds(function(ids) {
+        // var ids = ["d932d617-a897-4d3a-a1a7-9cfcfb0b1b77"];
+        //   var notificationObj = { contents: {en: "message body"},
+        //                       include_player_ids: ids,
+        //                        data: {"abc": "123", "foo": "bar"}};
+        //   window.plugins.OneSignal.postNotification(notificationObj,
+        //     function(successResponse) {
+        //       alert("Notification Post Success:", successResponse);
+        //       console.log("Notification Post Success:", successResponse);
+        //     },
+        //     function (failedResponse) {
+        //       console.log("Notification Post Failed: ", failedResponse);
+        //       alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
+        //     }
+        //   );
+        // // });
     });
 
     $$('#btn-forgot-pass').on('click', function() {
@@ -437,6 +434,93 @@ myApp.onPageInit('signup', function(page) {
     $$('#btn-close-terms').on('click', function() {
         myApp.closeModal('.popup-terms');
     });
+});
+
+/* =====Inbox List Page ===== */
+myApp.onPageInit('inbox-list', function(page) {
+  myApp.closePanel('left');
+
+  if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-inbox-list').prepend('Inbox');
+    } else {
+        $('#lbl-inbox-list').prepend('Indbakke');
+    }
+
+    if (checkInternetConnection() == true) {
+        myApp.showIndicator();
+        var items = [];
+        $.getJSON(ENVYP_API_URL + "get_inbox_list.php?account_id=" + localStorage.getItem('account_id'), function(result) {
+            $.each(result, function(i, field) {
+                if (field.status == 'empty') {
+                    myApp.alert('No message yet :(');
+                } else {
+                    $title = (field.status == 0 ? "<b>"+field.title+"</b>" : field.title);
+                    $message = (field.status == 0 ? "<b>"+field.message+"</b>" : field.message);
+                    items.push({
+                        inbox_id: field.inbox_id,
+                        account_image: field.account_image,
+                        title: $title,
+                        message: $message,
+                        status: field.status,
+                    });
+                }
+            });
+
+            var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
+                items: items,
+                searchAll: function(query, items) {
+                    var found = [];
+                    for (var i = 0; i < items.length; i++) {
+                        if (items[i].title.indexOf(query) >= 0 || query.trim() === '') found.push(i);
+                    }
+                    return found;
+                },
+                template: '<li>' +
+                    '<a href="inbox_detail.html?inbox_id={{inbox_id}}&status={{status}}" class="item-link item-content">' +
+                    '<div class="item-media"><img data-src="{{account_image}}" class="lazy lazy-fadein img-circle" style="width:44px; height:44px;"/></div>' +
+                    '<div class="item-inner">' +
+                    '<div class="item-title-row">' +
+                    '<div class="item-title">{{title}}</div>' +
+                    '</div>' +
+                    '<div class="item-subtitle">{{message}}</div>' +
+                    '</div>' +
+                    '</a>' +
+                    '</li>',
+                height: 73,
+            });
+            myApp.initImagesLazyLoad(page.container);
+            myApp.hideIndicator();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator(); 
+            myApp.alert(AJAX_ERROR_ALERT); 
+        });
+    } else {
+        myApp.alert(NO_INTERNET_ALERT);
+    }  
+
+    $$('#btn-inbox-refresh').on('click', function() {
+        mainView.router.reloadPage("inbox.html")
+    });
+});
+
+/* =====Inbox Detail Page ===== */
+myApp.onPageInit('inbox-detail', function(page) {
+    myApp.showIndicator();
+    $.getJSON(ENVYP_API_URL + "get_inbox_detail.php?inbox_id=" + page.query.inbox_id + "&status=" + page.query.status, function(result) {
+        $.each(result, function(i, field) {
+            $$('#img-inbox-image').attr('src', (field.account_image == '' || field.account_image == null ? "img/profile.jpg" : field.account_image));
+            $('#div-inbox-title').prepend(field.title);
+            $('#div-inbox-creator').prepend('From: ' + field.account_name);
+            $('#p-inbox-message').prepend(field.message);
+        });
+
+        myApp.hideIndicator();
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+        myApp.hideIndicator(); 
+        myApp.alert(AJAX_ERROR_ALERT); 
+    });  
 });
 
 /* ===== Add Profile Page ===== */
@@ -646,7 +730,7 @@ myApp.onPageInit('team-add', function(page) {
                         myApp.hideIndicator();
                         if (msg.status == '0') {
                             clearTeamDetails();
-                            mainView.router.loadPage('team_management.html?team_id=' + msg.team_id + '&team_name=' + team_name);
+                            mainView.router.loadPage('team_management.html?team_id=' + msg.team_id + '&team_name=' + team_name + '&team_password=' + team_password);
                         }
                         myApp.alert(msg.message);
                         $$('#btn-add-team').removeAttr("disabled");
@@ -827,6 +911,7 @@ myApp.onPageInit('team-management', function(page) {
         localStorage.setItem('selectedTeamID', page.query.team_id);
         localStorage.setItem('selectedTeamName', page.query.team_name);
         localStorage.setItem('selectedTeamImage', page.query.team_image);
+        localStorage.setItem('selectedTeamPassword', page.query.team_password);
         localStorage.setItem('currentTeamAdmin', page.query.team_admin);
     }
 
@@ -986,10 +1071,7 @@ myApp.onPageInit('roster-add', function(page) {
                 ft.upload(imgfile, ENVYP_API_URL + "add_roster.php", winRoster, fail, options);
 
                 clearRosterDetails();
-                // myApp.hideIndicator();
                 $$('#btn-add-roster').removeAttr("disabled");
-                // mainView.router.loadPage('roster_list.html');
-                // mainView.router.loadPage('roster_add.html');
             }
         }
     });
@@ -1216,7 +1298,7 @@ myApp.onPageInit('account-list', function(page) {
             $$.ajax({
                 type: "POST",
                 url: ENVYP_API_URL + "add_participant.php",
-                data: "account_ids=" + selectedParticipants + "&team_id=" + localStorage.getItem('selectedTeamID'),
+                data: "account_ids=" + selectedParticipants + "&team_id=" + localStorage.getItem('selectedTeamID') + "&team_name=" + localStorage.getItem('selectedTeamName') + "&team_password=" + localStorage.getItem('selectedTeamPassword') + "&created_by=" + localStorage.getItem('account_id'),
                 dataType: "json",
                 success: function(msg, string, jqXHR) {
                     myApp.hideIndicator();
@@ -3294,6 +3376,8 @@ function chooseLanguage() {
                 $('#lbl-profile').prepend('Profile');
                 $('#btn-edit-profile').empty();
                 $('#btn-edit-profile').prepend('Edit Profile');
+                $('#btn-inbox').empty();
+                $('#btn-inbox').prepend('Inbox');
                 $('#btn-choose-language').empty();
                 $('#btn-choose-language').prepend('Language');
                 $('#btn-logout').empty();
@@ -3315,6 +3399,8 @@ function chooseLanguage() {
                 $('#lbl-profile').prepend('Profil');
                 $('#btn-edit-profile').empty();
                 $('#btn-edit-profile').prepend('Rediger profil');
+                $('#btn-inbox').empty();
+                $('#btn-inbox').prepend('Indbakke');
                 $('#btn-choose-language').empty();
                 $('#btn-choose-language').prepend('Sprog');
                 $('#btn-logout').empty();
@@ -3392,7 +3478,7 @@ function winTeamAdd(r) {
     var resp = JSON.parse(r.response);
     myApp.alert(resp.message);
     if (resp.status == '0') {
-        mainView.router.loadPage('team_management.html?team_id=' + resp.team_id + '&team_name=' + resp.team_name);
+        mainView.router.loadPage('team_management.html?team_id=' + resp.team_id + '&team_name=' + resp.team_name + '&team_password=' + resp.team_password);
     }
 }
 
@@ -3407,7 +3493,7 @@ function getTeamPassword(team_id, team_admin, team_name, team_password, team_ima
                 myApp.prompt('Please enter a password', function(data) {
                     if (data == team_password) {
                         localStorage.setItem('currentAccountIsTeamAdmin', response.is_admin);
-                        mainView.router.loadPage('team_management.html?team_id=' + team_id + '&team_name=' + team_name + '&team_admin=' + team_admin + '&team_image=' + team_image);
+                        mainView.router.loadPage('team_management.html?team_id=' + team_id + '&team_name=' + team_name + '&team_admin=' + team_admin + '&team_image=' + team_image + '&team_password=' + team_password);
                     } else {
                         myApp.alert('Incorrect team password!');
                     }
@@ -3417,7 +3503,7 @@ function getTeamPassword(team_id, team_admin, team_name, team_password, team_ima
             }
         })
     } else {
-        mainView.router.loadPage('team_management.html?team_id=' + team_id + '&team_name=' + team_name + '&team_admin=' + team_admin + '&team_image=' + team_image);
+        mainView.router.loadPage('team_management.html?team_id=' + team_id + '&team_name=' + team_name + '&team_admin=' + team_admin + '&team_image=' + team_image + '&team_password=' + team_password);
     }
 }
 
