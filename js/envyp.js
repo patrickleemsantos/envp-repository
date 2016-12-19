@@ -29,8 +29,10 @@ document.addEventListener('deviceready', function () {
         window.plugins.OneSignal
             .startInit("536dcb4f-f5f0-4327-adb5-2f70746e20bf", "280176703234")
             .handleNotificationReceived(function(jsonData) {
-                alert("Notification received:\n" + JSON.stringify(jsonData));
-                console.log('Did I receive a notification: ' + JSON.stringify(jsonData));
+                // alert("Notification received:\n" + JSON.stringify(jsonData));
+                // console.log('Did I receive a notification: ' + JSON.stringify(jsonData));
+                    mainView.router.loadPage('choose_sports.html');
+                    alert("Notification received:\n" + JSON.stringify(jsonData));
                 })
 
             .endInit();
@@ -144,7 +146,6 @@ $$('#btn-email-login').on('click', function() {
                         $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
                         $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
 
-                        // callPushBot();
                         mainView.router.loadPage('choose_sports.html');
                     } else {
                         myApp.alert(msg.message);
@@ -166,22 +167,22 @@ $$('#btn-email-login').on('click', function() {
 });
 
 $$('#btn-signup-page').on('click', function() {
-    // mainView.router.loadPage('signup.html');
-    var ids = ["95052a6c-0361-441b-8b53-2ab1e2ea82a8"];
-    // window.plugins.OneSignal.getIds(function(ids) {
-      var notificationObj = { contents: {en: "message body"},
-                              include_player_ids: ids};
-      window.plugins.OneSignal.postNotification(notificationObj,
-        function(successResponse) {
-          alert("Notification Post Success:", successResponse);
-          console.log("Notification Post Success:", successResponse);
-        },
-        function (failedResponse) {
-          console.log("Notification Post Failed: ", failedResponse);
-          alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
-        }
-      );
-    // });
+    mainView.router.loadPage('signup.html');
+    // var ids = ["95052a6c-0361-441b-8b53-2ab1e2ea82a8"];
+    // // window.plugins.OneSignal.getIds(function(ids) {
+    //   var notificationObj = { contents: {en: "message body"},
+    //                           include_player_ids: ids};
+    //   window.plugins.OneSignal.postNotification(notificationObj,
+    //     function(successResponse) {
+    //       alert("Notification Post Success:", successResponse);
+    //       console.log("Notification Post Success:", successResponse);
+    //     },
+    //     function (failedResponse) {
+    //       console.log("Notification Post Failed: ", failedResponse);
+    //       alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
+    //     }
+    //   );
+    // // });
 });
 
 $$('#btn-logout').on('click', function() {
@@ -278,22 +279,22 @@ myApp.onPageInit('main', function(page) {
     });
 
     $$('#btn-signup-page').on('click', function() {
-        // mainView.router.loadPage('signup.html');
-        // window.plugins.OneSignal.getIds(function(ids) {
-        var ids = ["95052a6c-0361-441b-8b53-2ab1e2ea82a8"];
-          var notificationObj = { contents: {en: "message body"},
-                              include_player_ids: ids};
-          window.plugins.OneSignal.postNotification(notificationObj,
-            function(successResponse) {
-              alert("Notification Post Success:", successResponse);
-              console.log("Notification Post Success:", successResponse);
-            },
-            function (failedResponse) {
-              console.log("Notification Post Failed: ", failedResponse);
-              alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
-            }
-          );
-        // });
+        mainView.router.loadPage('signup.html');
+        // // window.plugins.OneSignal.getIds(function(ids) {
+        // var ids = ["95052a6c-0361-441b-8b53-2ab1e2ea82a8"];
+        //   var notificationObj = { contents: {en: "message body"},
+        //                       include_player_ids: ids};
+        //   window.plugins.OneSignal.postNotification(notificationObj,
+        //     function(successResponse) {
+        //       alert("Notification Post Success:", successResponse);
+        //       console.log("Notification Post Success:", successResponse);
+        //     },
+        //     function (failedResponse) {
+        //       console.log("Notification Post Failed: ", failedResponse);
+        //       alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
+        //     }
+        //   );
+        // // });
     });
 
     $$('#btn-forgot-pass').on('click', function() {
