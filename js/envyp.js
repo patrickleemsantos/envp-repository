@@ -2,8 +2,7 @@ var myApp = new Framework7({
     modalTitle: 'Envp',
     material: true,
     preloadPreviousPage: false,
-    fastClicks: true,
-    pushState: true
+    fastClicks: true
 });
 
 var $$ = Dom7;
@@ -645,6 +644,8 @@ myApp.onPageInit('profile-add', function(page) {
 
 /* ===== Choose Sports Page ===== */
 myApp.onPageInit('choose-sports', function(page) {
+    $("#div-inbox-badge").empty();
+
     if (localStorage.getItem('selectedLanguage') == '1') {
         $('#lbl-choose-sports').prepend('Choose Sports');
     } else {
@@ -657,6 +658,21 @@ myApp.onPageInit('choose-sports', function(page) {
 
     $$('#close-left-panel').on('click', function() {
         myApp.closePanel('left');
+    });
+
+    //Check if have notification
+    $$.ajax({
+        type: "POST",
+        url: ENVYP_API_URL + "get_inbox_count.php",
+        data: "account_id=" + localStorage.getItem('account_id'),
+        dataType: "json",
+        success: function(msg, string, jqXHR) {
+            if (msg.inbox_count > 0) {
+                $("#div-inbox-badge").prepend('<span class="badge bg-red">'+msg.inbox_count+'</span>');
+            }
+        },
+        error: function(msg, string, jqXHR) {
+        }
     });
 });
 
