@@ -1291,8 +1291,9 @@ myApp.onPageInit('account-list', function(page) {
                     myApp.hideIndicator();
                     if (msg.status == 0) {
                         if (msg.push_ids != '') {
+                              alert(msg.push_ids);
                               var notificationObj = { contents: {en: "You are invited to join " + localStorage.getItem('selectedTeamName') + " team"},
-                                                  include_player_ids: [msg.push_ids]};
+                                                  include_player_ids: ["5f641669-089e-44cf-b048-02a309f88414"]};
                               window.plugins.OneSignal.postNotification(notificationObj,
                                 function(successResponse) {
                                   alert("Notification Post Success:", successResponse);
