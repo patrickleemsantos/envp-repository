@@ -146,6 +146,8 @@ $$('#btn-email-login').on('click', function() {
                         $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
                         $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
 
+                        addPushNotificationID();
+
                         mainView.router.loadPage('choose_sports.html');
                     } else {
                         myApp.alert(msg.message);
@@ -168,22 +170,6 @@ $$('#btn-email-login').on('click', function() {
 
 $$('#btn-signup-page').on('click', function() {
     mainView.router.loadPage('signup.html');
-    // var ids = ["d932d617-a897-4d3a-a1a7-9cfcfb0b1b77"];
-    // // window.plugins.OneSignal.getIds(function(ids) {
-    //   var notificationObj = { contents: {en: "message body"},
-    //                           include_player_ids: ids,
-    //                            data: {"abc": "123", "foo": "bar"}};
-    //   window.plugins.OneSignal.postNotification(notificationObj,
-    //     function(successResponse) {
-    //       alert("Notification Post Success:", successResponse);
-    //       console.log("Notification Post Success:", successResponse);
-    //     },
-    //     function (failedResponse) {
-    //       console.log("Notification Post Failed: ", failedResponse);
-    //       alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
-    //     }
-    //   );
-    // // });
 });
 
 $$('#btn-logout').on('click', function() {
@@ -257,7 +243,7 @@ myApp.onPageInit('main', function(page) {
                             $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
                             $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
 
-                            // callPushBot();
+                            addPushNotificationID();
 
                             mainView.router.loadPage('choose_sports.html');
                         } else {
@@ -281,22 +267,6 @@ myApp.onPageInit('main', function(page) {
 
     $$('#btn-signup-page').on('click', function() {
         mainView.router.loadPage('signup.html');
-        // // window.plugins.OneSignal.getIds(function(ids) {
-        // var ids = ["d932d617-a897-4d3a-a1a7-9cfcfb0b1b77"];
-        //   var notificationObj = { contents: {en: "message body"},
-        //                       include_player_ids: ids,
-        //                        data: {"abc": "123", "foo": "bar"}};
-        //   window.plugins.OneSignal.postNotification(notificationObj,
-        //     function(successResponse) {
-        //       alert("Notification Post Success:", successResponse);
-        //       console.log("Notification Post Success:", successResponse);
-        //     },
-        //     function (failedResponse) {
-        //       console.log("Notification Post Failed: ", failedResponse);
-        //       alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
-        //     }
-        //   );
-        // // });
     });
 
     $$('#btn-forgot-pass').on('click', function() {
@@ -406,6 +376,7 @@ myApp.onPageInit('signup', function(page) {
                         if (msg.status == '0') {
                             localStorage.setItem('account_id', msg.account_id);
                             localStorage.setItem('isFbLogin', 0);
+                            addPushNotificationID();
                             mainView.router.loadPage('profile_add.html');
                         } else {
                             $$('#txt-password').val('');
@@ -1319,6 +1290,20 @@ myApp.onPageInit('account-list', function(page) {
                 success: function(msg, string, jqXHR) {
                     myApp.hideIndicator();
                     if (msg.status == 0) {
+                        if (msg.push_ids != '') {
+                              var notificationObj = { contents: {en: "You are invited to join " + localStorage.getItem('selectedTeamName') + " team"},
+                                                  include_player_ids: msg.push_ids};
+                              window.plugins.OneSignal.postNotification(notificationObj,
+                                function(successResponse) {
+                                  alert("Notification Post Success:", successResponse);
+                                  console.log("Notification Post Success:", successResponse);
+                                },
+                                function (failedResponse) {
+                                  console.log("Notification Post Failed: ", failedResponse);
+                                  alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
+                                }
+                              );
+                        }
                         getParticipantList();
                     } else {
                         myApp.alert(msg.message);
@@ -3704,6 +3689,21 @@ function removeAsAdministrator(account_id) {
     });
 }
 
+function addPushNotificationID() {
+   if (localStorage.getItem('oneSignalUserId') != '' || localStorage.getItem('oneSignalUserId') != undefined) {
+       $$.ajax({
+            type: "POST",
+            url: ENVYP_API_URL + "add_push_notification_id.php",
+            data: "account_id=" + localStorage.getItem('account_id') + "&team_id=" + localStorage.getItem('oneSignalUserId'),
+            dataType: "json",
+            success: function(msg, string, jqXHR) {
+            },
+            error: function(msg, string, jqXHR) {
+            }
+        }); 
+    }
+}
+
 function clearLogInDetails() {
     $$('#txt-log-email-add').val('');
     $$('#txt-log-email-pass').val('');
@@ -3851,6 +3851,7 @@ function getFBDetails() {
                         localStorage.setItem('fb_image', fb_image);
                         mainView.router.loadPage('profile_add.html?account_id=' + msg.account_id + '&first_name=' + result.first_name + '&last_name=' + result.last_name + '&age=' + age + '&description=')
                     }
+                    addPushNotificationID();
                     $$('#btn-email-login').removeAttr("disabled");
                     $$('#btn-signup-page').removeAttr("disabled");
                 },
@@ -3916,61 +3917,6 @@ function onBackKeyDown(){
     } catch (err) {
         myApp.alert('back error: ' + err.message);
     }
-
-  // alert('Back is clicked!');
-}
-
-function callPushBot() {
-    // try {
-    //     myApp.alert('Call Pushbot!');
-    
-    // // if (localStorage.getItem("device_token") == "" || localStorage.getItem("device_token") == null) {
-    //     if (checkInternetConnection() == true ) {
-    //         myApp.alert('Initialize Pushbot!');
-    //         window.plugins.PushbotsPlugin.initialize(PUSHBOT_APP_ID, {"android":{"sender_id":PUSHBOT_SENDER_ID}});
-
-    //         // First time registration
-    //         // This will be called on token registration/refresh with Android and with every runtime with iOS
-    //         window.plugins.PushbotsPlugin.on("registered", function(token){
-    //             myApp.alert("PushbotsPlugin.on: " + token);
-
-    //             if (token != '' || token != null) {
-    //                 localStorage.setItem("device_token",token);    
-
-    //                 // $$.ajax({
-    //                 //     type: "POST",
-    //                 //     url: GOFISH_API_URL + "add_push_token.php",
-    //                 //     data: "account_id=" + localStorage.getItem('account_id') + "&device_token=" + localStorage.getItem("device_token") + "&platform=" + PLATFORM,
-    //                 //     dataType: "json",
-    //                 //     success: function(msg, string, jqXHR) {
-    //                 //         if (msg.status == '0') {
-    //                 //             // myApp.alert(msg.message);
-    //                 //         } else {
-    //                 //             // myApp.alert(msg.message);
-    //                 //         }
-    //                 //     },
-    //                 //     error: function(xhr, ajaxOptions, thrownError) {
-    //                 //         myApp.alert("Error when adding push notification");
-    //                 //     }
-    //                 // });  
-    //             } else {
-    //                 // alert("Token is not empty");
-    //             }
-                
-    //         });
-    //         // myApp.alert("PushbotsPlugin.on: " + token);
-    //         // window.plugins.PushbotsPlugin.getRegistrationId(function(token){
-    //         //     alert("PushbotsPlugin.getRegistrationId: " + token);
-    //         // });
-    //     } else {
-    //         alert("Unable to register push notification, please check internet connection.");
-    //     }
-    // // } else {
-    // //     // alert("Token already exist in local storage");
-    // // }
-    // } catch (err) {
-    //     myApp.alert('Pushbot error: ' + err.message);
-    // }
 }
 
 (function ($) {
