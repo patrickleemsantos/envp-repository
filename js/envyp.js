@@ -172,7 +172,7 @@ $$('#btn-email-login').on('click', function() {
 
 $$('#btn-signup-page').on('click', function() {
     // mainView.router.loadPage('signup.html');
-    var ids = ["95052a6c-0361-441b-8b53-2ab1e2ea82a8"];
+    var ids = ["d932d617-a897-4d3a-a1a7-9cfcfb0b1b77"];
     // window.plugins.OneSignal.getIds(function(ids) {
       var notificationObj = { contents: {en: "message body"},
                               include_player_ids: ids,
@@ -286,7 +286,7 @@ myApp.onPageInit('main', function(page) {
     $$('#btn-signup-page').on('click', function() {
         // mainView.router.loadPage('signup.html');
         // window.plugins.OneSignal.getIds(function(ids) {
-        var ids = ["95052a6c-0361-441b-8b53-2ab1e2ea82a8"];
+        var ids = ["d932d617-a897-4d3a-a1a7-9cfcfb0b1b77"];
           var notificationObj = { contents: {en: "message body"},
                               include_player_ids: ids,
                                data: {"abc": "123", "foo": "bar"}};
