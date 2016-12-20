@@ -25,20 +25,20 @@ var longitude = '';
 var edit_latitude = '';
 var edit_longitude = '';
 
-document.addEventListener('deviceready', function () {
+document.addEventListener('deviceready', function() {
     var notificationOpenedCallback = function(jsonData) {
         console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
     };
     window.plugins.OneSignal
         .startInit("536dcb4f-f5f0-4327-adb5-2f70746e20bf", "280176703234")
         .handleNotificationReceived(function(jsonData) {
-                console.log('Did I receive a notification: ' + JSON.stringify(jsonData));
-                // alert("Notification received:\n" + JSON.stringify(jsonData));
-            })
+            console.log('Did I receive a notification: ' + JSON.stringify(jsonData));
+            // alert("Notification received:\n" + JSON.stringify(jsonData));
+        })
         .handleNotificationOpened(function(jsonData) {
-                // alert("Notification opened:\n" + JSON.stringify(jsonData));
-                console.log('didOpenRemoteNotificationCallBack: ' + JSON.stringify(jsonData));   
-            })
+            // alert("Notification opened:\n" + JSON.stringify(jsonData));
+            console.log('didOpenRemoteNotificationCallBack: ' + JSON.stringify(jsonData));
+        })
         .endInit();
 
     window.plugins.OneSignal.getIds(function(ids) {
@@ -179,7 +179,7 @@ $$('#btn-edit-profile').on('click', function() {
 });
 
 $$('#btn-forgot-pass').on('click', function() {
-    myApp.prompt('Please enter your email', function (value) {
+    myApp.prompt('Please enter your email', function(value) {
         if (validateEmail(value) == false) {
             myApp.alert('Invalid email format');
             return false;
@@ -260,7 +260,7 @@ myApp.onPageInit('main', function(page) {
     });
 
     $$('#btn-forgot-pass').on('click', function() {
-        myApp.prompt('Please enter your email', function (value) {
+        myApp.prompt('Please enter your email', function(value) {
             if (validateEmail(value) == false) {
                 myApp.alert('Invalid email format');
                 return false;
@@ -348,7 +348,7 @@ myApp.onPageInit('signup', function(page) {
                 myApp.alert("character ivalid");
                 $$('#btn-signup').removeAttr("disabled");
                 return false;
-            } 
+            }
 
             if ($('#chkbox-terms').is(':checked') == false) {
                 myApp.alert("Please agree with the terms and conditions");
@@ -398,9 +398,9 @@ myApp.onPageInit('signup', function(page) {
 
 /* =====Inbox List Page ===== */
 myApp.onPageInit('inbox-list', function(page) {
-  myApp.closePanel('left');
+    myApp.closePanel('left');
 
-  if (localStorage.getItem('selectedLanguage') == '1') {
+    if (localStorage.getItem('selectedLanguage') == '1') {
         $('#lbl-inbox-list').prepend('Inbox');
     } else {
         $('#lbl-inbox-list').prepend('Indbakke');
@@ -410,54 +410,54 @@ myApp.onPageInit('inbox-list', function(page) {
         myApp.showIndicator();
         var items = [];
         $.getJSON(ENVYP_API_URL + "get_inbox_list.php?account_id=" + localStorage.getItem('account_id'), function(result) {
-            $.each(result, function(i, field) {
-                if (field.status == 'empty') {
-                    myApp.alert('No message yet :(');
-                } else {
-                    $title = (field.status == 0 ? "<b>"+field.title+"</b>" : field.title);
-                    $message = (field.status == 0 ? "<b>"+field.message+"</b>" : field.message);
-                    items.push({
-                        inbox_id: field.inbox_id,
-                        account_image: field.account_image,
-                        title: $title,
-                        message: $message,
-                        status: field.status,
-                    });
-                }
-            });
-
-            var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
-                items: items,
-                searchAll: function(query, items) {
-                    var found = [];
-                    for (var i = 0; i < items.length; i++) {
-                        if (items[i].title.indexOf(query) >= 0 || query.trim() === '') found.push(i);
+                $.each(result, function(i, field) {
+                    if (field.status == 'empty') {
+                        myApp.alert('No message yet :(');
+                    } else {
+                        $title = (field.status == 0 ? "<b>" + field.title + "</b>" : field.title);
+                        $message = (field.status == 0 ? "<b>" + field.message + "</b>" : field.message);
+                        items.push({
+                            inbox_id: field.inbox_id,
+                            account_image: field.account_image,
+                            title: $title,
+                            message: $message,
+                            status: field.status,
+                        });
                     }
-                    return found;
-                },
-                template: '<li>' +
-                    '<a href="inbox_detail.html?inbox_id={{inbox_id}}&status={{status}}" class="item-link item-content">' +
-                    '<div class="item-media"><img data-src="{{account_image}}" class="lazy lazy-fadein img-circle" style="width:44px; height:44px;"/></div>' +
-                    '<div class="item-inner">' +
-                    '<div class="item-title-row">' +
-                    '<div class="item-title">{{title}}</div>' +
-                    '</div>' +
-                    '<div class="item-subtitle">{{message}}</div>' +
-                    '</div>' +
-                    '</a>' +
-                    '</li>',
-                height: 73,
+                });
+
+                var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
+                    items: items,
+                    searchAll: function(query, items) {
+                        var found = [];
+                        for (var i = 0; i < items.length; i++) {
+                            if (items[i].title.indexOf(query) >= 0 || query.trim() === '') found.push(i);
+                        }
+                        return found;
+                    },
+                    template: '<li>' +
+                        '<a href="inbox_detail.html?inbox_id={{inbox_id}}&status={{status}}" class="item-link item-content">' +
+                        '<div class="item-media"><img data-src="{{account_image}}" class="lazy lazy-fadein img-circle" style="width:44px; height:44px;"/></div>' +
+                        '<div class="item-inner">' +
+                        '<div class="item-title-row">' +
+                        '<div class="item-title">{{title}}</div>' +
+                        '</div>' +
+                        '<div class="item-subtitle">{{message}}</div>' +
+                        '</div>' +
+                        '</a>' +
+                        '</li>',
+                    height: 73,
+                });
+                myApp.initImagesLazyLoad(page.container);
+                myApp.hideIndicator();
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                myApp.hideIndicator();
+                myApp.alert(AJAX_ERROR_ALERT);
             });
-            myApp.initImagesLazyLoad(page.container);
-            myApp.hideIndicator();
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-            myApp.hideIndicator(); 
-            myApp.alert(AJAX_ERROR_ALERT); 
-        });
     } else {
         myApp.alert(NO_INTERNET_ALERT);
-    }  
+    }
 
     $$('#btn-inbox-refresh').on('click', function() {
         mainView.router.reloadPage("inbox.html")
@@ -468,19 +468,19 @@ myApp.onPageInit('inbox-list', function(page) {
 myApp.onPageInit('inbox-detail', function(page) {
     myApp.showIndicator();
     $.getJSON(ENVYP_API_URL + "get_inbox_detail.php?inbox_id=" + page.query.inbox_id + "&status=" + page.query.status, function(result) {
-        $.each(result, function(i, field) {
-            $$('#img-inbox-image').attr('src', (field.account_image == '' || field.account_image == null ? "img/profile.jpg" : field.account_image));
-            $('#div-inbox-title').prepend(field.title);
-            $('#div-inbox-creator').prepend('From: ' + field.account_name);
-            $('#p-inbox-message').prepend(field.message);
-        });
+            $.each(result, function(i, field) {
+                $$('#img-inbox-image').attr('src', (field.account_image == '' || field.account_image == null ? "img/profile.jpg" : field.account_image));
+                $('#div-inbox-title').prepend(field.title);
+                $('#div-inbox-creator').prepend('From: ' + field.account_name);
+                $('#p-inbox-message').prepend(field.message);
+            });
 
-        myApp.hideIndicator();
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-        myApp.hideIndicator(); 
-        myApp.alert(AJAX_ERROR_ALERT); 
-    });  
+            myApp.hideIndicator();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator();
+            myApp.alert(AJAX_ERROR_ALERT);
+        });
 });
 
 /* ===== Add Profile Page ===== */
@@ -502,7 +502,7 @@ myApp.onPageInit('profile-add', function(page) {
             // alert('not fb login');
             account_image = page.query.image_url;
             $$('#profile-image').attr('src', (account_image == '' || account_image == null ? "img/profile.jpg" : account_image));
-        }  
+        }
 
         localStorage.setItem('account_id', page.query.account_id);
     }
@@ -629,11 +629,10 @@ myApp.onPageInit('choose-sports', function(page) {
         dataType: "json",
         success: function(msg, string, jqXHR) {
             if (msg.inbox_count > 0) {
-                $("#div-inbox-badge").prepend('<span class="badge bg-red">'+msg.inbox_count+'</span>');
+                $("#div-inbox-badge").prepend('<span class="badge bg-red">' + msg.inbox_count + '</span>');
             }
         },
-        error: function(msg, string, jqXHR) {
-        }
+        error: function(msg, string, jqXHR) {}
     });
 });
 
@@ -746,6 +745,117 @@ myApp.onPageInit('team-add', function(page) {
     });
 });
 
+/* ===== Team edit Page ===== */
+myApp.onPageInit('team-edit', function(page) {
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-edit-team').prepend('Edit Team');
+        $('#lbl-team-edit-upload-image').prepend('Upload Image');
+        $('#lbl-team-edit-details').prepend('Details');
+        $('#lbl-team-edit-name').prepend('Team name');
+        $('#lbl-team-edit-description').prepend('Description');
+        $('#lbl-team-edit-password').prepend('Password');
+        $('#btn-edit-team').prepend('Continue');
+    } else {
+        $('#lbl-edit-team').prepend('Edit Team');
+        $('#lbl-team-edit-upload-image').prepend('Upload billede');
+        $('#lbl-team-edit-details').prepend('Detaljer');
+        $('#lbl-team-edit-name').prepend('Hold navn');
+        $('#lbl-team-edit-description').prepend('Beskrivelse');
+        $('#lbl-team-edit-password').prepend('Adgangskode');
+        $('#btn-edit-team').prepend('Blive ved');
+    }
+
+    myApp.showIndicator();
+    var image_url = '';
+    $.getJSON(ENVYP_API_URL + "get_team_detail.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
+            $.each(result, function(i, field) {
+                image_url = field.image_url;
+                if (image_url != '') $('#team-edit-image').attr('src',image_url);
+                $('#txt-team-edit-name').attr('value',field.name);
+                $('#txt-team-edit-password').attr('value',field.password);
+                // $('#txt-team-edit-description').attr('value',field.description);
+                // $('#txt-team-edit-name').prepend(field.name);
+                // $('#txt-team-edit-password').prepend(field.password);
+                $('#txt-team-edit-description').prepend(field.description);
+            });
+
+            myApp.hideIndicator();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator();
+            myApp.alert(AJAX_ERROR_ALERT);
+        });  
+
+    $$('#btn-edit-team').on('click', function() {
+        if (checkInternetConnection() == true) {
+            $$('#btn-edit-team').attr('disabled', true);
+            var team_name = $$('#txt-team-edit-name').val();
+            var team_description = $$('#txt-team-edit-description').val();
+            var team_password = $$('#txt-team-edit-password').val();
+
+            if (team_name == '' || team_name == null) {
+                myApp.alert('Please enter team name!');
+                $$('#btn-edit-team').removeAttr("disabled");
+                return false;
+            }
+
+            if (team_password == '' || team_password == null) {
+                myApp.alert('Please enter team password!');
+                $$('#btn-edit-team').removeAttr("disabled");
+                return false;
+            }
+
+            if (imgfile == '') {
+                myApp.showIndicator();
+                $$.ajax({
+                    type: "POST",
+                    url: ENVYP_API_URL + "update_team.php",
+                    data: "account_id=" + localStorage.getItem('account_id') + "&team_id=" + localStorage.getItem('selectedTeamID') + "&team_name=" + team_name + "&team_description=" + team_description + "&team_password=" + team_password + "&team_image=" + image_url,
+                    dataType: "json",
+                    success: function(msg, string, jqXHR) {
+                        myApp.hideIndicator();
+                        if (msg.status == '0') {
+                            clearEditTeamDetails();
+                            mainView.router.loadPage('team_management.html?team_id=' + msg.team_id + '&team_name=' + team_name + '&team_password=' + team_password);
+                        }
+                        myApp.alert(msg.message);
+                        $$('#btn-edit-team').removeAttr("disabled");
+                    },
+                    error: function(msg, string, jqXHR) {
+                        myApp.hideIndicator();
+                        myApp.alert(ERROR_ALERT);
+                        $$('#btn-edit-team').removeAttr("disabled");
+                    }
+                });
+            } else {
+                myApp.showIndicator();
+                var options = new FileUploadOptions();
+                options.fileKey = "file";
+                options.fileName = imgfile.substr(imgfile.lastIndexOf('/') + 1);
+                options.mimeType = "image/jpeg";
+                options.chunkedMode = false;
+
+                var params = new Object();
+                params.account_id = localStorage.getItem('account_id');
+                params.team_id = localStorage.getItem('selectedTeamID');
+                params.team_name = team_name;
+                params.team_description = team_description;
+                params.team_password = team_password;
+                params.team_image = image_url;
+
+                options.params = params;
+
+                var ft = new FileTransfer();
+                ft.upload(imgfile, ENVYP_API_URL + "add_team.php", winTeamAdd, fail, options);
+
+                clearEditTeamDetails();
+                myApp.hideIndicator();
+                $$('#btn-add-team').removeAttr("disabled");
+            }
+        }
+    });
+});
+
 /* ===== Team List Page ===== */
 myApp.onPageInit('team-list', function(page) {
     if (localStorage.getItem('selectedLanguage') == '1') {
@@ -758,50 +868,50 @@ myApp.onPageInit('team-list', function(page) {
         myApp.showIndicator();
         var items = [];
         $.getJSON(ENVYP_API_URL + "get_team_list.php?sport_id=" + localStorage.getItem('selectedSportID'), function(result) {
-            $.each(result, function(i, field) {
-                if (field.status == 'empty') {
-                    myApp.alert('No teams yet :(');
-                } else {
-                    items.push({
-                        team_id: field.team_id,
-                        team_admin: field.team_admin,
-                        team_name: field.team_name,
-                        team_password: field.team_password,
-                        team_image: field.team_image,
-                        created_by: field.first_name + ' ' + field.last_name
-                    });
-                }
-            });
-
-            var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
-                items: items,
-                searchAll: function(query, items) {
-                    var found = [];
-                    for (var i = 0; i < items.length; i++) {
-                        if (items[i].team_name.indexOf(query) >= 0 || query.trim() === '') found.push(i);
+                $.each(result, function(i, field) {
+                    if (field.status == 'empty') {
+                        myApp.alert('No teams yet :(');
+                    } else {
+                        items.push({
+                            team_id: field.team_id,
+                            team_admin: field.team_admin,
+                            team_name: field.team_name,
+                            team_password: field.team_password,
+                            team_image: field.team_image,
+                            created_by: field.first_name + ' ' + field.last_name
+                        });
                     }
-                    return found;
-                },
-                template: '<li>' +
-                    '<a href="#" onclick="getTeamPassword({{team_id}},{{team_admin}},\'{{team_name}}\',\'{{team_password}}\',\'{{team_image}}\')" class="item-link item-content">' +
-                    '<div class="item-media"><img data-src="{{team_image}}" class="lazy lazy-fadein img-circle" style="width:44px; height:44px;"/></div>' +
-                    '<div class="item-inner">' +
-                    '<div class="item-title-row">' +
-                    '<div class="item-title">{{team_name}}</div>' +
-                    '</div>' +
-                    '<div class="item-subtitle">Administrator: {{created_by}}</div>' +
-                    '</div>' +
-                    '</a>' +
-                    '</li>',
-                height: 73,
+                });
+
+                var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
+                    items: items,
+                    searchAll: function(query, items) {
+                        var found = [];
+                        for (var i = 0; i < items.length; i++) {
+                            if (items[i].team_name.indexOf(query) >= 0 || query.trim() === '') found.push(i);
+                        }
+                        return found;
+                    },
+                    template: '<li>' +
+                        '<a href="#" onclick="getTeamPassword({{team_id}},{{team_admin}},\'{{team_name}}\',\'{{team_password}}\',\'{{team_image}}\')" class="item-link item-content">' +
+                        '<div class="item-media"><img data-src="{{team_image}}" class="lazy lazy-fadein img-circle" style="width:44px; height:44px;"/></div>' +
+                        '<div class="item-inner">' +
+                        '<div class="item-title-row">' +
+                        '<div class="item-title">{{team_name}}</div>' +
+                        '</div>' +
+                        '<div class="item-subtitle">Administrator: {{created_by}}</div>' +
+                        '</div>' +
+                        '</a>' +
+                        '</li>',
+                    height: 73,
+                });
+                myApp.initImagesLazyLoad(page.container);
+                myApp.hideIndicator();
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                myApp.hideIndicator();
+                myApp.alert(AJAX_ERROR_ALERT);
             });
-            myApp.initImagesLazyLoad(page.container);
-            myApp.hideIndicator();
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-            myApp.hideIndicator(); 
-            myApp.alert(AJAX_ERROR_ALERT); 
-        });
     } else {
         myApp.alert(NO_INTERNET_ALERT);
     }
@@ -849,26 +959,26 @@ myApp.onPageInit('team-stats', function(page) {
 
     myApp.showIndicator();
     $.getJSON(ENVYP_API_URL + "get_team_stats.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
-        $.each(result, function(i, field) {
-            ppg = field.ppg
-            apg = field.apg
-            fpg = field.fpg
-            yellowcard = field.yellowcard
-            redcard = field.redcard
+            $.each(result, function(i, field) {
+                ppg = field.ppg
+                apg = field.apg
+                fpg = field.fpg
+                yellowcard = field.yellowcard
+                redcard = field.redcard
+            });
+
+            $('#team-ppg').prepend(ppg);
+            $('#team-apg').prepend(apg);
+            $('#team-fpg').prepend(fpg);
+            $('#team-yellowcard').prepend(yellowcard);
+            $('#team-redcard').prepend(redcard);
+
+            myApp.hideIndicator();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator();
+            myApp.alert(AJAX_ERROR_ALERT);
         });
-
-        $('#team-ppg').prepend(ppg);
-        $('#team-apg').prepend(apg);
-        $('#team-fpg').prepend(fpg);
-        $('#team-yellowcard').prepend(yellowcard);
-        $('#team-redcard').prepend(redcard);
-
-        myApp.hideIndicator();
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-        myApp.hideIndicator(); 
-        myApp.alert(AJAX_ERROR_ALERT); 
-    });  
 });
 
 /* ===== Team Management Page ===== */
@@ -914,7 +1024,7 @@ myApp.onPageInit('team-management', function(page) {
 });
 
 /* =====Roster List Page ===== */
-myApp.onPageInit('roster-list', function(page) {
+myApp.onPageInit('roster-list', function(page) { 
     if (localStorage.getItem('selectedLanguage') == '1') {
         $('#lbl-roster-list').append('Roster');
     } else {
@@ -929,50 +1039,54 @@ myApp.onPageInit('roster-list', function(page) {
         var items = [];
         myApp.showIndicator();
         $.getJSON(ENVYP_API_URL + "get_roster_list.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
-            $.each(result, function(i, field) {
-                if (field.status == 'empty') {
-                    myApp.alert('No roster yet :(');
-                } else {
-                    var roster_image = (field.image_url == '' || field.image_url == null ? "img/profile.jpg" : field.image_url);
-                    items.push({
-                        roster_id: field.roster_id,
-                        roster_name: field.name,
-                        roster_image: roster_image,
-                        roster_position: field.position
-                    });
-                }
-            });
-
-            var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
-                items: items,
-                searchAll: function(query, items) {
-                    var found = [];
-                    for (var i = 0; i < items.length; i++) {
-                        if (items[i].roster_name.indexOf(query) >= 0 || query.trim() === '') found.push(i);
+                $.each(result, function(i, field) {
+                    if (field.status == 'empty') {
+                        myApp.alert('No roster yet :(');
+                    } else {
+                        var roster_image = (field.image_url == '' || field.image_url == null ? "img/profile.jpg" : field.image_url);
+                        items.push({
+                            roster_id: field.roster_id,
+                            roster_name: field.name,
+                            roster_image: roster_image,
+                            roster_position: field.position
+                        });
                     }
-                    return found;
-                },
-                template: '<li>' +
-                    '<a href="roster_detail.html?roster_id={{roster_id}}&roster_name={{roster_name}}&roster_position={{roster_position}}&roster_image={{roster_image}}" class="item-link item-content">' +
-                    '<div class="item-media"><img data-src="{{roster_image}}" class="lazy lazy-fadein img-circle" style="width:44px; height:44px;"/></div>' +
-                    '<div class="item-inner">' +
-                    '<div class="item-title-row">' +
-                    '<div class="item-title">{{roster_name}}</div>' +
-                    '</div>' +
-                    '<div class="item-subtitle">{{roster_position}}</div>' +
-                    '</div></a></li>',
-                height: 63,
+                });
+
+                var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
+                    items: items,
+                    searchAll: function(query, items) {
+                        var found = [];
+                        for (var i = 0; i < items.length; i++) {
+                            if (items[i].roster_name.indexOf(query) >= 0 || query.trim() === '') found.push(i);
+                        }
+                        return found;
+                    },
+                    template: '<li>' +
+                        '<a href="roster_detail.html?roster_id={{roster_id}}&roster_name={{roster_name}}&roster_position={{roster_position}}&roster_image={{roster_image}}" class="item-link item-content">' +
+                        '<div class="item-media"><img data-src="{{roster_image}}" class="lazy lazy-fadein img-circle" style="width:44px; height:44px;"/></div>' +
+                        '<div class="item-inner">' +
+                        '<div class="item-title-row">' +
+                        '<div class="item-title">{{roster_name}}</div>' +
+                        '</div>' +
+                        '<div class="item-subtitle">{{roster_position}}</div>' +
+                        '</div></a></li>',
+                    height: 63,
+                });
+                myApp.initImagesLazyLoad(page.container);
+                myApp.hideIndicator();
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                myApp.hideIndicator();
+                myApp.alert(AJAX_ERROR_ALERT);
             });
-            myApp.initImagesLazyLoad(page.container);
-            myApp.hideIndicator();
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-            myApp.hideIndicator(); 
-            myApp.alert(AJAX_ERROR_ALERT); 
-        });
     } else {
         myApp.alert(NO_INTERNET_ALERT);
     }
+
+    $$('#btn-roster-list-refresh').on('click', function() {
+        mainView.router.reloadPage("roster_list.html")
+    });
 });
 
 /* ===== Roster Add Page ===== */
@@ -1095,19 +1209,19 @@ myApp.onPageInit('roster-detail', function(page) {
 
     myApp.showIndicator();
     $.getJSON(ENVYP_API_URL + "get_roster_average_stats.php?roster_id=" + page.query.roster_id, function(result) {
-        $.each(result, function(i, field) {
-            $('#roster-ppg').prepend(field.ppg);
-            $('#roster-apg').prepend(field.apg);
-            $('#roster-fpg').prepend(field.fpg);
-            $('#roster-yellowcard').prepend(field.yellowcard);
-            $('#roster-redcard').prepend(field.redcard);
+            $.each(result, function(i, field) {
+                $('#roster-ppg').prepend(field.ppg);
+                $('#roster-apg').prepend(field.apg);
+                $('#roster-fpg').prepend(field.fpg);
+                $('#roster-yellowcard').prepend(field.yellowcard);
+                $('#roster-redcard').prepend(field.redcard);
+            });
+            myApp.hideIndicator();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator();
+            myApp.alert(AJAX_ERROR_ALERT);
         });
-        myApp.hideIndicator();
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-        myApp.hideIndicator(); 
-        myApp.alert(AJAX_ERROR_ALERT); 
-    });
 
     $$('#btn-edit-roster-detail').on('click', function() {
         mainView.router.loadPage('roster_edit.html?roster_id=' + page.query.roster_id + '&roster_name=' + page.query.roster_name + '&roster_position=' + page.query.roster_position + '&roster_image=' + page.query.roster_image);
@@ -1217,50 +1331,50 @@ myApp.onPageInit('account-list', function(page) {
         var items = [];
         myApp.showIndicator();
         $.getJSON(ENVYP_API_URL + "get_account_list.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
-            $.each(result, function(i, field) {
-                if (field.status == 'empty') {
-                    // myApp.alert('No accounts available :(');
-                } else {
-                    var account_image = (field.image_url == '' || field.image_url == null ? "img/profile.jpg" : field.image_url);
-                    items.push({
-                        account_id: field.account_id,
-                        account_name: field.first_name + " " + field.last_name,
-                        account_image: account_image,
-                        account_description: field.account_description
-                    });
-                }
-            });
-
-            var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
-                items: items,
-                searchAll: function(query, items) {
-                    var found = [];
-                    for (var i = 0; i < items.length; i++) {
-                        if (items[i].account_name.indexOf(query) >= 0 || query.trim() === '') found.push(i);
+                $.each(result, function(i, field) {
+                    if (field.status == 'empty') {
+                        // myApp.alert('No accounts available :(');
+                    } else {
+                        var account_image = (field.image_url == '' || field.image_url == null ? "img/profile.jpg" : field.image_url);
+                        items.push({
+                            account_id: field.account_id,
+                            account_name: field.first_name + " " + field.last_name,
+                            account_image: account_image,
+                            account_description: field.account_description
+                        });
                     }
-                    return found;
-                },
-                template: '<li>' +
-                    '<label class="label-checkbox item-content">' +
-                    '<input id="checkbox-participants" type="checkbox" name="ks-media-checkbox" value="{{account_id}}"/>' +
-                    '<div class="item-media"><img src="{{account_image}}" style="width:44px; height:44px;" height="44"/></div>' +
-                    '<div class="item-inner">' +
-                    '<div class="item-title-row">' +
-                    '<div class="item-title">{{account_name}}</div>' +
-                    '<div class="item-after"><i class="icon icon-form-checkbox"></i></div>' +
-                    '</div>' +
-                    '<div class="item-subtitle">{{account_description}}</div>' +
-                    '</div>' +
-                    '</label>' +
-                    '</li>',
-                height: 73,
+                });
+
+                var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
+                    items: items,
+                    searchAll: function(query, items) {
+                        var found = [];
+                        for (var i = 0; i < items.length; i++) {
+                            if (items[i].account_name.indexOf(query) >= 0 || query.trim() === '') found.push(i);
+                        }
+                        return found;
+                    },
+                    template: '<li>' +
+                        '<label class="label-checkbox item-content">' +
+                        '<input id="checkbox-participants" type="checkbox" name="ks-media-checkbox" value="{{account_id}}"/>' +
+                        '<div class="item-media"><img src="{{account_image}}" style="width:44px; height:44px;" height="44"/></div>' +
+                        '<div class="item-inner">' +
+                        '<div class="item-title-row">' +
+                        '<div class="item-title">{{account_name}}</div>' +
+                        '<div class="item-after"><i class="icon icon-form-checkbox"></i></div>' +
+                        '</div>' +
+                        '<div class="item-subtitle">{{account_description}}</div>' +
+                        '</div>' +
+                        '</label>' +
+                        '</li>',
+                    height: 73,
+                });
+                myApp.hideIndicator();
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                myApp.hideIndicator();
+                myApp.alert(AJAX_ERROR_ALERT);
             });
-            myApp.hideIndicator();
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-            myApp.hideIndicator(); 
-            myApp.alert(AJAX_ERROR_ALERT); 
-        });
     } else {
         myApp.alert(NO_INTERNET_ALERT);
     }
@@ -1281,18 +1395,22 @@ myApp.onPageInit('account-list', function(page) {
                     myApp.hideIndicator();
                     if (msg.status == 0) {
                         if (msg.push_ids != '') {
-                          var notificationObj = { contents: {en: "You are invited to join " + localStorage.getItem('selectedTeamName') + " team"},
-                                                  include_player_ids: msg.push_ids};
-                          window.plugins.OneSignal.postNotification(notificationObj,
-                            function(successResponse) {
-                              console.log("Notification Post Success:", successResponse);
-                              alert("Notification Post Success:\n" + JSON.stringify(successResponse));
-                            },
-                            function (failedResponse) {
-                              console.log("Notification Post Failed: ", failedResponse);
-                              alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
-                            }
-                          );
+                            var notificationObj = {
+                                contents: {
+                                    en: "You are invited to join " + localStorage.getItem('selectedTeamName') + " team"
+                                },
+                                include_player_ids: msg.push_ids
+                            };
+                            window.plugins.OneSignal.postNotification(notificationObj,
+                                function(successResponse) {
+                                    console.log("Notification Post Success:", successResponse);
+                                    alert("Notification Post Success:\n" + JSON.stringify(successResponse));
+                                },
+                                function(failedResponse) {
+                                    console.log("Notification Post Failed: ", failedResponse);
+                                    alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
+                                }
+                            );
                         }
                         getParticipantList();
                     } else {
@@ -1325,50 +1443,50 @@ myApp.onPageInit('administrator-list', function(page) {
         var items = [];
         myApp.showIndicator();
         $.getJSON(ENVYP_API_URL + "get_team_participant_list.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
-            $.each(result, function(i, field) {
-                if (field.status == 'empty') {
-                    // myApp.alert('No accounts available :(');
-                } else {
-                    var account_image = (field.image_url == '' || field.image_url == null ? "img/profile.jpg" : field.image_url);
-                    items.push({
-                        account_id: field.account_id,
-                        account_name: field.first_name + " " + field.last_name,
-                        account_image: account_image,
-                        account_description: field.account_description
-                    });
-                }
-            });
-
-            var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
-                items: items,
-                searchAll: function(query, items) {
-                    var found = [];
-                    for (var i = 0; i < items.length; i++) {
-                        if (items[i].account_name.indexOf(query) >= 0 || query.trim() === '') found.push(i);
+                $.each(result, function(i, field) {
+                    if (field.status == 'empty') {
+                        // myApp.alert('No accounts available :(');
+                    } else {
+                        var account_image = (field.image_url == '' || field.image_url == null ? "img/profile.jpg" : field.image_url);
+                        items.push({
+                            account_id: field.account_id,
+                            account_name: field.first_name + " " + field.last_name,
+                            account_image: account_image,
+                            account_description: field.account_description
+                        });
                     }
-                    return found;
-                },
-                template: '<li>' +
-                    '<label class="label-checkbox item-content">' +
-                    '<input id="checkbox-administrator" type="checkbox" name="ks-media-checkbox" value="{{account_id}}"/>' +
-                    '<div class="item-media"><img src="{{account_image}}" style="width:44px; height:44px;"/></div>' +
-                    '<div class="item-inner">' +
-                    '<div class="item-title-row">' +
-                    '<div class="item-title">{{account_name}}</div>' +
-                    '<div class="item-after"><i class="icon icon-form-checkbox"></i></div>' +
-                    '</div>' +
-                    '<div class="item-subtitle">{{account_description}}</div>' +
-                    '</div>' +
-                    '</label>' +
-                    '</li>',
-                height: 73,
+                });
+
+                var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
+                    items: items,
+                    searchAll: function(query, items) {
+                        var found = [];
+                        for (var i = 0; i < items.length; i++) {
+                            if (items[i].account_name.indexOf(query) >= 0 || query.trim() === '') found.push(i);
+                        }
+                        return found;
+                    },
+                    template: '<li>' +
+                        '<label class="label-checkbox item-content">' +
+                        '<input id="checkbox-administrator" type="checkbox" name="ks-media-checkbox" value="{{account_id}}"/>' +
+                        '<div class="item-media"><img src="{{account_image}}" style="width:44px; height:44px;"/></div>' +
+                        '<div class="item-inner">' +
+                        '<div class="item-title-row">' +
+                        '<div class="item-title">{{account_name}}</div>' +
+                        '<div class="item-after"><i class="icon icon-form-checkbox"></i></div>' +
+                        '</div>' +
+                        '<div class="item-subtitle">{{account_description}}</div>' +
+                        '</div>' +
+                        '</label>' +
+                        '</li>',
+                    height: 73,
+                });
+                myApp.hideIndicator();
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                myApp.hideIndicator();
+                myApp.alert(AJAX_ERROR_ALERT);
             });
-            myApp.hideIndicator();
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-            myApp.hideIndicator(); 
-            myApp.alert(AJAX_ERROR_ALERT); 
-        });
     } else {
         myApp.alert(NO_INTERNET_ALERT);
     }
@@ -1526,50 +1644,54 @@ myApp.onPageInit('tournament-list', function(page) {
         var items = [];
         myApp.showIndicator();
         $.getJSON(ENVYP_API_URL + "get_tournament_list.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
-            $.each(result, function(i, field) {
-                if (field.status == 'empty') {
-                    myApp.alert('No tournament yet :(');
-                } else {
-                    var tournament_image = (field.image_url == '' || field.image_url == null ? "img/icon-basketball.png" : field.image_url);
-                    items.push({
-                        tournament_id: field.tournament_id,
-                        opponent: field.opponent,
-                        tournament_date: field.tournament_date,
-                        tournament_image: tournament_image
-                    });
-                }
-            });
-
-            var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
-                items: items,
-                searchAll: function(query, items) {
-                    var found = [];
-                    for (var i = 0; i < items.length; i++) {
-                        if (items[i].roster_name.indexOf(query) >= 0 || query.trim() === '') found.push(i);
+                $.each(result, function(i, field) {
+                    if (field.status == 'empty') {
+                        myApp.alert('No tournament yet :(');
+                    } else {
+                        var tournament_image = (field.image_url == '' || field.image_url == null ? "img/icon-basketball.png" : field.image_url);
+                        items.push({
+                            tournament_id: field.tournament_id,
+                            opponent: field.opponent,
+                            tournament_date: field.tournament_date,
+                            tournament_image: tournament_image
+                        });
                     }
-                    return found;
-                },
-                template: '<li>' +
-                    '<a href="tournament_detail.html?tournament_id={{tournament_id}}" class="item-link item-content">' +
-                    '<div class="item-media"><img data-src="{{tournament_image}}" style="width:44px; height:44px;" class="img-circle lazy lazy-fadein"/></div>' +
-                    '<div class="item-inner">' +
-                    '<div class="item-title-row">' +
-                    '<div class="item-title">{{opponent}}</div>' +
-                    '</div>' +
-                    '<div class="item-subtitle">{{tournament_date}}</div>' +
-                    '</div></a></li>',
-                height: 76,
+                });
+
+                var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
+                    items: items,
+                    searchAll: function(query, items) {
+                        var found = [];
+                        for (var i = 0; i < items.length; i++) {
+                            if (items[i].roster_name.indexOf(query) >= 0 || query.trim() === '') found.push(i);
+                        }
+                        return found;
+                    },
+                    template: '<li>' +
+                        '<a href="tournament_detail.html?tournament_id={{tournament_id}}" class="item-link item-content">' +
+                        '<div class="item-media"><img data-src="{{tournament_image}}" style="width:44px; height:44px;" class="img-circle lazy lazy-fadein"/></div>' +
+                        '<div class="item-inner">' +
+                        '<div class="item-title-row">' +
+                        '<div class="item-title">{{opponent}}</div>' +
+                        '</div>' +
+                        '<div class="item-subtitle">{{tournament_date}}</div>' +
+                        '</div></a></li>',
+                    height: 76,
+                });
+                myApp.initImagesLazyLoad(page.container);
+                myApp.hideIndicator();
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                myApp.hideIndicator();
+                myApp.alert(AJAX_ERROR_ALERT);
             });
-            myApp.initImagesLazyLoad(page.container);
-            myApp.hideIndicator();
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-            myApp.hideIndicator(); 
-            myApp.alert(AJAX_ERROR_ALERT); 
-        });
     } else {
         myApp.alert(NO_INTERNET_ALERT);
     }
+
+    $$('#btn-tournament-list-refresh').on('click', function() {
+        mainView.router.reloadPage("tournament_list.html")
+    });
 });
 
 /* =====Tournament Detail Page ===== */
@@ -1691,83 +1813,83 @@ myApp.onPageInit('tournament-detail', function(page) {
 
     myApp.showIndicator();
     $.getJSON(ENVYP_API_URL + "get_tournament_stats.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
-        $.each(result, function(i, field) {
-            team_name = localStorage.getItem('selectedTeamName');
-            team_points = field.team_points;
-            team_assists = field.team_assists;
-            team_fouls = field.team_fouls;
-            team_yellowcard = field.team_yellowcard;
-            team_redcard = field.team_redcard;
-            opponent_name = field.opponent;
-            opponent_points = field.opponent_points;
-            opponent_assists = field.opponent_assists;
-            opponent_fouls = field.opponent_fouls;
-            opponent_yellowcard = field.opponent_yellowcard;
-            opponent_redcard = field.opponent_redcard;
-            win = field.win;
-            lose = field.lose;
-            draw = field.draw;
-            status = field.tournament_status;
-            voting_status = field.voting_status;
-            team_image = field.team_image;
-            opponent_image = field.opponent_image;
+            $.each(result, function(i, field) {
+                team_name = localStorage.getItem('selectedTeamName');
+                team_points = field.team_points;
+                team_assists = field.team_assists;
+                team_fouls = field.team_fouls;
+                team_yellowcard = field.team_yellowcard;
+                team_redcard = field.team_redcard;
+                opponent_name = field.opponent;
+                opponent_points = field.opponent_points;
+                opponent_assists = field.opponent_assists;
+                opponent_fouls = field.opponent_fouls;
+                opponent_yellowcard = field.opponent_yellowcard;
+                opponent_redcard = field.opponent_redcard;
+                win = field.win;
+                lose = field.lose;
+                draw = field.draw;
+                status = field.tournament_status;
+                voting_status = field.voting_status;
+                team_image = field.team_image;
+                opponent_image = field.opponent_image;
+            });
+
+            var lbl_game = (status == 0 ? "End game" : "Game ended");
+            var lbl_voting = (voting_status == 0 ? "End vote" : "Vote result");
+
+            $$('.popop-tournament-options').on('click', function() {
+                var clickedLink = this;
+                var popoverHTML = '<div id="popover-tournament" class="popover">' +
+                    '<div class="popover-inner">' +
+                    '<div class="list-block">' +
+                    '<ul>' +
+                    '<li><a id="btn-end-tournament" href="#" onClick="endTournamentConfirmation(' + status + ');" class="item-link list-button">' + lbl_game + '</li>' +
+                    '<li><a id="btn-end-vote" href="#" onClick="endVoteConfirmation(' + voting_status + ');" class="item-link list-button">' + lbl_voting + '</li>' +
+                    '</ul>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>'
+                myApp.popover(popoverHTML, clickedLink);
+            });
+
+            $$('#team-name').prepend(team_name);
+            $$('#opponent-name').prepend(opponent_name);
+            $$('#team-points').prepend(team_points);
+            $$('#opponent-points').prepend(opponent_points);
+            $$('#team-assists').prepend(team_assists);
+            $$('#opponent-assists').prepend(opponent_assists);
+            $$('#team-fouls').prepend(team_fouls);
+            $$('#opponent-fouls').prepend(opponent_fouls);
+            $$('#team-yellowcard').prepend(team_yellowcard);
+            $$('#opponent-yellowcard').prepend(opponent_yellowcard);
+            $$('#team-redcard').prepend(team_redcard);
+            $$('#opponent-redcard').prepend(opponent_redcard);
+            $$('#tournament-win-lose').prepend('W ' + win + ' - L ' + lose + ' - D ' + draw);
+            $$('#tournament-score').prepend(team_points + ' - ' + opponent_points);
+
+            if (team_image != '' && team_image != undefined) {
+                $$("#img-tournament-det-team-image").attr("src", team_image);
+            }
+
+            if (opponent_image != '' && opponent_image != undefined) {
+                $$("#img-tournament-det-opp-image").attr("src", opponent_image);
+            }
+
+            myApp.initImagesLazyLoad(page.container);
+
+            if (status == '0') {
+                $$('#tournament-status').prepend('Ongoing');
+            } else {
+                $$('#tournament-status').prepend('Final');
+            }
+
+            myApp.hideIndicator();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator();
+            myApp.alert(AJAX_ERROR_ALERT);
         });
-
-        var lbl_game = (status == 0 ? "End game" : "Game ended");
-        var lbl_voting = (voting_status == 0 ? "End vote" : "Vote result");
-
-        $$('.popop-tournament-options').on('click', function () {
-        var clickedLink = this;
-        var popoverHTML = '<div id="popover-tournament" class="popover">'+
-                          '<div class="popover-inner">'+
-                            '<div class="list-block">'+
-                              '<ul>'+
-                              '<li><a id="btn-end-tournament" href="#" onClick="endTournamentConfirmation('+status+');" class="item-link list-button">'+lbl_game+'</li>'+
-                              '<li><a id="btn-end-vote" href="#" onClick="endVoteConfirmation('+voting_status+');" class="item-link list-button">'+lbl_voting+'</li>'+
-                              '</ul>'+
-                            '</div>'+
-                          '</div>'+
-                        '</div>'
-            myApp.popover(popoverHTML, clickedLink);
-        });
-
-        $$('#team-name').prepend(team_name);
-        $$('#opponent-name').prepend(opponent_name);
-        $$('#team-points').prepend(team_points);
-        $$('#opponent-points').prepend(opponent_points);
-        $$('#team-assists').prepend(team_assists);
-        $$('#opponent-assists').prepend(opponent_assists);
-        $$('#team-fouls').prepend(team_fouls);
-        $$('#opponent-fouls').prepend(opponent_fouls);
-        $$('#team-yellowcard').prepend(team_yellowcard);
-        $$('#opponent-yellowcard').prepend(opponent_yellowcard);
-        $$('#team-redcard').prepend(team_redcard);
-        $$('#opponent-redcard').prepend(opponent_redcard);
-        $$('#tournament-win-lose').prepend('W ' + win + ' - L ' + lose + ' - D ' + draw);
-        $$('#tournament-score').prepend(team_points + ' - ' + opponent_points);
-
-        if (team_image != '' && team_image != undefined) {
-            $$("#img-tournament-det-team-image").attr("src", team_image);
-        } 
-
-        if (opponent_image != '' && opponent_image != undefined) {
-            $$("#img-tournament-det-opp-image").attr("src", opponent_image);
-        }
-
-        myApp.initImagesLazyLoad(page.container);
-
-        if (status == '0') {
-            $$('#tournament-status').prepend('Ongoing');
-        } else {
-            $$('#tournament-status').prepend('Final');   
-        }
-
-        myApp.hideIndicator();
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-        myApp.hideIndicator(); 
-        myApp.alert(AJAX_ERROR_ALERT); 
-    });
 
     $$('#btn-edit-team-stats').on('click', function() {
         mainView.router.loadPage('edit_tournament_stats.html?team_name=' + team_name + '&opponent_name=' + opponent_name + '&team_points=' + team_points + '&opponent_points=' + opponent_points + '&team_assists=' + team_assists + '&opponent_assists=' + opponent_assists + '&team_fouls=' + team_fouls + '&opponent_fouls=' + opponent_fouls + '&team_yellowcard=' + team_yellowcard + '&team_redcard=' + team_redcard + '&opponent_yellowcard=' + opponent_yellowcard + '&opponent_redcard=' + opponent_redcard);
@@ -1777,30 +1899,30 @@ myApp.onPageInit('tournament-detail', function(page) {
     // Preload game details
     myApp.showIndicator();
     $.getJSON(ENVYP_API_URL + "get_tournament_detail.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
-        $.each(result, function(i, field) {
-            tournament_opponent = field.opponent;
-            tournament_location = field.location;
-            tournament_date = field.tournament_date;
-            tournament_description = field.description;
-            tournament_image_url = field.image_url;
-            tournament_longitude = field.longitude;
-            tournament_latitude = field.latitude;
-            tournament_formatted_date = field.formatted_date;
+            $.each(result, function(i, field) {
+                tournament_opponent = field.opponent;
+                tournament_location = field.location;
+                tournament_date = field.tournament_date;
+                tournament_description = field.description;
+                tournament_image_url = field.image_url;
+                tournament_longitude = field.longitude;
+                tournament_latitude = field.latitude;
+                tournament_formatted_date = field.formatted_date;
+            });
+
+            // $$("#tournament-background-image").css("background-image", "url(" + (tournament_image_url == '' || tournament_image_url == null ? "img/envyp_logo.png" : tournament_image_url) + ")");
+
+            $$('#txt-opponent-name').prepend(tournament_opponent);
+            $$('#txt-tournament-location').prepend(tournament_location);
+            $$('#txt-tournament-date').prepend(tournament_date);
+            $$('#txt-tournament-description').prepend((tournament_description == '' || tournament_description == null ? "No description" : tournament_description));
+
+            myApp.hideIndicator();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator();
+            myApp.alert(AJAX_ERROR_ALERT);
         });
-
-        // $$("#tournament-background-image").css("background-image", "url(" + (tournament_image_url == '' || tournament_image_url == null ? "img/envyp_logo.png" : tournament_image_url) + ")");
-
-        $$('#txt-opponent-name').prepend(tournament_opponent);
-        $$('#txt-tournament-location').prepend(tournament_location);
-        $$('#txt-tournament-date').prepend(tournament_date);
-        $$('#txt-tournament-description').prepend((tournament_description == '' || tournament_description == null ? "No description" : tournament_description));
-
-        myApp.hideIndicator();
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-        myApp.hideIndicator(); 
-        myApp.alert(AJAX_ERROR_ALERT); 
-    });
 
     $$('#btn-edit-tournament-details').on('click', function() {
         mainView.router.loadPage('tournament_edit.html?tournament_id=' + page.query.tournament_id + '&opponent=' + tournament_opponent + '&location=' + tournament_location + '&date=' + tournament_date + '&description=' + tournament_description + '&image_url=' + tournament_image_url + '&longitude=' + tournament_longitude + '&latitude=' + tournament_latitude + '&formatted_date=' + tournament_formatted_date);
@@ -1811,139 +1933,139 @@ myApp.onPageInit('tournament-detail', function(page) {
     $("#roster_list").empty();
     myApp.showIndicator();
     $.getJSON(ENVYP_API_URL + "get_tournament_roster.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
-        $.each(result, function(i, field) {
-            if (field.status == 'empty') {
-                $("#roster_list").append('<li><center><p>No roster</p><center></li>');
-            } else {
-                if (field.image_url == '' || field.image_url == null) {
-                    var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
+            $.each(result, function(i, field) {
+                if (field.status == 'empty') {
+                    $("#roster_list").append('<li><center><p>No roster</p><center></li>');
                 } else {
-                    var image_url = "<img src='" + field.image_url + "' class='img-circle' style='width:44px; height:44px;'>";
+                    if (field.image_url == '' || field.image_url == null) {
+                        var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
+                    } else {
+                        var image_url = "<img src='" + field.image_url + "' class='img-circle' style='width:44px; height:44px;'>";
+                    }
+                    $("#roster_list").append('<li>' +
+                        '<a href="roster_tournament_stats.html?roster_id=' + field.roster_id + '&roster_name=' + field.name + '&roster_position=' + field.position + '&roster_image=' + field.image_url + '" class="item-link item-content">' +
+                        '<div class="item-media">' + image_url + '</div>' +
+                        '<div class="item-inner">' +
+                        '<div class="item-title-row">' +
+                        '<div class="item-title">' + field.name + '</div>' +
+                        '</div>' +
+                        '<div class="item-subtitle">' + field.position + '</div>' +
+                        '</div></a></li>');
                 }
-                $("#roster_list").append('<li>' +
-                    '<a href="roster_tournament_stats.html?roster_id=' + field.roster_id + '&roster_name=' + field.name + '&roster_position=' + field.position + '&roster_image=' + field.image_url + '" class="item-link item-content">' +
-                    '<div class="item-media">' + image_url + '</div>' +
-                    '<div class="item-inner">' +
-                    '<div class="item-title-row">' +
-                    '<div class="item-title">' + field.name + '</div>' +
-                    '</div>' +
-                    '<div class="item-subtitle">' + field.position + '</div>' +
-                    '</div></a></li>');
-            }
-            // myApp.initImagesLazyLoad(page.container);
+                // myApp.initImagesLazyLoad(page.container);
+            });
+            myApp.hideIndicator();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator();
+            myApp.alert(AJAX_ERROR_ALERT);
         });
-        myApp.hideIndicator();
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-        myApp.hideIndicator(); 
-        myApp.alert(AJAX_ERROR_ALERT); 
-    });
     // End Preload roster list
 
     // Preload fine list
     $("#fine_list").empty();
     myApp.showIndicator();
     $.getJSON(ENVYP_API_URL + "get_roster_fine.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
-        $.each(result, function(i, field) {
-            if (field.status == 'empty') {
-                $("#fine_list").append('<li><center><p>No fine</p><center></li>');
-            } else {
-                if (field.image_url == '' || field.image_url == null) {
-                    var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
+            $.each(result, function(i, field) {
+                if (field.status == 'empty') {
+                    $("#fine_list").append('<li><center><p>No fine</p><center></li>');
                 } else {
-                    var image_url = "<img src='" + field.image_url + "' class='img-circle' style='width:44px; height:44px;'>";
+                    if (field.image_url == '' || field.image_url == null) {
+                        var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
+                    } else {
+                        var image_url = "<img src='" + field.image_url + "' class='img-circle' style='width:44px; height:44px;'>";
+                    }
+                    $("#fine_list").append('<li><a href="fine_detail.html?name=' + field.name + '&image_url=' + field.image_url + '&price=' + field.price + '&description=' + field.fine + '" class="item-link item-content">' +
+                        '<div class="item-media">' + image_url + '</div>' +
+                        '<div class="item-inner">' +
+                        '<div class="item-title-row">' +
+                        '<div class="item-title">' + field.name + '</div>' +
+                        '<div class="item-after">$' + field.price + '</div>' +
+                        '</div>' +
+                        '<div class="item-subtitle"></div>' +
+                        '<div class="item-text">' + field.fine + '</div>' +
+                        '</div></a></li>');
                 }
-                $("#fine_list").append('<li><a href="fine_detail.html?name=' + field.name + '&image_url=' + field.image_url + '&price=' + field.price + '&description=' + field.fine + '" class="item-link item-content">' +
-                    '<div class="item-media">' + image_url + '</div>' +
-                    '<div class="item-inner">' +
-                    '<div class="item-title-row">' +
-                    '<div class="item-title">' + field.name + '</div>' +
-                    '<div class="item-after">$' + field.price + '</div>' +
-                    '</div>' +
-                    '<div class="item-subtitle"></div>' +
-                    '<div class="item-text">' + field.fine + '</div>' +
-                    '</div></a></li>');
-            }
-            // myApp.initImagesLazyLoad(page.container);
+                // myApp.initImagesLazyLoad(page.container);
+            });
+            myApp.hideIndicator();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator();
+            myApp.alert(AJAX_ERROR_ALERT);
         });
-        myApp.hideIndicator();
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-        myApp.hideIndicator(); 
-        myApp.alert(AJAX_ERROR_ALERT); 
-    });
     // End Preload roster list
 
     // Preload vote stats
     $.getJSON(ENVYP_API_URL + "check_if_already_voted.php?tournament_id=" + localStorage.getItem('selectedTournamentId') + "&account_id=" + localStorage.getItem('account_id'), function(result) {
-        $.each(result, function(i, field) {
-            if (field.status == true) {
+            $.each(result, function(i, field) {
+                if (field.status == true) {
+                    $$('#div-vote-add').hide();
+                    $$('#div-vote-result').show();
+                } else {
+                    $$('#div-vote-add').show();
+                    $$('#div-vote-result').hide();
+                }
+            });
+
+            if (voting_status == 1) {
                 $$('#div-vote-add').hide();
                 $$('#div-vote-result').show();
-            } else {
-                $$('#div-vote-add').show();
-                $$('#div-vote-result').hide();
             }
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator();
+            myApp.alert(AJAX_ERROR_ALERT);
         });
-
-        if (voting_status == 1) {
-            $$('#div-vote-add').hide();
-            $$('#div-vote-result').show();
-        } 
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-        myApp.hideIndicator(); 
-        myApp.alert(AJAX_ERROR_ALERT); 
-    });
 
     $("#vote_list").empty();
     myApp.showIndicator();
     $.getJSON(ENVYP_API_URL + "get_roster_vote_list.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
-        $.each(result, function(i, field) {
-            if (field.status == 'empty') {
-                $("#vote_list").append('<li><center><p>No votes</p><center></li>');
-            } else {
-                if (field.image_url == '' || field.image_url == null) {
-                    var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
+            $.each(result, function(i, field) {
+                if (field.status == 'empty') {
+                    $("#vote_list").append('<li><center><p>No votes</p><center></li>');
                 } else {
-                    var image_url = "<img src='" + field.image_url + "' class='img-circle' style='width:44px; height:44px;'>";
+                    if (field.image_url == '' || field.image_url == null) {
+                        var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
+                    } else {
+                        var image_url = "<img src='" + field.image_url + "' class='img-circle' style='width:44px; height:44px;'>";
+                    }
+                    $("#vote_list").append('<li>' +
+                        '<div class="item-content">' +
+                        '<div class="item-media">' + image_url + '</div>' +
+                        '<div class="item-inner">' +
+                        '<div class="item-title">' + field.name + '</div>' +
+                        '<div class="item-after">Votes: ' + field.votes + '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</li>');
                 }
-                $("#vote_list").append('<li>' +
-                    '<div class="item-content">' +
-                    '<div class="item-media">' + image_url + '</div>' +
-                    '<div class="item-inner">' +
-                    '<div class="item-title">' + field.name + '</div>' +
-                    '<div class="item-after">Votes: ' + field.votes + '</div>' +
-                    '</div>' +
-                    '</div>' +
-                    '</li>');
-            }
-            // myApp.initImagesLazyLoad(page.container);
+                // myApp.initImagesLazyLoad(page.container);
+            });
+            myApp.hideIndicator();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator();
+            myApp.alert(AJAX_ERROR_ALERT);
         });
-        myApp.hideIndicator();
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-        myApp.hideIndicator(); 
-        myApp.alert(AJAX_ERROR_ALERT); 
-    });
 
     $("#select-vote-list").empty();
     myApp.showIndicator();
     $.getJSON(ENVYP_API_URL + "get_tournament_roster.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
-        $("#select-vote-list").prepend('<option value="" selected="selected">Select a roster</option>');
-        $.each(result, function(i, field) {
-            if (field.status == 'empty') {
-                // myApp.alert('No roster yet :(');
-            } else {
-                $("#select-vote-list").append('<option value="' + field.roster_id + '">' + field.name + '</option>');
-            }
+            $("#select-vote-list").prepend('<option value="" selected="selected">Select a roster</option>');
+            $.each(result, function(i, field) {
+                if (field.status == 'empty') {
+                    // myApp.alert('No roster yet :(');
+                } else {
+                    $("#select-vote-list").append('<option value="' + field.roster_id + '">' + field.name + '</option>');
+                }
+            });
+            myApp.hideIndicator();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator();
+            myApp.alert(AJAX_ERROR_ALERT);
         });
-        myApp.hideIndicator();
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-        myApp.hideIndicator(); 
-        myApp.alert(AJAX_ERROR_ALERT); 
-    });
     // End Preload vote
 
     $$('#detail').on('show', function() {
@@ -2001,33 +2123,33 @@ myApp.onPageInit('tournament-detail', function(page) {
                         $("#vote_list").empty();
                         myApp.showIndicator();
                         $.getJSON(ENVYP_API_URL + "get_roster_vote_list.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
-                            $.each(result, function(i, field) {
-                                if (field.status == 'empty') {
-                                    $("#vote_list").append('<li><center><p>No votes</p><center></li>');
-                                } else {
-                                    if (field.image_url == '' || field.image_url == null) {
-                                        var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
+                                $.each(result, function(i, field) {
+                                    if (field.status == 'empty') {
+                                        $("#vote_list").append('<li><center><p>No votes</p><center></li>');
                                     } else {
-                                        var image_url = "<img src='" + field.image_url + "' class='img-circle' style='width:44px; height:44px;'>";
+                                        if (field.image_url == '' || field.image_url == null) {
+                                            var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
+                                        } else {
+                                            var image_url = "<img src='" + field.image_url + "' class='img-circle' style='width:44px; height:44px;'>";
+                                        }
+                                        $("#vote_list").append('<li>' +
+                                            '<div class="item-content">' +
+                                            '<div class="item-media">' + image_url + '</div>' +
+                                            '<div class="item-inner">' +
+                                            '<div class="item-title">' + field.name + '</div>' +
+                                            '<div class="item-after">Votes: ' + field.votes + '</div>' +
+                                            '</div>' +
+                                            '</div>' +
+                                            '</li>');
                                     }
-                                    $("#vote_list").append('<li>' +
-                                        '<div class="item-content">' +
-                                        '<div class="item-media">' + image_url + '</div>' +
-                                        '<div class="item-inner">' +
-                                        '<div class="item-title">' + field.name + '</div>' +
-                                        '<div class="item-after">Votes: ' + field.votes + '</div>' +
-                                        '</div>' +
-                                        '</div>' +
-                                        '</li>');
-                                }
-                                // myApp.initImagesLazyLoad(page.container);
+                                    // myApp.initImagesLazyLoad(page.container);
+                                });
+                                myApp.hideIndicator();
+                            })
+                            .fail(function(jqXHR, textStatus, errorThrown) {
+                                myApp.hideIndicator();
+                                myApp.alert(AJAX_ERROR_ALERT);
                             });
-                            myApp.hideIndicator();
-                        })
-                        .fail(function(jqXHR, textStatus, errorThrown) {
-                            myApp.hideIndicator(); 
-                            myApp.alert(AJAX_ERROR_ALERT); 
-                        });
                     } else {
                         myApp.alert(msg.message);
                     }
@@ -2045,7 +2167,7 @@ myApp.onPageInit('tournament-detail', function(page) {
 
 function endTournamentConfirmation(status) {
     myApp.closeModal('#popover-tournament');
-    
+
     if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
         myApp.alert('You are not allowed to end the game');
     } else {
@@ -2075,10 +2197,10 @@ function endTournamentConfirmation(status) {
             } else {
                 myApp.alert(NO_INTERNET_ALERT);
             }
-        } 
+        }
     }
 
-    
+
     // else {
     //     myApp.alert('Tournament is already ended!');
     // }
@@ -2086,8 +2208,8 @@ function endTournamentConfirmation(status) {
 
 function endVoteConfirmation(status) {
     myApp.closeModal('#popover-tournament');
-    if (status == 0) {  
-         if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
+    if (status == 0) {
+        if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
             myApp.alert('You are not allowed to end the vote');
         } else {
             mainView.router.loadPage('voting_result.html');
@@ -2096,7 +2218,7 @@ function endVoteConfirmation(status) {
     } else {
         mainView.router.loadPage('voting_result.html');
     }
-    
+
 }
 
 /* ===== Voting Result ===== */
@@ -2143,58 +2265,58 @@ myApp.onPageInit('voting-result', function(page) {
 
     myApp.showIndicator();
     $.getJSON(ENVYP_API_URL + "get_mvp.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
-        $.each(result, function(i, field) {
-            team_name = field.team_name
-            opponent_name = field.opponent_name
-            roster_name = field.roster_name
-            points = field.points
-            assists = field.assists
-            fouls = field.fouls
-            yellowcard = field.yellowcard
-            redcard = field.redcard
-            votes = field.votes
-            roster_image = field.roster_image
+            $.each(result, function(i, field) {
+                team_name = field.team_name
+                opponent_name = field.opponent_name
+                roster_name = field.roster_name
+                points = field.points
+                assists = field.assists
+                fouls = field.fouls
+                yellowcard = field.yellowcard
+                redcard = field.redcard
+                votes = field.votes
+                roster_image = field.roster_image
+            });
+
+            $$("#img-mvp-image").attr("data-src", (roster_image == '' || roster_image == null ? "img/profile.jpg" : roster_image));
+            $$("#img-mvp-image").addClass('lazy lazy-fadein');
+            myApp.initImagesLazyLoad(page.container);
+
+            $$('#mvp-name').prepend(roster_name);
+            $$('#mvp-opponent').prepend('vs ' + opponent_name);
+
+            $$('#mvp-points').prepend(points);
+            $$('#mvp-assists').prepend(assists);
+            $$('#mvp-fouls').prepend(fouls);
+            $$('#mvp-yellowcard').prepend(yellowcard);
+            $$('#mvp-redcard').prepend(redcard);
+            $$('#mvp-votes').prepend(votes);
+
+            localStorage.setItem('mvp_team_name', team_name);
+            localStorage.setItem('mvp_opponent_name', opponent_name);
+            localStorage.setItem('mvp_roster_name', roster_name);
+            localStorage.setItem('mvp_roster_image', roster_image);
+
+            myApp.hideIndicator();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator();
+            myApp.alert(AJAX_ERROR_ALERT);
         });
 
-        $$("#img-mvp-image").attr("data-src", (roster_image == '' || roster_image == null ? "img/profile.jpg" : roster_image));
-        $$("#img-mvp-image").addClass('lazy lazy-fadein');
-        myApp.initImagesLazyLoad(page.container);
-
-        $$('#mvp-name').prepend(roster_name);
-        $$('#mvp-opponent').prepend('vs ' + opponent_name);
-
-        $$('#mvp-points').prepend(points);
-        $$('#mvp-assists').prepend(assists);
-        $$('#mvp-fouls').prepend(fouls);
-        $$('#mvp-yellowcard').prepend(yellowcard);
-        $$('#mvp-redcard').prepend(redcard);
-        $$('#mvp-votes').prepend(votes);
-
-        localStorage.setItem('mvp_team_name',team_name);
-        localStorage.setItem('mvp_opponent_name',opponent_name);
-        localStorage.setItem('mvp_roster_name',roster_name);
-        localStorage.setItem('mvp_roster_image',roster_image);
-
-        myApp.hideIndicator();
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-        myApp.hideIndicator(); 
-        myApp.alert(AJAX_ERROR_ALERT); 
-    });
-
-    $$('.popop-voting-result').on('click', function () {
-      var clickedLink = this;
-      var popoverHTML = '<div id="popover-tournament" class="popover">'+
-                          '<div class="popover-inner">'+
-                            '<div class="list-block">'+
-                              '<ul>'+
-                              '<li><a id="btn-fb-share href="#" onClick="shareMVPOnFacebook('+points+','+assists+','+fouls+','+yellowcard+','+redcard+','+votes+');" class="item-link list-button"><img src="img/icon-fb-share.png" style="width:20px; height:20px" /> Facebook</li>'+
-                              // '<li><a id="btn-twitter-share" href="#" onClick="" class="item-link list-button"><img src="img/icon-twitter-share.png" style="width:20px; height:20px" /> Twitter</li>'+
-                              '</ul>'+
-                            '</div>'+
-                          '</div>'+
-                        '</div>'
-      myApp.popover(popoverHTML, clickedLink);
+    $$('.popop-voting-result').on('click', function() {
+        var clickedLink = this;
+        var popoverHTML = '<div id="popover-tournament" class="popover">' +
+            '<div class="popover-inner">' +
+            '<div class="list-block">' +
+            '<ul>' +
+            '<li><a id="btn-fb-share href="#" onClick="shareMVPOnFacebook(' + points + ',' + assists + ',' + fouls + ',' + yellowcard + ',' + redcard + ',' + votes + ');" class="item-link list-button"><img src="img/icon-fb-share.png" style="width:20px; height:20px" /> Facebook</li>' +
+            // '<li><a id="btn-twitter-share" href="#" onClick="" class="item-link list-button"><img src="img/icon-twitter-share.png" style="width:20px; height:20px" /> Twitter</li>'+
+            '</ul>' +
+            '</div>' +
+            '</div>' +
+            '</div>'
+        myApp.popover(popoverHTML, clickedLink);
     });
 
     $$('#btn-back-tour-det').on('click', function() {
@@ -2202,28 +2324,28 @@ myApp.onPageInit('voting-result', function(page) {
     });
 });
 
- if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('selectedSportID') == 4) {
-        $('#li-mvp-fouls').hide();
-        $('#lbl-mvp-points').append('goals/mål');
-        $('#lbl-mvp-assists').append('assists');
-        $('#lbl-mvp-yellowcard').append('yellow card');
-        $('#lbl-mvp-redcard').append('red card');
-        $('#lbl-mvp-votes').append('votes');
-    } else if (localStorage.getItem('selectedSportID') == 2 || localStorage.getItem('selectedSportID') == 5) {
-        $('#li-mvp-yellowcard').hide();
-        $('#li-mvp-redcard').hide();
-        $('#lbl-mvp-points').append('goals/mål');
-        $('#lbl-mvp-assists').append('assists');
-        $('#lbl-mvp-fouls').append('fouls');
-        $('#lbl-mvp-votes').append('votes');
-    } else if (localStorage.getItem('selectedSportID') == 1 || localStorage.getItem('selectedSportID') == 6) {
-        $('#li-mvp-yellowcard').hide();
-        $('#li-mvp-redcard').hide();
-        $('#lbl-mvp-points').append('points');
-        $('#lbl-mvp-assists').append('assists');
-        $('#lbl-mvp-fouls').append('fouls');
-        $('#lbl-mvp-votes').append('votes');
-    }
+if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('selectedSportID') == 4) {
+    $('#li-mvp-fouls').hide();
+    $('#lbl-mvp-points').append('goals/mål');
+    $('#lbl-mvp-assists').append('assists');
+    $('#lbl-mvp-yellowcard').append('yellow card');
+    $('#lbl-mvp-redcard').append('red card');
+    $('#lbl-mvp-votes').append('votes');
+} else if (localStorage.getItem('selectedSportID') == 2 || localStorage.getItem('selectedSportID') == 5) {
+    $('#li-mvp-yellowcard').hide();
+    $('#li-mvp-redcard').hide();
+    $('#lbl-mvp-points').append('goals/mål');
+    $('#lbl-mvp-assists').append('assists');
+    $('#lbl-mvp-fouls').append('fouls');
+    $('#lbl-mvp-votes').append('votes');
+} else if (localStorage.getItem('selectedSportID') == 1 || localStorage.getItem('selectedSportID') == 6) {
+    $('#li-mvp-yellowcard').hide();
+    $('#li-mvp-redcard').hide();
+    $('#lbl-mvp-points').append('points');
+    $('#lbl-mvp-assists').append('assists');
+    $('#lbl-mvp-fouls').append('fouls');
+    $('#lbl-mvp-votes').append('votes');
+}
 
 function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) {
     var description = '';
@@ -2233,11 +2355,11 @@ function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) 
     var roster_image = localStorage.getItem('mvp_roster_image');
 
     if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('selectedSportID') == 4) {
-        description = roster_name + ":\nvotes: "+votes+"\ngoals/mål: "+points+"\nassists: "+assists+"\nyellow card: "+yellowcard+"red card: "+redcard;
+        description = roster_name + ":\nvotes: " + votes + "\ngoals/mål: " + points + "\nassists: " + assists + "\nyellow card: " + yellowcard + "red card: " + redcard;
     } else if (localStorage.getItem('selectedSportID') == 2 || localStorage.getItem('selectedSportID') == 5) {
-        description = roster_name + ":\nvotes: "+votes+"\ngoals/mål: "+points+"\nassists: "+assists+"\nfouls: "+fouls;
+        description = roster_name + ":\nvotes: " + votes + "\ngoals/mål: " + points + "\nassists: " + assists + "\nfouls: " + fouls;
     } else if (localStorage.getItem('selectedSportID') == 1 || localStorage.getItem('selectedSportID') == 6) {
-        description = roster_name + ":\nvotes: "+votes+"\npoints: "+points+"\nassists: "+assists+"\nfouls: "+fouls;
+        description = roster_name + ":\nvotes: " + votes + "\npoints: " + points + "\nassists: " + assists + "\nfouls: " + fouls;
     }
 
     facebookConnectPlugin.showDialog({
@@ -2247,12 +2369,11 @@ function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) 
         description: description,
         picture: 'http://meanstars.com/profile/134.jpg',
         share_feedWeb: true
-      }, function (response) {
+    }, function(response) {
         console.log(response)
-      }, function (response) {
+    }, function(response) {
         console.log(response)
-      }
-    );
+    });
 }
 
 /* =====Tournament Detail Page ===== */
@@ -2423,20 +2544,20 @@ myApp.onPageInit('tournament-fine-add', function(page) {
     $("#select-roster-list").empty();
     myApp.showIndicator();
     $.getJSON(ENVYP_API_URL + "get_tournament_roster.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
-        $("#select-roster-list").prepend('<option value="" selected="selected">Select a roster</option>');
-        $.each(result, function(i, field) {
-            if (field.status == 'empty') {
-                myApp.alert('No roster yet :(');
-            } else {
-                $("#select-roster-list").append('<option value="' + field.roster_id + '">' + field.name + '</option>');
-            }
+            $("#select-roster-list").prepend('<option value="" selected="selected">Select a roster</option>');
+            $.each(result, function(i, field) {
+                if (field.status == 'empty') {
+                    myApp.alert('No roster yet :(');
+                } else {
+                    $("#select-roster-list").append('<option value="' + field.roster_id + '">' + field.name + '</option>');
+                }
+            });
+            myApp.hideIndicator();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator();
+            myApp.alert(AJAX_ERROR_ALERT);
         });
-        myApp.hideIndicator();
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-        myApp.hideIndicator(); 
-        myApp.alert(AJAX_ERROR_ALERT); 
-    });
 
     $$('#btn-add-fine').on('click', function() {
         if (checkInternetConnection() == true) {
@@ -2477,34 +2598,34 @@ myApp.onPageInit('tournament-fine-add', function(page) {
                         $("#fine_list").empty();
                         myApp.showIndicator();
                         $.getJSON(ENVYP_API_URL + "get_roster_fine.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
-                            $.each(result, function(i, field) {
-                                if (field.status == 'empty') {
-                                    $("#fine_list").append('<li><center><p>No fine</p><center></li>');
-                                } else {
-                                    if (field.image_url == '' || field.image_url == null) {
-                                        var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
+                                $.each(result, function(i, field) {
+                                    if (field.status == 'empty') {
+                                        $("#fine_list").append('<li><center><p>No fine</p><center></li>');
                                     } else {
-                                        var image_url = "<img src='" + field.image_url + "' class='img-circle' style='width:44px; height:44px;'>";
+                                        if (field.image_url == '' || field.image_url == null) {
+                                            var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
+                                        } else {
+                                            var image_url = "<img src='" + field.image_url + "' class='img-circle' style='width:44px; height:44px;'>";
+                                        }
+                                        $("#fine_list").append('<li><a href="fine_detail.html?name=' + field.name + '&image_url=' + field.image_url + '&price=' + field.price + '&description=' + field.fine + '" class="item-link item-content">' +
+                                            '<div class="item-media">' + image_url + '</div>' +
+                                            '<div class="item-inner">' +
+                                            '<div class="item-title-row">' +
+                                            '<div class="item-title">' + field.name + '</div>' +
+                                            '<div class="item-after">$' + field.price + '</div>' +
+                                            '</div>' +
+                                            '<div class="item-subtitle"></div>' +
+                                            '<div class="item-text">' + field.fine + '</div>' +
+                                            '</div></a></li>');
                                     }
-                                    $("#fine_list").append('<li><a href="fine_detail.html?name=' + field.name + '&image_url=' + field.image_url + '&price=' + field.price + '&description=' + field.fine + '" class="item-link item-content">' +
-                                        '<div class="item-media">' + image_url + '</div>' +
-                                        '<div class="item-inner">' +
-                                        '<div class="item-title-row">' +
-                                        '<div class="item-title">' + field.name + '</div>' +
-                                        '<div class="item-after">$' + field.price + '</div>' +
-                                        '</div>' +
-                                        '<div class="item-subtitle"></div>' +
-                                        '<div class="item-text">' + field.fine + '</div>' +
-                                        '</div></a></li>');
-                                }
-                                // myApp.initImagesLazyLoad(page.container);
+                                    // myApp.initImagesLazyLoad(page.container);
+                                });
+                                myApp.hideIndicator();
+                            })
+                            .fail(function(jqXHR, textStatus, errorThrown) {
+                                myApp.hideIndicator();
+                                myApp.alert(AJAX_ERROR_ALERT);
                             });
-                            myApp.hideIndicator();
-                        })
-                        .fail(function(jqXHR, textStatus, errorThrown) {
-                            myApp.hideIndicator(); 
-                            myApp.alert(AJAX_ERROR_ALERT); 
-                        });
                     } else {
                         myApp.alert(msg.message);
                     }
@@ -2551,7 +2672,7 @@ myApp.onPageInit('roster-tournament-stats', function(page) {
         $('#lbl-roster-tournament-votes').append('votes');
     }
 
-     if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
+    if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
         $('#btn-edit-roster-stats').hide();
     }
 
@@ -2571,28 +2692,28 @@ myApp.onPageInit('roster-tournament-stats', function(page) {
 
     myApp.showIndicator();
     $.getJSON(ENVYP_API_URL + "get_roster_tournament_stats.php?tournament_id=" + localStorage.getItem('selectedTournamentId') + '&roster_id=' + page.query.roster_id, function(result) {
-        $.each(result, function(i, field) {
-            points = field.points
-            assists = field.assists
-            fouls = field.fouls
-            yellowcard = field.yellowcard
-            redcard = field.redcard
-            votes = field.votes
+            $.each(result, function(i, field) {
+                points = field.points
+                assists = field.assists
+                fouls = field.fouls
+                yellowcard = field.yellowcard
+                redcard = field.redcard
+                votes = field.votes
+            });
+
+            $$('#roster-points').prepend(points);
+            $$('#roster-assists').prepend(assists);
+            $$('#roster-fouls').prepend(fouls);
+            $$('#roster-yellowcard').prepend(yellowcard);
+            $$('#roster-redcard').prepend(redcard);
+            $$('#roster-votes').prepend(votes);
+
+            myApp.hideIndicator();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator();
+            myApp.alert(AJAX_ERROR_ALERT);
         });
-
-        $$('#roster-points').prepend(points);
-        $$('#roster-assists').prepend(assists);
-        $$('#roster-fouls').prepend(fouls);
-        $$('#roster-yellowcard').prepend(yellowcard);
-        $$('#roster-redcard').prepend(redcard);
-        $$('#roster-votes').prepend(votes);
-
-        myApp.hideIndicator();
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-        myApp.hideIndicator(); 
-        myApp.alert(AJAX_ERROR_ALERT); 
-    });
 
     $$('#btn-edit-roster-stats').on('click', function() {
         // mainView.router.loadPage('edit_roster_tournament_stats.html?roster_image=' + page.query.roster_image + '&roster_id=' + page.query.roster_id + '&roster_name=' + page.query.roster_name + '&roster_position=' + page.query.roster_position + '&points=' + points + '&assists=' + assists + '&fouls=' + fouls);
@@ -2898,50 +3019,50 @@ myApp.onPageInit('tournament-roster-list', function(page) {
         var items = [];
         myApp.showIndicator();
         $.getJSON(ENVYP_API_URL + "get_tournament_roster_list.php?tournament_id=" + localStorage.getItem('selectedTournamentId') + "&team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
-            $.each(result, function(i, field) {
-                if (field.status == 'empty') {
-                    myApp.alert('No roster available :(');
-                } else {
-                    var roster_image = (field.image_url == '' || field.image_url == null ? "img/profile.jpg" : field.image_url);
-                    items.push({
-                        roster_id: field.roster_id,
-                        roster_name: field.roster_name,
-                        roster_position: field.roster_position,
-                        roster_image: roster_image
-                    });
-                }
-            });
-
-            var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
-                items: items,
-                searchAll: function(query, items) {
-                    var found = [];
-                    for (var i = 0; i < items.length; i++) {
-                        if (items[i].roster_name.indexOf(query) >= 0 || query.trim() === '') found.push(i);
+                $.each(result, function(i, field) {
+                    if (field.status == 'empty') {
+                        myApp.alert('No roster available :(');
+                    } else {
+                        var roster_image = (field.image_url == '' || field.image_url == null ? "img/profile.jpg" : field.image_url);
+                        items.push({
+                            roster_id: field.roster_id,
+                            roster_name: field.roster_name,
+                            roster_position: field.roster_position,
+                            roster_image: roster_image
+                        });
                     }
-                    return found;
-                },
-                template: '<li>' +
-                    '<label class="label-checkbox item-content">' +
-                    '<input id="checkbox-roster" type="checkbox" name="ks-media-checkbox" value="{{roster_id}}"/>' +
-                    '<div class="item-media"><img src="{{roster_image}}" class="img-circle" style="width:44px; height:44px;"/></div>' +
-                    '<div class="item-inner">' +
-                    '<div class="item-title-row">' +
-                    '<div class="item-title">{{roster_name}}</div>' +
-                    '<div class="item-after"><i class="icon icon-form-checkbox"></i></div>' +
-                    '</div>' +
-                    '<div class="item-subtitle">{{roster_position}}</div>' +
-                    '</div>' +
-                    '</label>' +
-                    '</li>',
-                height: 73,
+                });
+
+                var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
+                    items: items,
+                    searchAll: function(query, items) {
+                        var found = [];
+                        for (var i = 0; i < items.length; i++) {
+                            if (items[i].roster_name.indexOf(query) >= 0 || query.trim() === '') found.push(i);
+                        }
+                        return found;
+                    },
+                    template: '<li>' +
+                        '<label class="label-checkbox item-content">' +
+                        '<input id="checkbox-roster" type="checkbox" name="ks-media-checkbox" value="{{roster_id}}"/>' +
+                        '<div class="item-media"><img src="{{roster_image}}" class="img-circle" style="width:44px; height:44px;"/></div>' +
+                        '<div class="item-inner">' +
+                        '<div class="item-title-row">' +
+                        '<div class="item-title">{{roster_name}}</div>' +
+                        '<div class="item-after"><i class="icon icon-form-checkbox"></i></div>' +
+                        '</div>' +
+                        '<div class="item-subtitle">{{roster_position}}</div>' +
+                        '</div>' +
+                        '</label>' +
+                        '</li>',
+                    height: 73,
+                });
+                myApp.hideIndicator();
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                myApp.hideIndicator();
+                myApp.alert(AJAX_ERROR_ALERT);
             });
-            myApp.hideIndicator();
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-            myApp.hideIndicator(); 
-            myApp.alert(AJAX_ERROR_ALERT); 
-        });
     } else {
         myApp.alert(NO_INTERNET_ALERT);
     }
@@ -2966,37 +3087,37 @@ myApp.onPageInit('tournament-roster-list', function(page) {
                         $("#roster_list").empty();
                         myApp.showIndicator();
                         $.getJSON(ENVYP_API_URL + "get_tournament_roster.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
-                            $.each(result, function(i, field) {
-                                if (field.status == 'empty') {
-                                    $("#roster_list").append('<li><center><p>No roster</p><center></li>');
-                                } else {
-                                    if (field.image_url == '' || field.image_url == null) {
-                                        var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
+                                $.each(result, function(i, field) {
+                                    if (field.status == 'empty') {
+                                        $("#roster_list").append('<li><center><p>No roster</p><center></li>');
                                     } else {
-                                        var image_url = "<img src='" + field.image_url + "' class='img-circle' style='width:44px; height:44px;'>";
+                                        if (field.image_url == '' || field.image_url == null) {
+                                            var image_url = "<img src='img/profile.jpg' class='img-circle' style='width:44px; height:44px;'>";
+                                        } else {
+                                            var image_url = "<img src='" + field.image_url + "' class='img-circle' style='width:44px; height:44px;'>";
+                                        }
+                                        $("#roster_list").append('<li>' +
+                                            '<a href="roster_tournament_stats.html?roster_id=' + field.roster_id + '&roster_name=' + field.name + '&roster_position=' + field.position + '&roster_image=' + field.image_url + '" class="item-link item-content">' +
+                                            '<div class="item-media">' + image_url + '</div>' +
+                                            '<div class="item-inner">' +
+                                            '<div class="item-title-row">' +
+                                            '<div class="item-title">' + field.name + '</div>' +
+                                            '</div>' +
+                                            '<div class="item-subtitle">' + field.position + '</div>' +
+                                            '</div></a></li>');
                                     }
-                                    $("#roster_list").append('<li>' +
-                                        '<a href="roster_tournament_stats.html?roster_id=' + field.roster_id + '&roster_name=' + field.name + '&roster_position=' + field.position + '&roster_image=' + field.image_url + '" class="item-link item-content">' +
-                                        '<div class="item-media">' + image_url + '</div>' +
-                                        '<div class="item-inner">' +
-                                        '<div class="item-title-row">' +
-                                        '<div class="item-title">' + field.name + '</div>' +
-                                        '</div>' +
-                                        '<div class="item-subtitle">' + field.position + '</div>' +
-                                        '</div></a></li>');
-                                }
-                                // myApp.initImagesLazyLoad(page.container);
+                                    // myApp.initImagesLazyLoad(page.container);
+                                });
+                                myApp.hideIndicator();
+                            })
+                            .fail(function(jqXHR, textStatus, errorThrown) {
+                                myApp.hideIndicator();
+                                myApp.alert(AJAX_ERROR_ALERT);
                             });
-                            myApp.hideIndicator();
-                        })
-                        .fail(function(jqXHR, textStatus, errorThrown) {
-                            myApp.hideIndicator(); 
-                            myApp.alert(AJAX_ERROR_ALERT); 
-                        });
 
                         $("#select-vote-list").empty();
-                            myApp.showIndicator();
-                            $.getJSON(ENVYP_API_URL + "get_tournament_roster.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
+                        myApp.showIndicator();
+                        $.getJSON(ENVYP_API_URL + "get_tournament_roster.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
                                 $("#select-vote-list").prepend('<option value="" selected="selected">Select a roster</option>');
                                 $.each(result, function(i, field) {
                                     if (field.status == 'empty') {
@@ -3008,8 +3129,8 @@ myApp.onPageInit('tournament-roster-list', function(page) {
                                 myApp.hideIndicator();
                             })
                             .fail(function(jqXHR, textStatus, errorThrown) {
-                                myApp.hideIndicator(); 
-                                myApp.alert(AJAX_ERROR_ALERT); 
+                                myApp.hideIndicator();
+                                myApp.alert(AJAX_ERROR_ALERT);
                             });
                     } else {
                         myApp.alert(msg.message);
@@ -3402,7 +3523,7 @@ function chooseLanguage() {
                 $('#lbl-team-participants').prepend('Deltagere');
                 $('#lbl-team-administrators').empty();
                 $('#lbl-team-administrators').prepend('Administratorer');
-            }   
+            }
         }, {
             text: 'Cancel',
             onClick: function() {}
@@ -3437,7 +3558,7 @@ function attachTeamImage(imageURI) {
 
 function attachEditTeamImage(imageURI) {
     imgfile = imageURI
-    $$("#edit-team-image").attr("src", imgfile);
+    $$("#team-edit-image").attr("src", imgfile);
 }
 
 function attachProfileImage(imageURI) {
@@ -3528,7 +3649,7 @@ function getParticipantList() {
         $("#list-view-participants").prepend('<li>' +
             '<div class="item-content">' +
             '<div class="item-inner">' +
-            '<div class="item-title"><a href="account_list.html" class="link"><font size="2">'+lbl_add_participant+'</font></a></div>' +
+            '<div class="item-title"><a href="account_list.html" class="link"><font size="2">' + lbl_add_participant + '</font></a></div>' +
             '</div>' +
             '</div>' +
             '</li>');
@@ -3537,41 +3658,41 @@ function getParticipantList() {
     var items = [];
     myApp.showIndicator();
     $.getJSON(ENVYP_API_URL + "get_participant_list.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
-        $.each(result, function(i, field) {
-            if (field.status == 'empty') {
-                $("#list-view-participants").append('<li>' +
-                    '<div class="item-content">' +
-                    '<div class="item-inner">' +
-                    '<div class="item-title"><font size="2">No participants</font></div>' +
-                    '</div>' +
-                    '</div>' +
-                    '</li>');
-            } else {
-                var account_image = (field.image_url == '' || field.image_url == null ? "img/profile.jpg" : field.image_url);
-                $("#list-view-participants").append('<li>' +
-                    '<div class="item-content">' +
-                    '<div class="item-media"><img src="' + account_image + '" class="img-circle" style="width:44px; height:44px;"/></div>' +
-                    '<div class="item-inner">' +
-                    '<div class="item-title-row">' +
-                    '<div class="item-title">' + field.first_name + ' ' + field.last_name + '</div>' +
-                    '<div class="item-after"><a href="#" onClick="removeParticipant(' + field.account_id + ');" class="link icon-only link-remove-participant"><i class="fa fa-times" aria-hidden="true"></i></a></div>' +
-                    '</div>' +
-                    '<div class="item-subtitle">' + field.account_description + '</div>' +
-                    '</div>' +
-                    '</div>' +
-                    '</li>');
-            }
+            $.each(result, function(i, field) {
+                if (field.status == 'empty') {
+                    $("#list-view-participants").append('<li>' +
+                        '<div class="item-content">' +
+                        '<div class="item-inner">' +
+                        '<div class="item-title"><font size="2">No participants</font></div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</li>');
+                } else {
+                    var account_image = (field.image_url == '' || field.image_url == null ? "img/profile.jpg" : field.image_url);
+                    $("#list-view-participants").append('<li>' +
+                        '<div class="item-content">' +
+                        '<div class="item-media"><img src="' + account_image + '" class="img-circle" style="width:44px; height:44px;"/></div>' +
+                        '<div class="item-inner">' +
+                        '<div class="item-title-row">' +
+                        '<div class="item-title">' + field.first_name + ' ' + field.last_name + '</div>' +
+                        '<div class="item-after"><a href="#" onClick="removeParticipant(' + field.account_id + ');" class="link icon-only link-remove-participant"><i class="fa fa-times" aria-hidden="true"></i></a></div>' +
+                        '</div>' +
+                        '<div class="item-subtitle">' + field.account_description + '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</li>');
+                }
 
-            if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
-                $('.link-remove-participant').hide();
-            }
+                if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
+                    $('.link-remove-participant').hide();
+                }
+            });
+            myApp.hideIndicator();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator();
+            myApp.alert(AJAX_ERROR_ALERT);
         });
-        myApp.hideIndicator();
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-        myApp.hideIndicator(); 
-        myApp.alert(AJAX_ERROR_ALERT); 
-    });
 }
 
 function getTeamAdministratorList() {
@@ -3587,7 +3708,7 @@ function getTeamAdministratorList() {
         $("#list-view-administrator").prepend('<li>' +
             '<div class="item-content">' +
             '<div class="item-inner">' +
-            '<div class="item-title"><a href="administrator_list.html" class="link"><font size="2">'+lbl_add_administrator+'</font></a></div>' +
+            '<div class="item-title"><a href="administrator_list.html" class="link"><font size="2">' + lbl_add_administrator + '</font></a></div>' +
             '</div>' +
             '</div>' +
             '</li>');
@@ -3596,41 +3717,41 @@ function getTeamAdministratorList() {
     var items = [];
     myApp.showIndicator();
     $.getJSON(ENVYP_API_URL + "get_team_administrator_list.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
-        $.each(result, function(i, field) {
-            if (field.status == 'empty') {
-                $("#list-view-administrator").append('<li>' +
-                    '<div class="item-content">' +
-                    '<div class="item-inner">' +
-                    '<div class="item-title"><font size="2">No administrator</font></div>' +
-                    '</div>' +
-                    '</div>' +
-                    '</li>');
-            } else {
-                var account_image = (field.image_url == '' || field.image_url == null ? "img/profile.jpg" : field.image_url);
-                $("#list-view-administrator").append('<li>' +
-                    '<div class="item-content">' +
-                    '<div class="item-media"><img src="' + account_image + '" class="img-circle" style="width:44px; height:44px;"/></div>' +
-                    '<div class="item-inner">' +
-                    '<div class="item-title-row">' +
-                    '<div class="item-title">' + field.first_name + ' ' + field.last_name + '</div>' +
-                    '<div class="item-after"><a href="#" onClick="removeAsAdministrator(' + field.account_id + ');" class="link icon-only link-remove-administrator"><i class="fa fa-times" aria-hidden="true"></i></a></div>' +
-                    '</div>' +
-                    '<div class="item-subtitle">' + field.account_description + '</div>' +
-                    '</div>' +
-                    '</div>' +
-                    '</li>');
-            }
+            $.each(result, function(i, field) {
+                if (field.status == 'empty') {
+                    $("#list-view-administrator").append('<li>' +
+                        '<div class="item-content">' +
+                        '<div class="item-inner">' +
+                        '<div class="item-title"><font size="2">No administrator</font></div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</li>');
+                } else {
+                    var account_image = (field.image_url == '' || field.image_url == null ? "img/profile.jpg" : field.image_url);
+                    $("#list-view-administrator").append('<li>' +
+                        '<div class="item-content">' +
+                        '<div class="item-media"><img src="' + account_image + '" class="img-circle" style="width:44px; height:44px;"/></div>' +
+                        '<div class="item-inner">' +
+                        '<div class="item-title-row">' +
+                        '<div class="item-title">' + field.first_name + ' ' + field.last_name + '</div>' +
+                        '<div class="item-after"><a href="#" onClick="removeAsAdministrator(' + field.account_id + ');" class="link icon-only link-remove-administrator"><i class="fa fa-times" aria-hidden="true"></i></a></div>' +
+                        '</div>' +
+                        '<div class="item-subtitle">' + field.account_description + '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</li>');
+                }
 
-            if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
-                $('.link-remove-administrator').hide();
-            }
+                if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
+                    $('.link-remove-administrator').hide();
+                }
+            });
+            myApp.hideIndicator();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            myApp.hideIndicator();
+            myApp.alert(AJAX_ERROR_ALERT);
         });
-        myApp.hideIndicator();
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-        myApp.hideIndicator(); 
-        myApp.alert(AJAX_ERROR_ALERT); 
-    });
 }
 
 function removeParticipant(account_id) {
@@ -3680,17 +3801,15 @@ function removeAsAdministrator(account_id) {
 }
 
 function addPushNotificationID() {
-   if (localStorage.getItem('oneSignalUserId') != '' && localStorage.getItem('oneSignalUserId') != undefined) {
-       $$.ajax({
+    if (localStorage.getItem('oneSignalUserId') != '' && localStorage.getItem('oneSignalUserId') != undefined) {
+        $$.ajax({
             type: "POST",
             url: ENVYP_API_URL + "add_push_notification_id.php",
             data: "account_id=" + localStorage.getItem('account_id') + "&push_id=" + localStorage.getItem('oneSignalUserId'),
             dataType: "json",
-            success: function(msg, string, jqXHR) {
-            },
-            error: function(msg, string, jqXHR) {
-            }
-        }); 
+            success: function(msg, string, jqXHR) {},
+            error: function(msg, string, jqXHR) {}
+        });
     }
 }
 
@@ -3711,34 +3830,38 @@ function clearTeamDetails() {
     $$('#txt-team-name').val('');
     $$('#txt-team-description').val('');
     $$('#txt-team-password').val('');
+    $$('#team-image').attr('src', 'img/envp-icon.png');
     imgfile = '';
 }
 
 function clearEditTeamDetails() {
-    $$('#edit-txt-team-name').val('');
-    $$('#edit-txt-team-description').val('');
+    $$('#txt-team-edit-name').val('');
+    $$('#txt-team-edit-description').val('');
+    $$('#txt-team-edit-password').val('');
+    $$('#team-edit-image').attr('src', 'img/envp-icon.png');
     imgfile = '';
 }
 
 function clearRosterDetails() {
     $$('#txt-roster-name').val('');
     $$('#txt-roster-position').val('');
-    $$('#roster-image').attr('src','img/profile.jpg');
+    $$('#roster-image').attr('src', 'img/profile.jpg');
     imgfile = '';
 }
 
 function clearEditRosterDetails() {
     $$('#edit-txt-roster-name').val('');
     $$('#edit-txt-roster-position').val('');
-    $$('#edit-roster-image').attr('src','img/profile.jpg');
+    $$('#edit-roster-image').attr('src', 'img/profile.jpg');
     imgfile = '';
 }
 
 function clearTournamentDetails() {
     $("#txt-tournament-date").val(new Date().toJSON().slice(0, 16));
     $$('#txt-opponent-name').val('');
+    $$('#txt-tournament-location').val('');
     $$('#txt-tournament-description').val('');
-    $$('#roster-image').attr('src','img/camera-flat.png');
+    $$('#roster-image').attr('src', 'img/camera-flat.png');
     imgfile = '';
 }
 
@@ -3776,41 +3899,40 @@ function checkInternetConnection() {
     // return true;
 }
 
-var fbLoginSuccess = function (userData) {   
+var fbLoginSuccess = function(userData) {
     if (userData.status === 'connected') {
         getFBDetails();
     } else if (userData.status === 'not_authorized') {
 
     } else {
 
-    }   
+    }
 }
 
 function FBLogin() {
-    if (checkInternetConnection() == true ) {
+    if (checkInternetConnection() == true) {
         try {
             facebookConnectPlugin.login(["public_profile"],
                 fbLoginSuccess,
-                function (error) { 
+                function(error) {
                     myApp.alert("[ERROR] fb error 1: " + error);
                 }
             );
-        } catch(err) {
+        } catch (err) {
             myApp.alert('[ERROR] fb error 2: ' + err.message);
-        } 
+        }
     } else {
         myApp.alert(NO_INTERNET_ALERT);
     }
 }
 
 function FBLogout() {
-    facebookConnectPlugin.logout(function(response) {
-    });
+    facebookConnectPlugin.logout(function(response) {});
 }
 
 function getFBDetails() {
-    facebookConnectPlugin.api("me/?fields=id,last_name,first_name,email,birthday",["public_profile"],
-        function (result) {
+    facebookConnectPlugin.api("me/?fields=id,last_name,first_name,email,birthday", ["public_profile"],
+        function(result) {
             $$('#btn-email-login').attr('disabled', true);
             $$('#btn-signup-page').attr('disabled', true);
             $$.ajax({
@@ -3851,7 +3973,8 @@ function getFBDetails() {
                     $$('#btn-signup-page').removeAttr("disabled");
                 }
             });
-        }, function (error) {
+        },
+        function(error) {
             myApp.alert("[ERROR] " + error);
         });
 }
@@ -3861,7 +3984,7 @@ function calcAge(dateString) {
     return ~~((Date.now() - birthday) / (31557600000));
 }
 
-function onBackKeyDown(){
+function onBackKeyDown() {
     try {
         // var view=myApp.getCurrentView();
         // if($$('.popup.popup-login').length){
@@ -3885,22 +4008,22 @@ function onBackKeyDown(){
         // }
 
         if (mainView.activePage.name == 'choose-sports' || mainView.activePage.name == 'main') {
-            myApp.confirm('Do you want to Exit?', 'Exit App',function () {
-                navigator.app.clearHistory(); 
+            myApp.confirm('Do you want to Exit?', 'Exit App', function() {
+                navigator.app.clearHistory();
                 navigator.app.exitApp();
             });
         } else {
-            if($$('.popup.popup-login').length > 0) {
+            if ($$('.popup.popup-login').length > 0) {
                 return false;
-            } else if($$('.popover, .actions-modal, .picker-modal').length > 0) {
-                myApp.closeModal('.popover, .actions-modal, .picker-modal'); 
-            } else if($$('.searchbar.searchbar-active').length > 0) {
+            } else if ($$('.popover, .actions-modal, .picker-modal').length > 0) {
+                myApp.closeModal('.popover, .actions-modal, .picker-modal');
+            } else if ($$('.searchbar.searchbar-active').length > 0) {
                 $$('.searchbar.searchbar-active')[0].f7Searchbar.disable();
-            } else if($$('.photo-browser').length > 0) {
+            } else if ($$('.photo-browser').length > 0) {
                 $$('.photo-browser .photo-browser-close-link, .photo-browser .close-popup').trigger('click');
             } else {
-                myApp.closeModal(); 
-                var view=myApp.getCurrentView();
+                myApp.closeModal();
+                var view = myApp.getCurrentView();
                 view.router.back();
             }
         }
@@ -3909,8 +4032,8 @@ function onBackKeyDown(){
     }
 }
 
-(function ($) {
-    $.fn.focusTextToEnd = function () {
+(function($) {
+    $.fn.focusTextToEnd = function() {
         this.focus();
         var $thisVal = this.val();
         this.val('').val($thisVal);
