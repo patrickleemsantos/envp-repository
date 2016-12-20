@@ -1294,12 +1294,9 @@ myApp.onPageInit('account-list', function(page) {
                           alert(msg.push_ids);
                           var ids = ["5f641669-089e-44cf-b048-02a309f88414"];
                           var notificationObj = { contents: {en: "message body"},
-                                                    include_player_ids: ids,
-                                                    headers: {'Content-Type': 'application/json'}
-                                                };
+                                                  include_player_ids: ids};
                           window.plugins.OneSignal.postNotification(notificationObj,
                             function(successResponse) {
-                              alert("Notification Post Success:", successResponse);
                               console.log("Notification Post Success:", successResponse);
                             },
                             function (failedResponse) {
