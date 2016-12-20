@@ -1304,9 +1304,9 @@ myApp.onPageInit('account-list', function(page) {
                           //     alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
                           //   }
                           // );
-                          window.plugins.OneSignal.getIds(function(ids) {
+                          // window.plugins.OneSignal.getIds(function(ids) {
                               var notificationObj = { contents: {en: "message body"},
-                                                      include_player_ids: [ids.userId]};
+                                                      include_player_ids: msg.push_ids};
                               window.plugins.OneSignal.postNotification(notificationObj,
                                 function(successResponse) {
                                   console.log("Notification Post Success:", successResponse);
@@ -1317,7 +1317,7 @@ myApp.onPageInit('account-list', function(page) {
                                   alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
                                 }
                               );
-                            });
+                            // });
                         }
                         getParticipantList();
                     } else {
