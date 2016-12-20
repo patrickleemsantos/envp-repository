@@ -1310,6 +1310,7 @@ myApp.onPageInit('account-list', function(page) {
                               window.plugins.OneSignal.postNotification(notificationObj,
                                 function(successResponse) {
                                   console.log("Notification Post Success:", successResponse);
+                                  alert("Notification Post Success:\n" + JSON.stringify(successResponse));
                                 },
                                 function (failedResponse) {
                                   console.log("Notification Post Failed: ", failedResponse);
