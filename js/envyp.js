@@ -29,30 +29,23 @@ document.addEventListener('deviceready', function () {
     var notificationOpenedCallback = function(jsonData) {
         console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
     };
+    window.plugins.OneSignal
+        .startInit("536dcb4f-f5f0-4327-adb5-2f70746e20bf", "280176703234")
+        .handleNotificationReceived(function(jsonData) {
+                console.log('Did I receive a notification: ' + JSON.stringify(jsonData));
+                // alert("Notification received:\n" + JSON.stringify(jsonData));
+            })
+        .handleNotificationOpened(function(jsonData) {
+                // alert("Notification opened:\n" + JSON.stringify(jsonData));
+                console.log('didOpenRemoteNotificationCallBack: ' + JSON.stringify(jsonData));   
+            })
+        .endInit();
 
-    // if (localStorage.getItem('oneSignalUserId') == '' || localStorage.getItem('oneSignalUserId') == undefined) {
-        alert('register one signal');
-        window.plugins.OneSignal
-            .startInit("536dcb4f-f5f0-4327-adb5-2f70746e20bf", "280176703234")
-            .handleNotificationReceived(function(jsonData) {
-                    console.log('Did I receive a notification: ' + JSON.stringify(jsonData));
-                    // alert("Notification received:\n" + JSON.stringify(jsonData));
-                })
-            .handleNotificationOpened(function(jsonData) {
-                    // alert("Notification opened:\n" + JSON.stringify(jsonData));
-                    console.log('didOpenRemoteNotificationCallBack: ' + JSON.stringify(jsonData));   
-                })
-            .endInit();
-
-        window.plugins.OneSignal.getIds(function(ids) {
-            localStorage.setItem('oneSignalUserId', ids.userId);
-            localStorage.setItem('oneSignalPushToken', ids.pushToken);
-            // console.log('getIds: ' + JSON.stringify(ids));
-            alert("userId = " + ids.userId + ", pushToken = " + ids.pushToken);
-        });
-    // } else {
-    //     alert('one signal is already registered');
-    // }
+    window.plugins.OneSignal.getIds(function(ids) {
+        localStorage.setItem('oneSignalUserId', ids.userId);
+        localStorage.setItem('oneSignalPushToken', ids.pushToken);
+        console.log('getIds: ' + JSON.stringify(ids));
+    });
 }, false);
 
 document.addEventListener('backbutton', onBackKeyDown, false);
@@ -1288,7 +1281,6 @@ myApp.onPageInit('account-list', function(page) {
                     myApp.hideIndicator();
                     if (msg.status == 0) {
                         if (msg.push_ids != '') {
-                          alert(msg.push_ids);
                           var notificationObj = { contents: {en: "You are invited to join " + localStorage.getItem('selectedTeamName') + " team"},
                                                   include_player_ids: msg.push_ids};
                           window.plugins.OneSignal.postNotification(notificationObj,
