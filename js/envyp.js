@@ -1291,20 +1291,20 @@ myApp.onPageInit('account-list', function(page) {
                     myApp.hideIndicator();
                     if (msg.status == 0) {
                         if (msg.push_ids != '') {
-                              alert(msg.push_ids);
-                              var arr_ids = ["5f641669-089e-44cf-b048-02a309f88414"];
-                              var notificationObj = { contents: {en: "You are invited to join " + localStorage.getItem('selectedTeamName') + " team"},
-                                                  include_player_ids: arr_ids};
-                              window.plugins.OneSignal.postNotification(notificationObj,
-                                function(successResponse) {
-                                  alert("Notification Post Success:", successResponse);
-                                  console.log("Notification Post Success:", successResponse);
-                                },
-                                function (failedResponse) {
-                                  console.log("Notification Post Failed: ", failedResponse);
-                                  alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
-                                }
-                              );
+                          alert(msg.push_ids);
+                          var ids = ["5f641669-089e-44cf-b048-02a309f88414"];
+                          var notificationObj = { contents: {en: "message body"},
+                                              include_player_ids: ids};
+                          window.plugins.OneSignal.postNotification(notificationObj,
+                            function(successResponse) {
+                              alert("Notification Post Success:", successResponse);
+                              console.log("Notification Post Success:", successResponse);
+                            },
+                            function (failedResponse) {
+                              console.log("Notification Post Failed: ", failedResponse);
+                              alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
+                            }
+                          );
                         }
                         getParticipantList();
                     } else {
