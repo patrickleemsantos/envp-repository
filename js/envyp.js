@@ -35,15 +35,12 @@ document.addEventListener('deviceready', function () {
         window.plugins.OneSignal
             .startInit("536dcb4f-f5f0-4327-adb5-2f70746e20bf", "280176703234")
             .handleNotificationReceived(function(jsonData) {
-                // alert("Notification received:\n" + JSON.stringify(jsonData));
-                // console.log('Did I receive a notification: ' + JSON.stringify(jsonData));
-                    mainView.router.loadPage('signup.html');
-                    alert("Notification received:\n" + JSON.stringify(jsonData));
+                    console.log('Did I receive a notification: ' + JSON.stringify(jsonData));
+                    // alert("Notification received:\n" + JSON.stringify(jsonData));
                 })
             .handleNotificationOpened(function(jsonData) {
-                    mainView.router.loadPage('signup.html');
-                    alert("Notification opened:\n" + JSON.stringify(jsonData));
-                    // console.log('didOpenRemoteNotificationCallBack: ' + JSON.stringify(jsonData));   
+                    // alert("Notification opened:\n" + JSON.stringify(jsonData));
+                    console.log('didOpenRemoteNotificationCallBack: ' + JSON.stringify(jsonData));   
                 })
             .endInit();
 
@@ -1292,32 +1289,18 @@ myApp.onPageInit('account-list', function(page) {
                     if (msg.status == 0) {
                         if (msg.push_ids != '') {
                           alert(msg.push_ids);
-                          // var ids = ["5f641669-089e-44cf-b048-02a309f88414"];
-                          // var notificationObj = { contents: {en: "message body"},
-                          //                         include_player_ids: ids};
-                          // window.plugins.OneSignal.postNotification(notificationObj,
-                          //   function(successResponse) {
-                          //     console.log("Notification Post Success:", successResponse);
-                          //   },
-                          //   function (failedResponse) {
-                          //     console.log("Notification Post Failed: ", failedResponse);
-                          //     alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
-                          //   }
-                          // );
-                          // window.plugins.OneSignal.getIds(function(ids) {
-                              var notificationObj = { contents: {en: "message body"},
-                                                      include_player_ids: msg.push_ids};
-                              window.plugins.OneSignal.postNotification(notificationObj,
-                                function(successResponse) {
-                                  console.log("Notification Post Success:", successResponse);
-                                  alert("Notification Post Success:\n" + JSON.stringify(successResponse));
-                                },
-                                function (failedResponse) {
-                                  console.log("Notification Post Failed: ", failedResponse);
-                                  alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
-                                }
-                              );
-                            // });
+                          var notificationObj = { contents: {en: "You are invited to join " + localStorage.getItem('selectedTeamName') + " team"},
+                                                  include_player_ids: msg.push_ids};
+                          window.plugins.OneSignal.postNotification(notificationObj,
+                            function(successResponse) {
+                              console.log("Notification Post Success:", successResponse);
+                              alert("Notification Post Success:\n" + JSON.stringify(successResponse));
+                            },
+                            function (failedResponse) {
+                              console.log("Notification Post Failed: ", failedResponse);
+                              alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
+                            }
+                          );
                         }
                         getParticipantList();
                     } else {
