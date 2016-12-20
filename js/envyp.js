@@ -30,7 +30,7 @@ document.addEventListener('deviceready', function () {
         console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
     };
 
-    if (localStorage.getItem('oneSignalUserId') == '' || localStorage.getItem('oneSignalUserId') == undefined) {
+    // if (localStorage.getItem('oneSignalUserId') == '' || localStorage.getItem('oneSignalUserId') == undefined) {
         alert('register one signal');
         window.plugins.OneSignal
             .startInit("536dcb4f-f5f0-4327-adb5-2f70746e20bf", "280176703234")
@@ -53,9 +53,9 @@ document.addEventListener('deviceready', function () {
             // console.log('getIds: ' + JSON.stringify(ids));
             alert("userId = " + ids.userId + ", pushToken = " + ids.pushToken);
         });
-    } else {
-        alert('one signal is already registered');
-    }
+    // } else {
+    //     alert('one signal is already registered');
+    // }
 }, false);
 
 document.addEventListener('backbutton', onBackKeyDown, false);
