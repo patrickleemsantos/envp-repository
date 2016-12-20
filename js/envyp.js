@@ -773,12 +773,8 @@ myApp.onPageInit('team-edit', function(page) {
                 if (image_url != '') $('#team-edit-image').attr('src',image_url);
                 $('#txt-team-edit-name').attr('value',field.name);
                 $('#txt-team-edit-password').attr('value',field.password);
-                // $('#txt-team-edit-description').attr('value',field.description);
-                // $('#txt-team-edit-name').prepend(field.name);
-                // $('#txt-team-edit-password').prepend(field.password);
                 $('#txt-team-edit-description').prepend(field.description);
             });
-
             myApp.hideIndicator();
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
@@ -816,7 +812,7 @@ myApp.onPageInit('team-edit', function(page) {
                         myApp.hideIndicator();
                         if (msg.status == '0') {
                             clearEditTeamDetails();
-                            mainView.router.loadPage('team_management.html?team_id=' + msg.team_id + '&team_name=' + team_name + '&team_password=' + team_password);
+                            mainView.router.loadPage('team_management.html?team_id=' + localStorage.getItem('selectedTeamID') + '&team_name=' + team_name + '&team_password=' + team_password);
                         }
                         myApp.alert(msg.message);
                         $$('#btn-edit-team').removeAttr("disabled");
@@ -846,7 +842,7 @@ myApp.onPageInit('team-edit', function(page) {
                 options.params = params;
 
                 var ft = new FileTransfer();
-                ft.upload(imgfile, ENVYP_API_URL + "add_team.php", winTeamAdd, fail, options);
+                ft.upload(imgfile, ENVYP_API_URL + "update_team.php", winTeamAdd, fail, options);
 
                 clearEditTeamDetails();
                 myApp.hideIndicator();
