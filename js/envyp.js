@@ -1086,7 +1086,7 @@ myApp.onPageInit('roster-list', function(page) {
                     $$.ajax({
                         type: "POST",
                         url: ENVYP_API_URL + "delete_roster.php",
-                        data: "account_id=" + localStorage.getItem('selectedRosterID')
+                        data: "account_id=" + localStorage.getItem('selectedRosterID'),
                         dataType: "json",
                         success: function(msg, string, jqXHR) {
                         },
