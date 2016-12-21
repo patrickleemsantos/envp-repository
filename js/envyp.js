@@ -1072,11 +1072,14 @@ myApp.onPageInit('roster-list', function(page) {
                         '</div>' +
                         '<div class="item-subtitle">{{roster_position}}</div>' +
                         '<div class="item-text"></div>' +
-                        '</div></a><div class="swipeout-actions-right"><a href="#" data-confirm="Are you sure you want to delete this item?" class="swipeout-delete">Delete</a></div></li>',
+                        '</div></a><div class="swipeout-actions-left"><a href="#" data-confirm="Are you sure you want to delete this item?" class="swipeout-delete">Delete</a></div></li>',
                     height: 73,
                 });
                 myApp.initImagesLazyLoad(page.container);
                 myApp.hideIndicator();
+                if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
+                    $( "li" ).removeClass( "swipeout" );
+                }
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
                 myApp.hideIndicator();
