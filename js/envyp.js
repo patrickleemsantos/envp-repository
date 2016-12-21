@@ -1063,7 +1063,7 @@ myApp.onPageInit('roster-list', function(page) {
                         }
                         return found;
                     },
-                    template: '<li class="swipeout"><a href="roster_detail.html?roster_id={{roster_id}}&roster_name={{roster_name}}&roster_position={{roster_position}}&roster_image={{roster_image}}" class="item-link item-content swipeout-content">' +
+                    template: '<li id="li-roster-list" class="swipeout"><a href="roster_detail.html?roster_id={{roster_id}}&roster_name={{roster_name}}&roster_position={{roster_position}}&roster_image={{roster_image}}" class="item-link item-content swipeout-content">' +
                         '<div class="item-media"><img data-src="{{roster_image}}" class="lazy lazy-fadein img-circle" style="width:44px; height:44px;"/></div>' +
                         '<div class="item-inner">' +
                         '<div class="item-title-row">' +
@@ -1077,12 +1077,16 @@ myApp.onPageInit('roster-list', function(page) {
                 });
                 myApp.initImagesLazyLoad(page.container);
                 myApp.hideIndicator();
+
                 if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
                     $( "li" ).removeClass( "swipeout" );
                 }
-                $$('.swipeout').on('swipeout:deleted', function () {
-                  myApp.alert('Item removed');
+
+                 $$('.swipeout').on('swipeout:deleted', function () {
+                    myApp.alert('Item removed');
                 }); 
+
+                myApp.swipeoutDelete('#li-roster-list', deleteRoster());
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
                 myApp.hideIndicator();
@@ -1096,6 +1100,10 @@ myApp.onPageInit('roster-list', function(page) {
         mainView.router.reloadPage("roster_list.html")
     });
 });
+
+function deleteRoster() {
+    myApp.alert('swipeoutDelete');
+}
 
 /* ===== Roster Add Page ===== */
 myApp.onPageInit('roster-add', function(page) {
