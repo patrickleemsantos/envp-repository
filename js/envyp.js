@@ -2,7 +2,8 @@ var myApp = new Framework7({
     modalTitle: 'Envp',
     material: true,
     preloadPreviousPage: false,
-    fastClicks: true
+    fastClicks: true,
+    pushState: true
 });
 
 var $$ = Dom7;
@@ -998,6 +999,10 @@ myApp.onPageInit('team-management', function(page) {
         localStorage.setItem('currentTeamAdmin', page.query.team_admin);
     }
 
+    if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
+        $('#btn-edit-team-detail').hide();
+    }
+
     $('#header-team-name').append(localStorage.getItem('selectedTeamName'));
 
     $$('#btn-roster').on('click', function() {
@@ -1058,16 +1063,17 @@ myApp.onPageInit('roster-list', function(page) {
                         }
                         return found;
                     },
-                    template: '<li>' +
-                        '<a href="roster_detail.html?roster_id={{roster_id}}&roster_name={{roster_name}}&roster_position={{roster_position}}&roster_image={{roster_image}}" class="item-link item-content">' +
+                    template: '<li class="swipeout"><a href="roster_detail.html?roster_id={{roster_id}}&roster_name={{roster_name}}&roster_position={{roster_position}}&roster_image={{roster_image}}" class="item-link item-content swipeout-content">' +
                         '<div class="item-media"><img data-src="{{roster_image}}" class="lazy lazy-fadein img-circle" style="width:44px; height:44px;"/></div>' +
                         '<div class="item-inner">' +
                         '<div class="item-title-row">' +
                         '<div class="item-title">{{roster_name}}</div>' +
+                        '<div class="item-after"></div>' +
                         '</div>' +
                         '<div class="item-subtitle">{{roster_position}}</div>' +
-                        '</div></a></li>',
-                    height: 63,
+                        '<div class="item-text"></div>' +
+                        '</div></a><div class="swipeout-actions-right"><a href="#" data-confirm="Are you sure you want to delete this item?" class="swipeout-delete">Delete</a></div></li>',
+                    height: 73,
                 });
                 myApp.initImagesLazyLoad(page.container);
                 myApp.hideIndicator();
