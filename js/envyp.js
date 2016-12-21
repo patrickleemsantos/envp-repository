@@ -1072,7 +1072,7 @@ myApp.onPageInit('roster-list', function(page) {
                         '</div>' +
                         '<div class="item-subtitle">{{roster_position}}</div>' +
                         '<div class="item-text"></div>' +
-                        '</div></a><div class="swipeout-actions-left"><a href="#" data-confirm="Are you sure you want to delete this item?" class="swipeout-delete">Delete</a></div></li>',
+                        '</div></a><div class="swipeout-actions-left"><a href="#" onClick="deleteRoster();" data-confirm="Are you sure you want to delete this item?" class="swipeout-delete">Delete</a></div></li>',
                     height: 73,
                 });
                 myApp.initImagesLazyLoad(page.container);
@@ -1093,6 +1093,10 @@ myApp.onPageInit('roster-list', function(page) {
         mainView.router.reloadPage("roster_list.html")
     });
 });
+
+function deleteRoster(){
+    myApp.alert('Delete roster!');
+}
 
 /* ===== Roster Add Page ===== */
 myApp.onPageInit('roster-add', function(page) {
@@ -3866,14 +3870,16 @@ function clearTournamentDetails() {
     $$('#txt-opponent-name').val('');
     $$('#txt-tournament-location').val('');
     $$('#txt-tournament-description').val('');
-    $$('#roster-image').attr('src', 'img/camera-flat.png');
+    $$('#tournament-image').attr('src', 'img/camera-flat.png');
     imgfile = '';
 }
 
 function clearEditTournamentDetails() {
     $("#edit-txt-tournament-date").val(new Date().toJSON().slice(0, 16));
     $$('#edit-txt-opponent-name').val('');
+    $$('#edit-txt-tournament-location').val('');
     $$('#edit-txt-tournament-description').val('');
+    $$('#edit-image-upload').attr('src', 'img/camera-flat.png');
     imgfile = '';
 }
 
