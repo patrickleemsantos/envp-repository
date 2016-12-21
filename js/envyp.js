@@ -1080,6 +1080,9 @@ myApp.onPageInit('roster-list', function(page) {
                 if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
                     $( "li" ).removeClass( "swipeout" );
                 }
+                $$('.swipeout').on('swipeout:deleted', function () {
+                  myApp.alert('Item removed');
+                }); 
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
                 myApp.hideIndicator();
@@ -1092,10 +1095,6 @@ myApp.onPageInit('roster-list', function(page) {
     $$('#btn-roster-list-refresh').on('click', function() {
         mainView.router.reloadPage("roster_list.html")
     });
-
-    $$('.swipeout').on('swipeout:deleted', function () {
-      myApp.alert('Item removed');
-    }); 
 });
 
 /* ===== Roster Add Page ===== */
