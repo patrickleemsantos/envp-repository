@@ -1083,7 +1083,17 @@ myApp.onPageInit('roster-list', function(page) {
                 }
 
                 $$('.demo-remove-callback').on('deleted', function () {
-                    myApp.alert('Thanks, item removed!' + localStorage.getItem('selectedRosterID'));
+                    $$.ajax({
+                        type: "POST",
+                        url: ENVYP_API_URL + "delete_roster.php",
+                        data: "account_id=" + localStorage.getItem('selectedRosterID')
+                        dataType: "json",
+                        success: function(msg, string, jqXHR) {
+                        },
+                        error: function(msg, string, jqXHR) {
+                            // myApp.alert(ERROR_ALERT);
+                        }
+                    });
                 });
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
