@@ -1063,7 +1063,7 @@ myApp.onPageInit('roster-list', function(page) {
                         }
                         return found;
                     },
-                    template: '<li id="li-roster-list" class="swipeout demo-remove-callback"><a href="roster_detail.html?roster_id={{roster_id}}&roster_name={{roster_name}}&roster_position={{roster_position}}&roster_image={{roster_image}}" class="item-link item-content swipeout-content">' +
+                    template: '<li id="li-roster-list" class="swipeout"><a href="roster_detail.html?roster_id={{roster_id}}&roster_name={{roster_name}}&roster_position={{roster_position}}&roster_image={{roster_image}}" class="item-link item-content swipeout-content">' +
                         '<div class="item-media"><img data-src="{{roster_image}}" class="lazy lazy-fadein img-circle" style="width:44px; height:44px;"/></div>' +
                         '<div class="item-inner">' +
                         '<div class="item-title-row">' +
@@ -1072,7 +1072,7 @@ myApp.onPageInit('roster-list', function(page) {
                         '</div>' +
                         '<div class="item-subtitle">{{roster_position}}</div>' +
                         '<div class="item-text"></div>' +
-                        '</div></a><div class="swipeout-actions-left"><a href="#" data-confirm="Are you sure you want to delete this item?" class="swipeout-delete">Delete</a></div></li>',
+                        '</div></a><div class="swipeout-actions-left"><a href="#" onClick="deleteRoster({{roster_id}})" data-confirm="Are you sure you want to delete this item?" class="swipeout-delete">Delete</a></div></li>',
                     height: 73,
                 });
                 myApp.initImagesLazyLoad(page.container);
@@ -1082,8 +1082,8 @@ myApp.onPageInit('roster-list', function(page) {
                     $( "li" ).removeClass( "swipeout" );
                 }
 
-                $$('.demo-remove-callback').on('deleted', function () {
-                    myApp.alert('Thanks, item removed!');
+                $$('#li-roster-list').on('deleted', function () {
+                    myApp.alert('Thanks, item removed!' + localStorage.getItem('selectedRosterID'));
                 });
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
@@ -1099,8 +1099,8 @@ myApp.onPageInit('roster-list', function(page) {
     });
 });
 
-function deleteRoster() {
-    myApp.alert('swipeoutDelete');
+function deleteRoster(roster_id) {
+    localStorage.setItem('selectedRosterID', roster_id);
 }
 
 /* ===== Roster Add Page ===== */
