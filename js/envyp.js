@@ -1063,7 +1063,7 @@ myApp.onPageInit('roster-list', function(page) {
                         }
                         return found;
                     },
-                    template: '<li id="li-roster-list" class="swipeout"><a href="roster_detail.html?roster_id={{roster_id}}&roster_name={{roster_name}}&roster_position={{roster_position}}&roster_image={{roster_image}}" class="item-link item-content swipeout-content">' +
+                    template: '<li id="li-roster-list" class="swipeout demo-remove-callback"><a href="roster_detail.html?roster_id={{roster_id}}&roster_name={{roster_name}}&roster_position={{roster_position}}&roster_image={{roster_image}}" class="item-link item-content swipeout-content">' +
                         '<div class="item-media"><img data-src="{{roster_image}}" class="lazy lazy-fadein img-circle" style="width:44px; height:44px;"/></div>' +
                         '<div class="item-inner">' +
                         '<div class="item-title-row">' +
@@ -1082,9 +1082,9 @@ myApp.onPageInit('roster-list', function(page) {
                     $( "li" ).removeClass( "swipeout" );
                 }
 
-                 $$('#li-roster-list').on('swipeout:deleted', function () {
-                    myApp.alert('Item removed');
-                }); 
+                $$('.demo-remove-callback').on('deleted', function () {
+                    myApp.alert('Thanks, item removed!');
+                });
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
                 myApp.hideIndicator();
