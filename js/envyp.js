@@ -1082,11 +1082,9 @@ myApp.onPageInit('roster-list', function(page) {
                     $( "li" ).removeClass( "swipeout" );
                 }
 
-                 $$('.swipeout').on('swipeout:deleted', function () {
+                 $$('#li-roster-list').on('swipeout:deleted', function () {
                     myApp.alert('Item removed');
                 }); 
-
-                myApp.swipeoutDelete('#li-roster-list', deleteRoster());
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
                 myApp.hideIndicator();
