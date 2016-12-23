@@ -1919,6 +1919,11 @@ myApp.onPageInit('tournament-detail', function(page) {
         $('#div-add-tournament-fine').hide();
     }
 
+    $('#opponent-assists').hide();
+    $('#opponent-fouls').hide();
+    $('#opponent-yellowcard').hide();
+    $('#opponent-redcard').hide();
+
     var tournament_id = 0;
     var tournament_opponent = '';
     var tournament_location = '';
@@ -3003,6 +3008,11 @@ myApp.onPageInit('edit-tournament-stats', function(page) {
     } else {
         $('#lbl-edit-team-statistics').append('Rediger statistik');
     }
+
+    $('#li-opp-assists').hide();
+    $('#li-opp-fouls').hide();
+    $('#li-opp-yellowcard').hide();
+    $('#li-opp-redcard').hide();
 
     $$('#txt-edit-team-name').prepend("Team: <b>" + page.query.team_name + "</b>");
     $$('#txt-edit-opponent-name').prepend("Opponent: <b>" + page.query.opponent_name + "</b>");
