@@ -1111,10 +1111,33 @@ myApp.onPageInit('fine-detail-list', function(page) {
                             tournament_image: tournament_image,
                             opponent: field.opponent,
                             fine: field.fine,
+                            date: field.date,
                             price: field.price
                         });
                     }
                 });
+
+                // var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
+                //     items: items,
+                //     searchAll: function(query, items) {
+                //         var found = [];
+                //         for (var i = 0; i < items.length; i++) {
+                //             if (items[i].opponent.indexOf(query) >= 0 || query.trim() === '') found.push(i);
+                //         }
+                //         return found;
+                //     },
+                //     template: '<li class="item-content">' +
+                //         '<div class="item-media"><img data-src="{{tournament_image}}" class="lazy lazy-fadein img-circle" style="width:44px; height:44px;"/></div>' +
+                //         '<div class="item-inner">' +
+                //         '<div class="item-title-row">' +
+                //         '<div class="item-title">{{opponent}}</div>' +
+                //         '<div class="item-after">${{price}}</div>' +
+                //         '</div>' +
+                //         '<div class="item-subtitle">{{date}}</div>' +
+                //         '<div class="item-text">{{fine}}</div>' +
+                //         '</div></li>',
+                //     height: 93,
+                // });
 
                 var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
                     items: items,
@@ -1132,11 +1155,15 @@ myApp.onPageInit('fine-detail-list', function(page) {
                         '<div class="item-title">{{opponent}}</div>' +
                         '<div class="item-after">${{price}}</div>' +
                         '</div>' +
-                        '<div class="item-subtitle"></div>' +
+                        '<div class="item-subtitle">{{date}}</div>' +
                         '<div class="item-text">{{fine}}</div>' +
                         '</div></li>',
-                    height: 73,
+                    height: function (item) {
+                        if (item.fine) return 93; //item with picture is 100px height
+                        else return 93; //item without picture is 44px height
+                    }
                 });
+
                 myApp.initImagesLazyLoad(page.container);
                 myApp.hideIndicator();
             })
@@ -2208,7 +2235,7 @@ myApp.onPageInit('tournament-detail', function(page) {
 
     $("#select-vote-list").empty();
     myApp.showIndicator();
-    $.getJSON(ENVYP_API_URL + "get_tournament_roster.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
+    $.getJSON(ENVYP_API_URL + "get_tournament_roster_vote_list.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
             $("#select-vote-list").prepend('<option value="" selected="selected">Select a roster</option>');
             $.each(result, function(i, field) {
                 if (field.status == 'empty') {
@@ -2330,6 +2357,7 @@ function endTournamentConfirmation(status) {
     } else {
         if (status == 0) {
             if (checkInternetConnection() == true) {
+                myApp.showIndicator();
                 $$.ajax({
                     type: "POST",
                     url: ENVYP_API_URL + "end_tournament.php",
@@ -2365,17 +2393,59 @@ function endTournamentConfirmation(status) {
 
 function endVoteConfirmation(status) {
     myApp.closeModal('#popover-tournament');
-    if (status == 0) {
-        if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
-            myApp.alert('You are not allowed to end the vote');
+    if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
+        myApp.alert('You are not allowed to end the vote');
+    } else {
+        if (status == 0) {
+            myApp.confirm('Are you sure you want to end the vote?', function () {
+                if (checkInternetConnection() == true) {
+                    myApp.showIndicator();
+                    $$.ajax({
+                        type: "POST",
+                        url: ENVYP_API_URL + "check_voting_result.php",
+                        data: "tournament_id=" + localStorage.getItem('selectedTournamentId'),
+                        dataType: "json",
+                        success: function(msg, string, jqXHR) {
+                            myApp.hideIndicator();
+                            if (msg.status == 0) {
+                                if (msg.vote_count == 1) {
+                                    mainView.router.loadPage('voting_result.html');
+                                    myApp.alert('Vote ended successfully!');
+                                } else {
+                                    myApp.confirm('Oops! There was a tie, would you like to reset the voting for the top rosters?', function () {
+                                          myApp.showIndicator();
+                                          $$.ajax({
+                                            type: "POST",
+                                            url: ENVYP_API_URL + "reset_voting.php",
+                                            data: "tournament_id=" + localStorage.getItem('selectedTournamentId') + "&top_vote=" + msg.top_vote,
+                                            dataType: "json",
+                                            success: function(msg, string, jqXHR) {
+                                                myApp.hideIndicator();
+                                                myApp.alert(msg.message);
+                                                mainView.router.reloadPage('tournament_detail.html?tournament_id=' + localStorage.getItem('selectedTournamentId'));
+                                            },
+                                            error: function(msg, string, jqXHR) {
+                                                myApp.hideIndicator();
+                                                myApp.alert(ERROR_ALERT);
+                                            }
+                                        });  
+                                    });
+                                }
+                            }
+                        },
+                        error: function(msg, string, jqXHR) {
+                            myApp.hideIndicator();
+                            myApp.alert(ERROR_ALERT);
+                        }
+                    });
+                } else {
+                    myApp.alert(NO_INTERNET_ALERT);
+                }
+            });
         } else {
             mainView.router.loadPage('voting_result.html');
-            myApp.alert('Vote ended successfully');
         }
-    } else {
-        mainView.router.loadPage('voting_result.html');
     }
-
 }
 
 /* ===== Voting Result ===== */
@@ -2467,7 +2537,7 @@ myApp.onPageInit('voting-result', function(page) {
             '<div class="popover-inner">' +
             '<div class="list-block">' +
             '<ul>' +
-            '<li><a id="btn-fb-share href="#" onClick="shareMVPOnFacebook(' + points + ',' + assists + ',' + fouls + ',' + yellowcard + ',' + redcard + ',' + votes + ');" class="item-link list-button"><img src="img/icon-fb-share.png" style="width:20px; height:20px" /> Facebook</li>' +
+            '<li><a id="btn-fb-share href="#" onClick="shareMVPOnFacebook(' + points + ',' + assists + ',' + fouls + ',' + yellowcard + ',' + redcard + ',' + votes + ',' + roster_image + ');" class="item-link list-button"><img src="img/icon-fb-share.png" style="width:20px; height:20px" /> Facebook</li>' +
             // '<li><a id="btn-twitter-share" href="#" onClick="" class="item-link list-button"><img src="img/icon-twitter-share.png" style="width:20px; height:20px" /> Twitter</li>'+
             '</ul>' +
             '</div>' +
@@ -2504,7 +2574,7 @@ if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('select
     $('#lbl-mvp-votes').append('votes');
 }
 
-function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) {
+function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes, roster_image ) {
     var description = '';
     var team_name = localStorage.getItem('mvp_team_name');
     var opponent_name = localStorage.getItem('mvp_opponent_name');
@@ -2519,12 +2589,28 @@ function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) 
         description = roster_name + ":\nvotes: " + votes + "\npoints: " + points + "\nassists: " + assists + "\nfouls: " + fouls;
     }
 
+    var image_url = roster_image;
+
+    // Upload pic to server
+    if (imgfile != '') {
+        myApp.showIndicator();
+        var options = new FileUploadOptions();
+        options.fileKey = "file";
+        options.fileName = imgfile.substr(imgfile.lastIndexOf('/') + 1);
+        options.mimeType = "image/jpeg";
+        options.chunkedMode = false;
+
+        var ft = new FileTransfer();
+        ft.upload(imgfile, ENVYP_API_URL + "upload_mvp_image.php", winMVP, fail, options);
+        image_url = localStorage.getItem('mvp_image_url');
+    }
+
     facebookConnectPlugin.showDialog({
         method: "feed",
         href: "http://envp.dk",
         caption: "MVP Result: " + team_name + " vs " + opponent_name,
         description: description,
-        picture: 'http://meanstars.com/profile/134.jpg',
+        picture: image_url,
         share_feedWeb: true
     }, function(response) {
         console.log(response)
@@ -3606,6 +3692,53 @@ function editTeamImage() {
     });
 }
 
+function getMVPImage() {
+    myApp.modal({
+        title: 'Choose MVP Image',
+        verticalButtons: true,
+        buttons: [{
+            text: 'Take new picture',
+            onClick: function() {
+                try {
+                    navigator.camera.getPicture(attachMVPImage, function(message) {
+                        myApp.alert('No image selected');
+                    }, {
+                        quality: 100,
+                        destinationType: navigator.camera.DestinationType.FILE_URI,
+                        sourceType: navigator.camera.PictureSourceType.CAMERA,
+                        targetWidth: 400,
+                        targetHeight: 400,
+                        correctOrientation: true
+                    });
+                } catch (err) {
+                    myApp.alert('camera error: ' + err.message);
+                }
+            }
+        }, {
+            text: 'Select from gallery',
+            onClick: function() {
+                try {
+                    navigator.camera.getPicture(attachMVPImage, function(message) {
+                        myApp.alert('No image selected');
+                    }, {
+                        quality: 100,
+                        destinationType: navigator.camera.DestinationType.FILE_URI,
+                        sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY,
+                        targetWidth: 400,
+                        targetHeight: 400,
+                        correctOrientation: true
+                    });
+                } catch (err) {
+                    myApp.alert('camera error: ' + err.message);
+                }
+            }
+        }, {
+            text: 'Cancel',
+            onClick: function() {}
+        }]
+    });
+}
+
 function getProfileImage() {
     myApp.modal({
         title: 'Choose Profile Image',
@@ -3745,6 +3878,11 @@ function attachProfileImage(imageURI) {
     $$("#profile-image").attr("src", imgfile);
 }
 
+function attachMVPImage(imageURI) {
+    imgfile = imageURI
+    $$("#img-mvp-image").attr("src", imgfile);
+}
+
 function win(r) {
     var resp = JSON.parse(r.response);
     myApp.alert(resp.message);
@@ -3762,6 +3900,14 @@ function winUpdateUser(r) {
     if (resp.status == '0') {
         localStorage.setItem('account_image', resp.account_image);
         $$('#img-profile-image').attr('src', resp.account_image);
+    }
+}
+
+function winMVP(r) {
+    var resp = JSON.parse(r.response);
+    myApp.alert(resp.image_url);
+    if (resp.status == '0') {
+        localStorage.setItem('mvp_image_url', resp.image_url);
     }
 }
 
