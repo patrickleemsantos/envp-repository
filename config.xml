@@ -73,6 +73,8 @@
 	    <gap:param name="APP_NAME" value="Envp" />
 	</gap:plugin>
 
+	<plugin name="cordova-instagram-plugin" source="npm" />
+
 	<!-- <gap:plugin name="pushbots-cordova-plugin" source="npm" /> -->
 	<!-- <plugin name="pushbots-cordova-plugin" spec="1.4.1" />	 -->
 	<!-- <gap:plugin name="pushbots-cordova-plugin" spec="^1.4.0" source="npm" /> -->
