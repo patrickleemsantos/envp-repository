@@ -2621,7 +2621,24 @@ function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) 
 }
 
 function shareMVPOnInstagram(points, assists, fouls, yellowcard, redcard, votes, roster_image) {
+    Instagram.isInstalled(function (err, installed) {
+    if (installed) {
+        alert("Instagram is", installed); // installed app version on Android
+    } else {
+        alert("Instagram is not installed");
+    }
 
+    var canvasIdOrDataUrl = '';
+    var caption = 'Test Envp';
+
+    Instagram.share(canvasIdOrDataUrl, caption, function (err) {
+        if (err) {
+            console.log("not shared");
+        } else {
+            console.log("shared");
+        }
+    });
+});
 }
 
 /* =====Tournament Detail Page ===== */
