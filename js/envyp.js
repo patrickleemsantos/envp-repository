@@ -2633,9 +2633,9 @@ function shareMVPOnInstagram(points, assists, fouls, yellowcard, redcard, votes,
 
     Instagram.share(canvasIdOrDataUrl, caption, function (err) {
         if (err) {
-            console.log("not shared");
+            alert("not shared");
         } else {
-            console.log("shared");
+            alert("shared");
         }
     });
 });
