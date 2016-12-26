@@ -2621,9 +2621,9 @@ function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) 
 }
 
 function shareMVPOnInstagram(points, assists, fouls, yellowcard, redcard, votes, roster_image) {
-    Instagram.isInstalled(function (err, installed) {
-    if (installed) {
-        alert("Instagram is", installed); // installed app version on Android
+    // Instagram.isInstalled(function (err, installed) {
+    // if (installed) {
+    //     alert("Instagram is", installed); // installed app version on Android
         var canvasIdOrDataUrl = 'https://pmcfootwearnews.files.wordpress.com/2015/06/michael-jordan-chicago-bulls.jpg?w=683';
         var caption = 'Test Envp';
 
@@ -2634,10 +2634,10 @@ function shareMVPOnInstagram(points, assists, fouls, yellowcard, redcard, votes,
                 alert("shared");
             }
         });
-    } else {
-        alert("Instagram is not installed");
-    }
-});
+//     } else {
+//         alert("Instagram is not installed");
+//     }
+// });
 }
 
 /* =====Tournament Detail Page ===== */
@@ -3925,6 +3925,7 @@ function winUpdateUser(r) {
 }
 
 function winMVP(r) {
+    myApp.hideIndicator();
     var resp = JSON.parse(r.response);
     myApp.alert(resp.image_url);
     if (resp.status == '0') {
