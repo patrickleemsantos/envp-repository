@@ -2624,20 +2624,19 @@ function shareMVPOnInstagram(points, assists, fouls, yellowcard, redcard, votes,
     Instagram.isInstalled(function (err, installed) {
     if (installed) {
         alert("Instagram is", installed); // installed app version on Android
+        var canvasIdOrDataUrl = 'https://pmcfootwearnews.files.wordpress.com/2015/06/michael-jordan-chicago-bulls.jpg?w=683';
+        var caption = 'Test Envp';
+
+        Instagram.share(canvasIdOrDataUrl, caption, function (err) {
+            if (err) {
+                alert("not shared");
+            } else {
+                alert("shared");
+            }
+        });
     } else {
         alert("Instagram is not installed");
     }
-
-    var canvasIdOrDataUrl = 'https://pmcfootwearnews.files.wordpress.com/2015/06/michael-jordan-chicago-bulls.jpg?w=683';
-    var caption = 'Test Envp';
-
-    Instagram.share(canvasIdOrDataUrl, caption, function (err) {
-        if (err) {
-            alert("not shared");
-        } else {
-            alert("shared");
-        }
-    });
 });
 }
 
