@@ -2537,8 +2537,8 @@ myApp.onPageInit('voting-result', function(page) {
             '<div class="popover-inner">' +
             '<div class="list-block">' +
             '<ul>' +
-            '<li><a id="btn-fb-share href="#" onClick="shareMVPOnFacebook(' + points + ',' + assists + ',' + fouls + ',' + yellowcard + ',' + redcard + ',' + votes + ',' + roster_image + ');" class="item-link list-button"><img src="img/icon-fb-share.png" style="width:20px; height:20px" /> Facebook</li>' +
-            // '<li><a id="btn-twitter-share" href="#" onClick="" class="item-link list-button"><img src="img/icon-twitter-share.png" style="width:20px; height:20px" /> Twitter</li>'+
+            '<li><a id="btn-fb-share href="#" onClick="shareMVPOnFacebook(' + points + ',' + assists + ',' + fouls + ',' + yellowcard + ',' + redcard + ',' + votes + ');" class="item-link list-button"><img src="img/icon-fb-share.png" style="width:20px; height:20px" /> Facebook</li>' +
+            '<li><a id="btn-instagram-share" href="#" onClick="shareMVPOnInstagram(' + points + ',' + assists + ',' + fouls + ',' + yellowcard + ',' + redcard + ',' + votes + ');" class="item-link list-button"><img src="img/icon-instagram-share.png" style="width:20px; height:20px" /> Instagram</li>'+
             '</ul>' +
             '</div>' +
             '</div>' +
@@ -2574,7 +2574,8 @@ if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('select
     $('#lbl-mvp-votes').append('votes');
 }
 
-function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes, roster_image ) {
+function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) {
+    var roster_image = '';
     var description = '';
     var team_name = localStorage.getItem('mvp_team_name');
     var opponent_name = localStorage.getItem('mvp_opponent_name');
@@ -2617,6 +2618,10 @@ function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes, 
     }, function(response) {
         console.log(response)
     });
+}
+
+function shareMVPOnInstagram(points, assists, fouls, yellowcard, redcard, votes, roster_image) {
+
 }
 
 /* =====Tournament Detail Page ===== */
