@@ -2628,7 +2628,7 @@ function shareMVPOnInstagram(points, assists, fouls, yellowcard, redcard, votes,
         alert("Instagram is not installed");
     }
 
-    var canvasIdOrDataUrl = '';
+    var canvasIdOrDataUrl = 'https://pmcfootwearnews.files.wordpress.com/2015/06/michael-jordan-chicago-bulls.jpg?w=683';
     var caption = 'Test Envp';
 
     Instagram.share(canvasIdOrDataUrl, caption, function (err) {
