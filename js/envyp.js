@@ -1878,6 +1878,7 @@ myApp.onPageInit('tournament-list', function(page) {
 
 /* =====Tournament Detail Page ===== */
 myApp.onPageInit('tournament-detail', function(page) {
+    imgfile = '';
     if (localStorage.getItem('selectedLanguage') == '1') {
         $('#lbl-tournament-detail').append('Detail');
         $('#lbl-tournament-detail-roster').append('Roster');
@@ -2592,7 +2593,6 @@ function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) 
 
     var image_url = roster_image;
 
-    // Upload pic to server
     if (imgfile != '') {
         myApp.showIndicator();
         var options = new FileUploadOptions();
@@ -2622,33 +2622,32 @@ function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) 
 
 function shareMVPOnInstagram(points, assists, fouls, yellowcard, redcard, votes, roster_image) {
     try {
-    // Instagram.isInstalled(function (err, installed) {
-    // if (installed) {
-    //     alert("Instagram is", installed); // installed app version on Android
+        Instagram.isInstalled(function (err, installed) {
+            if (installed) {
+                if (imgfile == '') {
+                    myApp.alert('Please take a picture of the MVP!');
+                } else {
+                    var canvasIdOrDataUrl = imgfile;
+                    var caption = '';
 
-        if (imgfile == '') {
-            myApp.alert('Please take a picture of the MVP!');
-        } else {
-            var canvasIdOrDataUrl = imgfile;
-            var caption = 'Test Envp';
+                    getDataUri(canvasIdOrDataUrl, function(dataUri) {
+                        Instagram.share(dataUri, caption, function (err) {
+                            if (err) {
+                                // alert("not shared");
+                            } else {
+                                myApp.alert("Success!");
+                            }
+                        });
+                    });
+                    // imgfile = ''; 
+                }
 
-            getDataUri(canvasIdOrDataUrl, function(dataUri) {
-                Instagram.share(dataUri, caption, function (err) {
-                    if (err) {
-                        alert("not shared");
-                    } else {
-                        alert("shared");
-                    }
-                });
-            });
-        //     } else {
-        //         alert("Instagram is not installed");
-        //     }
-        // });
-            imgfile = ''; 
-        }
+            } else {
+                myApp.alert("Instagram is not installed");
+            }
+        });    
     } catch (err) {
-        myApp.alert('instagram error: ' + err.message);
+        myApp.alert('Instagram Share Error: ' + err.message);
     }   
 }
 
