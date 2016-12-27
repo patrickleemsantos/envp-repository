@@ -2626,22 +2626,27 @@ function shareMVPOnInstagram(points, assists, fouls, yellowcard, redcard, votes,
     // if (installed) {
     //     alert("Instagram is", installed); // installed app version on Android
 
-        var canvasIdOrDataUrl = 'img/profile.jpg';
-        var caption = 'Test Envp';
+        if (imgfile == '') {
+            myApp.alert('Please take a picture of the MVP!');
+        } else {
+            var canvasIdOrDataUrl = imgfile;
+            var caption = 'Test Envp';
 
-        getDataUri(canvasIdOrDataUrl, function(dataUri) {
-            Instagram.share(dataUri, caption, function (err) {
-                if (err) {
-                    alert("not shared");
-                } else {
-                    alert("shared");
-                }
+            getDataUri(canvasIdOrDataUrl, function(dataUri) {
+                Instagram.share(dataUri, caption, function (err) {
+                    if (err) {
+                        alert("not shared");
+                    } else {
+                        alert("shared");
+                    }
+                });
             });
-        });
-    //     } else {
-    //         alert("Instagram is not installed");
-    //     }
-    // });
+        //     } else {
+        //         alert("Instagram is not installed");
+        //     }
+        // });
+            imgfile = ''; 
+        }
     } catch (err) {
         myApp.alert('instagram error: ' + err.message);
     }   
