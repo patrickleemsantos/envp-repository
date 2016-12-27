@@ -2621,6 +2621,7 @@ function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) 
 }
 
 function shareMVPOnInstagram(points, assists, fouls, yellowcard, redcard, votes, roster_image) {
+    try {
     // Instagram.isInstalled(function (err, installed) {
     // if (installed) {
     //     alert("Instagram is", installed); // installed app version on Android
@@ -2634,10 +2635,13 @@ function shareMVPOnInstagram(points, assists, fouls, yellowcard, redcard, votes,
                 alert("shared");
             }
         });
-//     } else {
-//         alert("Instagram is not installed");
-//     }
-// });
+    //     } else {
+    //         alert("Instagram is not installed");
+    //     }
+    // });
+    } catch (err) {
+        myApp.alert('camera error: ' + err.message);
+    }   
 }
 
 /* =====Tournament Detail Page ===== */
