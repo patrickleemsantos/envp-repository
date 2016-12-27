@@ -2540,7 +2540,7 @@ myApp.onPageInit('voting-result', function(page) {
             '<ul>' +
             '<li><a id="btn-fb-share href="#" onClick="shareMVPOnFacebook(' + points + ',' + assists + ',' + fouls + ',' + yellowcard + ',' + redcard + ',' + votes + ');" class="item-link list-button"><img src="img/icon-fb-share.png" style="width:20px; height:20px" /> Facebook</li>' +
             '<li><a id="btn-instagram-share" href="#" onClick="shareMVPOnInstagram(' + points + ',' + assists + ',' + fouls + ',' + yellowcard + ',' + redcard + ',' + votes + ');" class="item-link list-button"><img src="img/icon-instagram-share.png" style="width:20px; height:20px" /> Instagram</li>'+
-            '<li><a id="btn-twitter-share" href="#" onclick="shareMVPOnTwitter();" class="item-link list-button"><img src="img/icon-twitter-share.png" style="width:20px; height:20px" /> Twitter</li>'+
+            '<li><a id="btn-twitter-share" href="#" onclick="shareMVPOnTwitter(' + points + ',' + assists + ',' + fouls + ',' + yellowcard + ',' + redcard + ',' + votes + ');" class="item-link list-button"><img src="img/icon-twitter-share.png" style="width:20px; height:20px" /> Twitter</li>'+
             '</ul>' +
             '</div>' +
             '</div>' +
@@ -2576,13 +2576,32 @@ if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('select
     $('#lbl-mvp-votes').append('votes');
 }
 
-function shareMVPOnTwitter() {
-    window.plugins.socialsharing.shareViaTwitter('Message via Twitter',
-                                                 null /* img */, 
-                                                 'http://twitter.com/', 
-                                                 null, 
-                                                 function(errormsg){alert("Error: Cannot Share")}
-                                                 );
+function shareMVPOnTwitter(points, assists, fouls, yellowcard, redcard, votes) {
+    if (imgfile == '') {
+        myApp.alert('Please take a picture of the MVP!');
+    } else {
+        var roster_image = '';
+        var description = '';
+        var team_name = localStorage.getItem('mvp_team_name');
+        var opponent_name = localStorage.getItem('mvp_opponent_name');
+        var roster_name = localStorage.getItem('mvp_roster_name');
+        var roster_image = localStorage.getItem('mvp_roster_image');
+
+        if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('selectedSportID') == 4) {
+            description = roster_name + ":\nvotes: " + votes + "\ngoals/mål: " + points + "\nassists: " + assists + "\nyellow card: " + yellowcard + "red card: " + redcard;
+        } else if (localStorage.getItem('selectedSportID') == 2 || localStorage.getItem('selectedSportID') == 5) {
+            description = roster_name + ":\nvotes: " + votes + "\ngoals/mål: " + points + "\nassists: " + assists + "\nfouls: " + fouls;
+        } else if (localStorage.getItem('selectedSportID') == 1 || localStorage.getItem('selectedSportID') == 6) {
+            description = roster_name + ":\nvotes: " + votes + "\npoints: " + points + "\nassists: " + assists + "\nfouls: " + fouls;
+        }
+
+        window.plugins.socialsharing.shareViaTwitter(description,
+                                                     imgfile /* img */, 
+                                                     'http://envp.dk/', 
+                                                     null, 
+                                                     function(errormsg){alert("Error: Cannot Share")}
+                                                     );
+    }
 }
 
 function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) {
