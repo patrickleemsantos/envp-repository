@@ -2579,6 +2579,7 @@ if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('select
 function shareMVPOnTwitter(points, assists, fouls, yellowcard, redcard, votes) {
     if (imgfile == '') {
         myApp.alert('Please take a picture of the MVP!');
+        myApp.closeModal('.popover');
     } else {
         var roster_image = '';
         var description = '';
@@ -2588,18 +2589,21 @@ function shareMVPOnTwitter(points, assists, fouls, yellowcard, redcard, votes) {
         var roster_image = localStorage.getItem('mvp_roster_image');
 
         if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('selectedSportID') == 4) {
-            description = roster_name + ":\nvotes: " + votes + "\ngoals/mål: " + points + "\nassists: " + assists + "\nyellow card: " + yellowcard + "red card: " + redcard;
+            description = team_name + " vs " + opponent_name + "\n" + roster_name + ":\nvotes: " + votes + "\ngoals/mål: " + points + "\nassists: " + assists + "\nyellow card: " + yellowcard + "\nred card: " + redcard + "\n";
         } else if (localStorage.getItem('selectedSportID') == 2 || localStorage.getItem('selectedSportID') == 5) {
-            description = roster_name + ":\nvotes: " + votes + "\ngoals/mål: " + points + "\nassists: " + assists + "\nfouls: " + fouls;
+            description = team_name + " vs " + opponent_name + "\n" + roster_name + ":\nvotes: " + votes + "\ngoals/mål: " + points + "\nassists: " + assists + "\nfouls: " + fouls + "\n";
         } else if (localStorage.getItem('selectedSportID') == 1 || localStorage.getItem('selectedSportID') == 6) {
-            description = roster_name + ":\nvotes: " + votes + "\npoints: " + points + "\nassists: " + assists + "\nfouls: " + fouls;
+            description = team_name + " vs " + opponent_name + "\n" + roster_name + ":\nvotes: " + votes + "\npoints: " + points + "\nassists: " + assists + "\nfouls: " + fouls + "\n";
         }
 
         window.plugins.socialsharing.shareViaTwitter(description,
                                                      imgfile /* img */, 
                                                      'http://envp.dk/', 
                                                      null, 
-                                                     function(errormsg){alert("Error: Cannot Share")}
+                                                     function(errormsg){
+                                                        alert("Twitter Error: " + JSON.stringify(errormsg));
+                                                        myApp.closeModal('.popover');
+                                                     }
                                                      );
     }
 }
@@ -2643,9 +2647,11 @@ function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) 
         picture: image_url,
         share_feedWeb: true
     }, function(response) {
-        console.log(response)
+        console.log(response);
+        myApp.closeModal('.popover');
     }, function(response) {
-        console.log(response)
+        console.log(response);
+        myApp.closeModal('.popover');
     });
 }
 
@@ -2655,6 +2661,7 @@ function shareMVPOnInstagram(points, assists, fouls, yellowcard, redcard, votes,
             if (installed) {
                 if (imgfile == '') {
                     myApp.alert('Please take a picture of the MVP!');
+                    myApp.closeModal('.popover');
                 } else {
                     var canvasIdOrDataUrl = imgfile;
                     var caption = '';
@@ -2673,10 +2680,12 @@ function shareMVPOnInstagram(points, assists, fouls, yellowcard, redcard, votes,
 
             } else {
                 myApp.alert("Instagram is not installed");
+                myApp.closeModal('.popover');
             }
         });    
     } catch (err) {
-        myApp.alert('Instagram Share Error: ' + err.message);
+        myApp.alert('Instagram Error: ' + err.message);
+        myApp.closeModal('.popover');
     }   
 }
 
