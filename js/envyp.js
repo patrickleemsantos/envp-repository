@@ -4295,7 +4295,7 @@ function FBLogin() {
             facebookConnectPlugin.login(["public_profile"],
                 fbLoginSuccess,
                 function(error) {
-                    myApp.alert("[ERROR] fb error 1: " + error);
+                    myApp.alert("[ERROR] fb error 1: " + JSON.stringify(error));
                 }
             );
         } catch (err) {

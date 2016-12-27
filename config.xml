@@ -15,7 +15,7 @@
 	<icon src="img/envp-icon.png" gap:platform="android" gap:qualifier="hdpi" />
 	<icon src="img/envp-icon.png" gap:platform="android" gap:qualifier="xhdpi" />
 	
-	<preference name="phonegap-version" value="cli-6.3.0" />
+	<preference name="phonegap-version" value="cli-6.4.0" />
 	<preference name="orientation" value="portrait" />
 	<preference name="fullscreen" value="false" />
 	<preference name="android-windowSoftInputMode" value="stateVisible" />
