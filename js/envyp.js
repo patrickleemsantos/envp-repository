@@ -2625,23 +2625,46 @@ function shareMVPOnInstagram(points, assists, fouls, yellowcard, redcard, votes,
     // Instagram.isInstalled(function (err, installed) {
     // if (installed) {
     //     alert("Instagram is", installed); // installed app version on Android
-        var canvasIdOrDataUrl = 'https://pmcfootwearnews.files.wordpress.com/2015/06/michael-jordan-chicago-bulls.jpg?w=683';
+
+        var canvasIdOrDataUrl = 'img/profile.jpg';
         var caption = 'Test Envp';
 
-        Instagram.share(canvasIdOrDataUrl, caption, function (err) {
-            if (err) {
-                alert("not shared");
-            } else {
-                alert("shared");
-            }
+        getDataUri(canvasIdOrDataUrl, function(dataUri) {
+            Instagram.share(dataUri, caption, function (err) {
+                if (err) {
+                    alert("not shared");
+                } else {
+                    alert("shared");
+                }
+            });
         });
     //     } else {
     //         alert("Instagram is not installed");
     //     }
     // });
     } catch (err) {
-        myApp.alert('camera error: ' + err.message);
+        myApp.alert('instagram error: ' + err.message);
     }   
+}
+
+function getDataUri(url, callback) {
+    var image = new Image();
+
+    image.onload = function () {
+        var canvas = document.createElement('canvas');
+        canvas.width = this.naturalWidth; // or 'width' if you want a special/scaled size
+        canvas.height = this.naturalHeight; // or 'height' if you want a special/scaled size
+
+        canvas.getContext('2d').drawImage(this, 0, 0);
+
+        // Get raw image data
+        callback(canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, ''));
+
+        // ... or get as Data URI
+        callback(canvas.toDataURL('image/png'));
+    };
+
+    image.src = url;
 }
 
 /* =====Tournament Detail Page ===== */
