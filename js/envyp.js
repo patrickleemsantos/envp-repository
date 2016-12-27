@@ -2577,7 +2577,12 @@ if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('select
 }
 
 function shareMVPOnTwitter() {
-    window.plugins.socialsharing.shareViaTwitter("Message via Twitter");
+    window.plugins.socialsharing.shareViaTwitter('Message via Twitter',
+                                                 null /* img */, 
+                                                 'http://twitter.com/', 
+                                                 null, 
+                                                 function(errormsg){alert("Error: Cannot Share")}
+                                                 );
 }
 
 function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) {
