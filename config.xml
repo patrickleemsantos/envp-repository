@@ -75,6 +75,7 @@
 	</gap:plugin>
 
 	<plugin name="cordova-instagram-plugin" spec="0.5.3" />
+	<gap:plugin name="cordova-plugin-x-socialsharing" source="npm" />
 
 	<!-- <gap:plugin name="pushbots-cordova-plugin" source="npm" /> -->
 	<!-- <plugin name="pushbots-cordova-plugin" spec="1.4.1" />	 -->

@@ -2394,7 +2394,7 @@ function endTournamentConfirmation(status) {
 
 function endVoteConfirmation(status) {
     myApp.closeModal('#popover-tournament');
-    if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
+    if (((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) && status == 0) {
         myApp.alert('You are not allowed to end the vote');
     } else {
         if (status == 0) {
@@ -4295,11 +4295,11 @@ function FBLogin() {
             facebookConnectPlugin.login(["public_profile"],
                 fbLoginSuccess,
                 function(error) {
-                    myApp.alert("[ERROR] fb error 1: " + JSON.stringify(error));
+                    myApp.alert("[Facebook Error]: " + JSON.stringify(error));
                 }
             );
         } catch (err) {
-            myApp.alert('[ERROR] fb error 2: ' + err.message);
+            myApp.alert('[Facebook Error]: ' + err.message);
         }
     } else {
         myApp.alert(NO_INTERNET_ALERT);
