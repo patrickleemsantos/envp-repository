@@ -70,6 +70,8 @@ if (localStorage.getItem('account_id') != '' && localStorage.getItem('account_id
 if (localStorage.getItem('selectedLanguage') == '1') {
     $('#lbl-profile').empty();
     $('#lbl-profile').prepend('Profile');
+    $('#btn-my-teams').empty();
+    $('#btn-my-teams').prepend('My Teams');
     $('#btn-edit-profile').empty();
     $('#btn-edit-profile').prepend('Edit Profile');
     $('#btn-inbox').empty();
@@ -87,6 +89,8 @@ if (localStorage.getItem('selectedLanguage') == '1') {
 } else {
     $('#lbl-profile').empty();
     $('#lbl-profile').prepend('Profil');
+    $('#btn-my-teams').empty();
+    $('#btn-my-teams').prepend('Mine Teams');
     $('#btn-edit-profile').empty();
     $('#btn-edit-profile').prepend('Rediger profil');
     $('#btn-inbox').empty();
@@ -865,6 +869,69 @@ myApp.onPageInit('team-list', function(page) {
         myApp.showIndicator();
         var items = [];
         $.getJSON(ENVYP_API_URL + "get_team_list.php?sport_id=" + localStorage.getItem('selectedSportID'), function(result) {
+                $.each(result, function(i, field) {
+                    if (field.status == 'empty') {
+                        myApp.alert('No teams yet :(');
+                    } else {
+                        items.push({
+                            team_id: field.team_id,
+                            team_admin: field.team_admin,
+                            team_name: field.team_name,
+                            team_password: field.team_password,
+                            team_image: field.team_image,
+                            created_by: field.first_name + ' ' + field.last_name
+                        });
+                    }
+                });
+
+                var virtualList = myApp.virtualList($$(page.container).find('.virtual-list'), {
+                    items: items,
+                    searchAll: function(query, items) {
+                        var found = [];
+                        for (var i = 0; i < items.length; i++) {
+                            if (items[i].team_name.indexOf(query) >= 0 || query.trim() === '') found.push(i);
+                        }
+                        return found;
+                    },
+                    template: '<li>' +
+                        '<a href="#" onclick="getTeamPassword({{team_id}},{{team_admin}},\'{{team_name}}\',\'{{team_password}}\',\'{{team_image}}\')" class="item-link item-content">' +
+                        '<div class="item-media"><img data-src="{{team_image}}" class="lazy lazy-fadein img-circle" style="width:44px; height:44px;"/></div>' +
+                        '<div class="item-inner">' +
+                        '<div class="item-title-row">' +
+                        '<div class="item-title">{{team_name}}</div>' +
+                        '</div>' +
+                        '<div class="item-subtitle">Administrator: {{created_by}}</div>' +
+                        '</div>' +
+                        '</a>' +
+                        '</li>',
+                    height: 73,
+                });
+                myApp.initImagesLazyLoad(page.container);
+                myApp.hideIndicator();
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                myApp.hideIndicator();
+                myApp.alert(AJAX_ERROR_ALERT);
+            });
+    } else {
+        myApp.alert(NO_INTERNET_ALERT);
+    }
+});
+
+/* ===== Team List Page ===== */
+myApp.onPageInit('my-team-list', function(page) {
+    myApp.closePanel('left');
+    
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-my-team-list').prepend('My Team List');
+    } else {
+        $('#lbl-my-team-list').prepend('Mine Team liste');
+    }
+
+    if (checkInternetConnection() == true) {
+        myApp.showIndicator();
+        var items = [];
+        $.getJSON(ENVYP_API_URL + "get_my_team_list.php?account_id=" + localStorage.getItem('account_id'), function(result) {
                 $.each(result, function(i, field) {
                     if (field.status == 'empty') {
                         myApp.alert('No teams yet :(');
@@ -3888,6 +3955,8 @@ function chooseLanguage() {
                 $('#lbl-choose-sports').prepend('Choose Sports');
                 $('#lbl-profile').empty();
                 $('#lbl-profile').prepend('Profile');
+                $('#btn-my-teams').empty();
+                $('#btn-my-teams').prepend('My Teams');
                 $('#btn-edit-profile').empty();
                 $('#btn-edit-profile').prepend('Edit Profile');
                 $('#btn-inbox').empty();
@@ -3911,6 +3980,8 @@ function chooseLanguage() {
                 $('#lbl-choose-sports').prepend('Vælg Sport');
                 $('#lbl-profile').empty();
                 $('#lbl-profile').prepend('Profil');
+                $('#btn-my-teams').empty();
+                $('#btn-my-teams').prepend('Mine Teams');
                 $('#btn-edit-profile').empty();
                 $('#btn-edit-profile').prepend('Rediger profil');
                 $('#btn-inbox').empty();
