@@ -78,6 +78,8 @@ if (localStorage.getItem('selectedLanguage') == '1') {
     $('#btn-inbox').prepend('Inbox');
     $('#btn-choose-language').empty();
     $('#btn-choose-language').prepend('Language');
+    $('#btn-settings').empty();
+    $('#btn-settings').prepend('Settings');
     $('#btn-logout').empty();
     $('#btn-logout').prepend('Logout');
     $('#lbl-team-settings').empty();
@@ -97,6 +99,8 @@ if (localStorage.getItem('selectedLanguage') == '1') {
     $('#btn-inbox').prepend('Indbakke');
     $('#btn-choose-language').empty();
     $('#btn-choose-language').prepend('Sprog');
+    $('#btn-settings').empty();
+    $('#btn-settings').prepend('Settings');
     $('#btn-logout').empty();
     $('#btn-logout').prepend('Log ud');
     $('#lbl-team-settings').empty();
@@ -137,6 +141,9 @@ $$('#btn-email-login').on('click', function() {
                         localStorage.setItem('age', msg.age);
                         localStorage.setItem('description', msg.description);
                         localStorage.setItem('account_image', msg.account_image);
+                        localStorage.setItem('currency_id', msg.account_image);
+                        localStorage.setItem('currency_id', msg.currency_id);
+                        localStorage.setItem('time_id', msg.time_id);
 
                         $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
                         $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
@@ -234,6 +241,8 @@ myApp.onPageInit('main', function(page) {
                             localStorage.setItem('age', msg.age);
                             localStorage.setItem('description', msg.description);
                             localStorage.setItem('account_image', msg.account_image);
+                            localStorage.setItem('currency_id', msg.currency_id);
+                            localStorage.setItem('time_id', msg.time_id);
 
                             $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
                             $$('#img-profile-image').attr('src', (localStorage.getItem('account_image') == '' || localStorage.getItem('account_image') == null ? "img/profile.jpg" : localStorage.getItem('account_image')));
@@ -487,6 +496,52 @@ myApp.onPageInit('inbox-detail', function(page) {
             myApp.alert(AJAX_ERROR_ALERT);
         });
 });
+
+/* ===== Settings Page ===== */
+myApp.onPageInit('settings', function(page) {
+    myApp.closePanel('left');
+    if (localStorage.getItem('selectedLanguage') == '1') {
+        $('#lbl-settings').prepend('Settings');
+        $('#btn-update-settings').prepend('Update');
+    } else {
+        $('#lbl-settings').prepend('Indstillinger');
+        $('#btn-update-settings').prepend('Opdatering');
+    }
+
+    $$('#btn-update-settings').on('click', function() {
+        if (checkInternetConnection() == true) {
+            var currency_id = $$('#select-currency-list').val();
+            var time_id = $$('#select-time-list').val();  
+
+            $$('#btn-update-settings').attr('disabled', true);
+            myApp.showIndicator();
+            $$.ajax({
+                type: "POST",
+                url: ENVYP_API_URL + "update_settings.php",
+                data: "account_id=" + localStorage.getItem('account_id') + "&currency_id=" + currency_id + "&time_id=" + time_id,
+                dataType: "json",
+                success: function(msg, string, jqXHR) {
+                    myApp.hideIndicator();
+                    if (msg.status == '0') {
+                        myApp.alert('Success');
+                        localStorage.setItem('currency_id', currency_id);
+                        localStorage.setItem('time_id', time_id);
+                    } else {
+                        myApp.alert(msg.message);
+                    }
+                    $$('#btn-update-settings').removeAttr("disabled");
+                },
+                error: function(msg, string, jqXHR) {
+                    myApp.hideIndicator();
+                    myApp.alert(ERROR_ALERT);
+                    $$('#btn-update-settings').removeAttr("disabled");
+                }
+            });
+        } else {
+            myApp.alert(NO_INTERNET_ALERT);
+        }
+    });
+});   
 
 /* ===== Add Profile Page ===== */
 myApp.onPageInit('profile-add', function(page) {
@@ -1900,7 +1955,7 @@ myApp.onPageInit('tournament-list', function(page) {
     if (checkInternetConnection() == true) {
         var items = [];
         myApp.showIndicator();
-        $.getJSON(ENVYP_API_URL + "get_tournament_list.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
+        $.getJSON(ENVYP_API_URL + "get_tournament_list.php?team_id=" + localStorage.getItem('selectedTeamID') + "&time_id=" + localStorage.getItem('time_id'), function(result) {
                 $.each(result, function(i, field) {
                     if (field.status == 'empty') {
                         myApp.alert('No tournament yet :(');
@@ -3971,6 +4026,8 @@ function chooseLanguage() {
                 $('#btn-inbox').prepend('Inbox');
                 $('#btn-choose-language').empty();
                 $('#btn-choose-language').prepend('Language');
+                $('#btn-settings').empty();
+                $('#btn-settings').prepend('Settings');
                 $('#btn-logout').empty();
                 $('#btn-logout').prepend('Logout');
                 $('#lbl-team-settings').empty();
@@ -3996,6 +4053,8 @@ function chooseLanguage() {
                 $('#btn-inbox').prepend('Indbakke');
                 $('#btn-choose-language').empty();
                 $('#btn-choose-language').prepend('Sprog');
+                $('#btn-settings').empty();
+                $('#btn-settings').prepend('Indstillinger');
                 $('#btn-logout').empty();
                 $('#btn-logout').prepend('Log ud');
                 $('#lbl-team-settings').empty();
@@ -4447,6 +4506,8 @@ function getFBDetails() {
                         localStorage.setItem('age', msg.age);
                         localStorage.setItem('description', msg.description);
                         localStorage.setItem('account_image', msg.account_image);
+                        localStorage.setItem('currency_id', msg.currency_id);
+                        localStorage.setItem('time_id', msg.time_id);
 
                         $('#div-profile-name').empty();
                         $$('#div-profile-name').prepend(localStorage.getItem('first_name') + ' ' + localStorage.getItem('last_name'));
