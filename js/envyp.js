@@ -916,6 +916,10 @@ myApp.onPageInit('team-list', function(page) {
     } else {
         myApp.alert(NO_INTERNET_ALERT);
     }
+
+    $$('#btn-team-list-refresh').on('click', function() {
+        mainView.router.reloadPage("team_list.html")
+    });
 });
 
 /* ===== Team List Page ===== */
@@ -979,6 +983,10 @@ myApp.onPageInit('my-team-list', function(page) {
     } else {
         myApp.alert(NO_INTERNET_ALERT);
     }
+
+    $$('#btn-my-team-list-refresh').on('click', function() {
+        mainView.router.reloadPage("my_team_list.html")
+    });
 });
 
 /* ===== Team Stats Page ===== */
@@ -1653,11 +1661,11 @@ myApp.onPageInit('account-list', function(page) {
                             window.plugins.OneSignal.postNotification(notificationObj,
                                 function(successResponse) {
                                     console.log("Notification Post Success:", successResponse);
-                                    alert("Notification Post Success:\n" + JSON.stringify(successResponse));
+                                    // alert("Notification Post Success:\n" + JSON.stringify(successResponse));
                                 },
                                 function(failedResponse) {
                                     console.log("Notification Post Failed: ", failedResponse);
-                                    alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
+                                    // alert("Notification Post Failed:\n" + JSON.stringify(failedResponse));
                                 }
                             );
                         }
