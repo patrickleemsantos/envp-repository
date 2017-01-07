@@ -508,6 +508,42 @@ myApp.onPageInit('settings', function(page) {
         $('#btn-update-settings').prepend('Opdatering');
     }
 
+    if (localStorage.getItem('currency_id') == 1) {
+        myApp.smartSelectAddOption('#select-currency-list', '<option value="1" selected>USD</option>');
+        myApp.smartSelectAddOption('#select-currency-list', '<option value="2">DKK</option>');
+        myApp.smartSelectAddOption('#select-currency-list', '<option value="3">GBP</option>');
+        myApp.smartSelectAddOption('#select-currency-list', '<option value="4">EUR</option>');
+        $$('#select-currency-list').val(1);
+    } else if (localStorage.getItem('currency_id') == 2) {
+        myApp.smartSelectAddOption('#select-currency-list', '<option value="1">USD</option>');
+       myApp.smartSelectAddOption('#select-currency-list', '<option value="2" selected>DKK</option>');
+        myApp.smartSelectAddOption('#select-currency-list', '<option value="3">GBP</option>');
+        myApp.smartSelectAddOption('#select-currency-list', '<option value="4">EUR</option>');
+        $$('#select-currency-list').val(2);
+    } else if (localStorage.getItem('currency_id') == 3) {
+        myApp.smartSelectAddOption('#select-currency-list', '<option value="1">USD</option>');
+        myApp.smartSelectAddOption('#select-currency-list', '<option value="2">DKK</option>');
+        myApp.smartSelectAddOption('#select-currency-list', '<option value="3" selected>GBP</option>');
+        myApp.smartSelectAddOption('#select-currency-list', '<option value="4">EUR</option>');
+        $$('#select-currency-list').val(3);
+    } else if (localStorage.getItem('currency_id') == 4) {
+        myApp.smartSelectAddOption('#select-currency-list', '<option value="1">USD</option>');
+        myApp.smartSelectAddOption('#select-currency-list', '<option value="2">DKK</option>');
+        myApp.smartSelectAddOption('#select-currency-list', '<option value="3">GBP</option>');
+        myApp.smartSelectAddOption('#select-currency-list', '<option value="4" selected>EUR</option>');
+        $$('#select-currency-list').val(4);
+    }
+
+    if (localStorage.getItem('time_id') == 1) {
+        myApp.smartSelectAddOption('#select-time-list', '<option value="1" selected>24-Hour Clock</option>');
+        myApp.smartSelectAddOption('#select-time-list', '<option value="2">12-Hour Clock</option>');
+        $$('#select-time-list').val("1");
+    } else if (localStorage.getItem('time_id') == 2) {
+        myApp.smartSelectAddOption('#select-time-list', '<option value="1">24-Hour Clock</option>');
+        myApp.smartSelectAddOption('#select-time-list', '<option value="2" selected>12-Hour Clock</option>');
+        $$('#select-time-list').val("2");
+    }    
+
     $$('#btn-update-settings').on('click', function() {
         if (checkInternetConnection() == true) {
             var currency_id = $$('#select-currency-list').val();
@@ -1197,7 +1233,7 @@ myApp.onPageInit('fines-list', function(page) {
                         '<div class="item-inner">' +
                         '<div class="item-title-row">' +
                         '<div class="item-title">{{roster_name}}</div>' +
-                        '<div class="item-after">${{total_price}}</div>' +
+                        '<div class="item-after">{{total_price}}</div>' +
                         '</div>' +
                         '<div class="item-subtitle">{{roster_position}}</div>' +
                         '<div class="item-text"></div>' +
@@ -1283,7 +1319,7 @@ myApp.onPageInit('fine-detail-list', function(page) {
                         '<div class="item-inner">' +
                         '<div class="item-title-row">' +
                         '<div class="item-title">{{opponent}}</div>' +
-                        '<div class="item-after">${{price}}</div>' +
+                        '<div class="item-after">{{price}}</div>' +
                         '</div>' +
                         '<div class="item-subtitle">{{date}}</div>' +
                         '<div class="item-text">{{fine}}</div>' +
@@ -2216,7 +2252,7 @@ myApp.onPageInit('tournament-detail', function(page) {
 
     // Preload game details
     myApp.showIndicator();
-    $.getJSON(ENVYP_API_URL + "get_tournament_detail.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
+    $.getJSON(ENVYP_API_URL + "get_tournament_detail.php?tournament_id=" + localStorage.getItem('selectedTournamentId') + "&time_id=" + localStorage.getItem('time_id'), function(result) {
             $.each(result, function(i, field) {
                 tournament_opponent = field.opponent;
                 tournament_location = field.location;
@@ -2242,6 +2278,10 @@ myApp.onPageInit('tournament-detail', function(page) {
 
     $$('#btn-edit-tournament-details').on('click', function() {
         mainView.router.loadPage('tournament_edit.html?tournament_id=' + page.query.tournament_id + '&opponent=' + tournament_opponent + '&location=' + tournament_location + '&date=' + tournament_date + '&description=' + tournament_description + '&image_url=' + tournament_image_url + '&longitude=' + tournament_longitude + '&latitude=' + tournament_latitude + '&formatted_date=' + tournament_formatted_date);
+    });
+
+    $$('#btn-tournament-refresh').on('click', function() {
+        mainView.router.reloadPage('tournament_detail.html?tournament_id=' + localStorage.getItem('selectedTournamentId'));
     });
     // End preload game details
 
@@ -2295,7 +2335,7 @@ myApp.onPageInit('tournament-detail', function(page) {
                         '<div class="item-inner">' +
                         '<div class="item-title-row">' +
                         '<div class="item-title">' + field.name + '</div>' +
-                        '<div class="item-after">$' + field.price + '</div>' +
+                        '<div class="item-after">' + field.price + '</div>' +
                         '</div>' +
                         '<div class="item-subtitle"></div>' +
                         '<div class="item-text">' + field.fine + '</div>' +
@@ -2719,11 +2759,11 @@ function shareMVPOnTwitter(points, assists, fouls, yellowcard, redcard, votes) {
         var roster_image = localStorage.getItem('mvp_roster_image');
 
         if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('selectedSportID') == 4) {
-            description = team_name + " vs " + opponent_name + "\n" + roster_name + "\nvotes: " + votes + "\ngoals/mål: " + points + "\nassists: " + assists + "\nyellow card: " + yellowcard + "\nred card: " + redcard + "\n";
+            description = "Congratualtions! You are MV!" "Tillykke! Du er kampens spiller! \n" + team_name + " vs " + opponent_name + "\n" + roster_name + "\nvotes: " + votes + "\ngoals/mål: " + points + "\nassists: " + assists + "\nyellow card: " + yellowcard + "\nred card: " + redcard + "\n";
         } else if (localStorage.getItem('selectedSportID') == 2 || localStorage.getItem('selectedSportID') == 5) {
-            description = team_name + " vs " + opponent_name + "\n" + roster_name + "\nvotes: " + votes + "\ngoals/mål: " + points + "\nassists: " + assists + "\nfouls: " + fouls + "\n";
+            description = "Congratualtions! You are MV!" "Tillykke! Du er kampens spiller! \n" + team_name + " vs " + opponent_name + "\n" + roster_name + "\nvotes: " + votes + "\ngoals/mål: " + points + "\nassists: " + assists + "\nfouls: " + fouls + "\n";
         } else if (localStorage.getItem('selectedSportID') == 1 || localStorage.getItem('selectedSportID') == 6) {
-            description = team_name + " vs " + opponent_name + "\n" + roster_name + "\nvotes: " + votes + "\npoints: " + points + "\nassists: " + assists + "\nfouls: " + fouls + "\n";
+            description = "Congratualtions! You are MV!" "Tillykke! Du er kampens spiller! \n" + team_name + " vs " + opponent_name + "\n" + roster_name + "\nvotes: " + votes + "\npoints: " + points + "\nassists: " + assists + "\nfouls: " + fouls + "\n";
         }
 
         window.plugins.socialsharing.shareViaTwitter(description,
@@ -2772,7 +2812,7 @@ function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) 
     facebookConnectPlugin.showDialog({
         method: "feed",
         href: "http://envp.dk",
-        caption: "MVP Result: " + team_name + " vs " + opponent_name,
+        caption: "Congratualtions! You are MV!" "Tillykke! Du er kampens spiller! \n" + team_name + " vs " + opponent_name,
         description: description,
         picture: image_url,
         share_feedWeb: true
@@ -2990,18 +3030,29 @@ myApp.onPageInit('tournament-edit', function(page) {
 
 /* =====Administrator List Page ===== */
 myApp.onPageInit('tournament-fine-add', function(page) {
+    var currency = '';
+    if (localStorage.getItem('currency_id') == 1) {
+        currency = 'USD';
+    } else if (localStorage.getItem('currency_id') == 2) {
+        currency = 'DKK';
+    } else if (localStorage.getItem('currency_id') == 3) {
+        currency = 'GBP';
+    } else if (localStorage.getItem('currency_id') == 4) {
+        currency = 'EUR';
+    }
+
     if (localStorage.getItem('selectedLanguage') == '1') {
         $('#lbl-create-fine').append('Create Fine');
         $('#lbl-fine-add-details').append('Details');
         $('#lbl-fine-add-roster').append('Roster');
         $('#lbl-fine-add-fine').append('Fine');
-        $('#lbl-fine-add-price').append('Price');
+        $('#lbl-fine-add-price').append('Price ' + '(' + currency + ')');
     } else {
         $('#lbl-create-fine').append('Opret fint');
         $('#lbl-fine-add-details').append('Detaljer');
         $('#lbl-fine-add-roster').append('mandskab');
         $('#lbl-fine-add-fine').append('Bøde');
-        $('#lbl-fine-add-price').append('Pris');
+        $('#lbl-fine-add-price').append('Pris ' + '(' + currency + ')');
     }
 
     $("#select-roster-list").empty();
@@ -3051,7 +3102,7 @@ myApp.onPageInit('tournament-fine-add', function(page) {
             $$.ajax({
                 type: "POST",
                 url: ENVYP_API_URL + "add_tournament_fine.php",
-                data: "tournament_id=" + localStorage.getItem('selectedTournamentId') + "&account_id=" + localStorage.getItem('account_id') + "&roster_id=" + roster_id + "&fine=" + fine_description + "&price=" + fine_price,
+                data: "tournament_id=" + localStorage.getItem('selectedTournamentId') + "&account_id=" + localStorage.getItem('account_id') + "&roster_id=" + roster_id + "&fine=" + fine_description + "&price=" + fine_price + "&currency_id=" + localStorage.getItem('currency_id'),
                 dataType: "json",
                 success: function(msg, string, jqXHR) {
                     myApp.hideIndicator();
@@ -3075,7 +3126,7 @@ myApp.onPageInit('tournament-fine-add', function(page) {
                                             '<div class="item-inner">' +
                                             '<div class="item-title-row">' +
                                             '<div class="item-title">' + field.name + '</div>' +
-                                            '<div class="item-after">$' + field.price + '</div>' +
+                                            '<div class="item-after">' + field.price + '</div>' +
                                             '</div>' +
                                             '<div class="item-subtitle"></div>' +
                                             '<div class="item-text">' + field.fine + '</div>' +
