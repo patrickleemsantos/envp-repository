@@ -1155,7 +1155,7 @@ myApp.onPageInit('team-management', function(page) {
         $('#btn-roster').append('mandskab');
         $('#btn-tournament').append('Turnering');
         $('#btn-statistics').append('Statistik');
-        $('#btn-fines').append('fines');
+        $('#btn-fines').append('Bøder');
     }
 
     if (page.query.team_id != null) {
@@ -2069,7 +2069,7 @@ myApp.onPageInit('tournament-detail', function(page) {
         $('#lbl-tournament-detail-roster').append('mandskab');
         $('#lbl-tournament-detail-stats').empty();
         $('#lbl-tournament-detail-stats').append('Statistik');
-        $('#lbl-tournament-detail-fine-box').append('fint kasse');
+        $('#lbl-tournament-detail-fine-box').append('bødekasse');
         $('#lbl-tournament-detail-mvp').append('MVP');
 
         $('#lbl-tournament-detail-opponent').append('<b>Modstander</b>');
@@ -2080,9 +2080,9 @@ myApp.onPageInit('tournament-detail', function(page) {
 
         $('#lbl-tournament-detail-versus').append('Imod');
 
-        $('#lbl-tournament-detail-enter-vote').append('Indtast din stemme');
+        $('#lbl-tournament-detail-enter-vote').append('Indtast din stem');
         $('#lbl-tournament-detail-roster-vote').append('mandskab');
-        $('#btn-submit-vote').append('Stemme');
+        $('#btn-submit-vote').append('Stem');
     }
 
     if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('selectedSportID') == 4) {
@@ -2759,11 +2759,11 @@ function shareMVPOnTwitter(points, assists, fouls, yellowcard, redcard, votes) {
         var roster_image = localStorage.getItem('mvp_roster_image');
 
         if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('selectedSportID') == 4) {
-            description = "Congratualtions! You are MV!" "Tillykke! Du er kampens spiller! \n" + team_name + " vs " + opponent_name + "\n" + roster_name + "\nvotes: " + votes + "\ngoals/mål: " + points + "\nassists: " + assists + "\nyellow card: " + yellowcard + "\nred card: " + redcard + "\n";
+            description = "Congratualtions! You are MV! Tillykke! Du er kampens spiller! \n" + team_name + " vs " + opponent_name + "\n" + roster_name + "\nvotes: " + votes + "\ngoals/mål: " + points + "\nassists: " + assists + "\nyellow card: " + yellowcard + "\nred card: " + redcard + "\n";
         } else if (localStorage.getItem('selectedSportID') == 2 || localStorage.getItem('selectedSportID') == 5) {
-            description = "Congratualtions! You are MV!" "Tillykke! Du er kampens spiller! \n" + team_name + " vs " + opponent_name + "\n" + roster_name + "\nvotes: " + votes + "\ngoals/mål: " + points + "\nassists: " + assists + "\nfouls: " + fouls + "\n";
+            description = "Congratualtions! You are MV! Tillykke! Du er kampens spiller! \n" + team_name + " vs " + opponent_name + "\n" + roster_name + "\nvotes: " + votes + "\ngoals/mål: " + points + "\nassists: " + assists + "\nfouls: " + fouls + "\n";
         } else if (localStorage.getItem('selectedSportID') == 1 || localStorage.getItem('selectedSportID') == 6) {
-            description = "Congratualtions! You are MV!" "Tillykke! Du er kampens spiller! \n" + team_name + " vs " + opponent_name + "\n" + roster_name + "\nvotes: " + votes + "\npoints: " + points + "\nassists: " + assists + "\nfouls: " + fouls + "\n";
+            description = "Congratualtions! You are MV! Tillykke! Du er kampens spiller! \n" + team_name + " vs " + opponent_name + "\n" + roster_name + "\nvotes: " + votes + "\npoints: " + points + "\nassists: " + assists + "\nfouls: " + fouls + "\n";
         }
 
         window.plugins.socialsharing.shareViaTwitter(description,
@@ -2812,7 +2812,7 @@ function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) 
     facebookConnectPlugin.showDialog({
         method: "feed",
         href: "http://envp.dk",
-        caption: "Congratualtions! You are MV!" "Tillykke! Du er kampens spiller! \n" + team_name + " vs " + opponent_name,
+        caption: "Congratualtions! You are MV! Tillykke! Du er kampens spiller! \n" + team_name + " vs " + opponent_name,
         description: description,
         picture: image_url,
         share_feedWeb: true
