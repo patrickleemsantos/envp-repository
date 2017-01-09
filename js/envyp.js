@@ -1114,6 +1114,8 @@ myApp.onPageInit('team-stats', function(page) {
         $('#lbl-team-stats-fouls').append('fouls');
     }
 
+    $('#li-team-stats-assists').hide();
+
     var ppg = 0;
     var oppg = 0;
     var apg = 0;
@@ -1214,7 +1216,7 @@ myApp.onPageInit('fines-list', function(page) {
     if (checkInternetConnection() == true) {
         var items = [];
         myApp.showIndicator();
-        $.getJSON(ENVYP_API_URL + "get_roster_fines.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
+        $.getJSON(ENVYP_API_URL + "get_roster_fines.php?team_id=" + localStorage.getItem('selectedTeamID') + "&currency_id=" + localStorage.getItem('currency_id'), function(result) {
                 $.each(result, function(i, field) {
                     if (field.status == 'empty') {
                         myApp.alert('No roster fines yet :(');
@@ -4245,14 +4247,16 @@ function getTeamPassword(team_id, team_admin, team_name, team_password, team_ima
     if (team_admin != localStorage.getItem('account_id')) {
         isAccountInvited(team_id, function(response) {
             if (response.status == true) {
-                myApp.prompt('Please enter a password', function(data) {
-                    if (data == team_password) {
-                        localStorage.setItem('currentAccountIsTeamAdmin', response.is_admin);
-                        mainView.router.loadPage('team_management.html?team_id=' + team_id + '&team_name=' + team_name + '&team_admin=' + team_admin + '&team_image=' + team_image + '&team_password=' + team_password);
-                    } else {
-                        myApp.alert('Incorrect team password!');
-                    }
-                });
+                // myApp.prompt('Please enter a password', function(data) {
+                    myApp.modalPassword('Please enter a password', function (password) {
+                        if (data == team_password) {
+                            localStorage.setItem('currentAccountIsTeamAdmin', response.is_admin);
+                            mainView.router.loadPage('team_management.html?team_id=' + team_id + '&team_name=' + team_name + '&team_admin=' + team_admin + '&team_image=' + team_image + '&team_password=' + team_password);
+                        } else {
+                            myApp.alert('Incorrect team password!');
+                        }
+                    });
+                // });
             } else {
                 myApp.alert('You are not invited on this event');
             }
