@@ -55,6 +55,14 @@ if (localStorage.getItem('selectedLanguage') == '' || localStorage.getItem('sele
     localStorage.setItem('selectedLanguage', '1');
 }
 
+if (localStorage.getItem('currency_id') == '' || localStorage.getItem('currency_id') == null) {
+    localStorage.setItem('currency_id', '1');
+}
+
+if (localStorage.getItem('time_id') == '' || localStorage.getItem('time_id') == null) {
+    localStorage.setItem('time_id', '1');
+}
+
 $(document).on({
     'DOMNodeInserted': function() {
         $('.pac-item, .pac-item span', this).addClass('no-fastclick');
