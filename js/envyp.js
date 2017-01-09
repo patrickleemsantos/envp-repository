@@ -1090,6 +1090,8 @@ myApp.onPageInit('team-stats', function(page) {
 
     if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('selectedSportID') == 4) {
         $('#li-team-stats-fouls').hide();
+        $('#lbl-team-games').append('games');
+        $('#lbl-team-stats-opp-points').append('opponent goals/mål');
         $('#lbl-team-stats-points').append('goals/mål');
         $('#lbl-team-stats-assists').append('assists');
         $('#lbl-team-stats-yellowcard').append('yellow card');
@@ -1097,18 +1099,23 @@ myApp.onPageInit('team-stats', function(page) {
     } else if (localStorage.getItem('selectedSportID') == 2 || localStorage.getItem('selectedSportID') == 5) {
         $('#li-team-stats-yellowcard').hide();
         $('#li-team-stats-redcard').hide();
+        $('#lbl-team-games').append('games');
+        $('#lbl-team-stats-opp-points').append('opponent goals/mål');
         $('#lbl-team-stats-points').append('goals/mål');
         $('#lbl-team-stats-assists').append('assists');
         $('#lbl-team-stats-fouls').append('fouls/minutes');
     } else if (localStorage.getItem('selectedSportID') == 1 || localStorage.getItem('selectedSportID') == 6) {
         $('#li-team-stats-yellowcard').hide();
         $('#li-team-stats-redcard').hide();
+        $('#lbl-team-games').append('games');
+        $('#lbl-team-stats-opp-points').append('opponent points');
         $('#lbl-team-stats-points').append('points');
         $('#lbl-team-stats-assists').append('assists');
         $('#lbl-team-stats-fouls').append('fouls');
     }
 
     var ppg = 0;
+    var oppg = 0;
     var apg = 0;
     var fpg = 0;
     var yellowcard = 0;
@@ -1123,14 +1130,18 @@ myApp.onPageInit('team-stats', function(page) {
     myApp.showIndicator();
     $.getJSON(ENVYP_API_URL + "get_team_stats.php?team_id=" + localStorage.getItem('selectedTeamID'), function(result) {
             $.each(result, function(i, field) {
+                total_games = field.total_games;
                 ppg = field.ppg
+                oppg = field.oppg
                 apg = field.apg
                 fpg = field.fpg
                 yellowcard = field.yellowcard
                 redcard = field.redcard
             });
 
+            $('#team-games').prepend(total_games);
             $('#team-ppg').prepend(ppg);
+            $('#team-oppg').prepend(oppg);
             $('#team-apg').prepend(apg);
             $('#team-fpg').prepend(fpg);
             $('#team-yellowcard').prepend(yellowcard);
@@ -1530,18 +1541,24 @@ myApp.onPageInit('roster-detail', function(page) {
         $('#lbl-roster-det-assists').append('assists');
         $('#lbl-roster-det-yellowcard').append('yellow card');
         $('#lbl-roster-det-redcard').append('red card');
+        $('#lbl-roster-det-votes').append('votes');
+        $('#lbl-roster-det-mvp').append('mvp');
     } else if (localStorage.getItem('selectedSportID') == 2 || localStorage.getItem('selectedSportID') == 5) {
         $('#li-roster-det-yellowcard').hide();
         $('#li-roster-det-redcard').hide();
         $('#lbl-roster-det-score').append('goals/mål');
         $('#lbl-roster-det-assists').append('assists');
         $('#lbl-roster-det-fouls').append('fouls/minutes');
+        $('#lbl-roster-det-votes').append('votes');
+        $('#lbl-roster-det-mvp').append('mvp');
     } else if (localStorage.getItem('selectedSportID') == 1 || localStorage.getItem('selectedSportID') == 6) {
         $('#li-roster-det-yellowcard').hide();
         $('#li-roster-det-redcard').hide();
         $('#lbl-roster-det-score').append('points');
         $('#lbl-roster-det-assists').append('assists');
         $('#lbl-roster-det-fouls').append('fouls');
+        $('#lbl-roster-det-votes').append('votes');
+        $('#lbl-roster-det-mvp').append('mvp');
     }
 
     if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
@@ -1563,6 +1580,8 @@ myApp.onPageInit('roster-detail', function(page) {
                 $('#roster-fpg').prepend(field.fpg);
                 $('#roster-yellowcard').prepend(field.yellowcard);
                 $('#roster-redcard').prepend(field.redcard);
+                $('#roster-votes').prepend(field.votes);
+                $('#roster-mvp').prepend(field.mvp_count);
             });
             myApp.hideIndicator();
         })
@@ -1996,7 +2015,7 @@ myApp.onPageInit('tournament-list', function(page) {
                     if (field.status == 'empty') {
                         myApp.alert('No tournament yet :(');
                     } else {
-                        var tournament_image = (field.image_url == '' || field.image_url == null ? "img/icon-basketball.png" : field.image_url);
+                        var tournament_image = (field.image_url == '' || field.image_url == null ? "img/envp-icon-ldpi.png" : field.image_url);
                         items.push({
                             tournament_id: field.tournament_id,
                             opponent: field.opponent,
@@ -2580,8 +2599,25 @@ function endVoteConfirmation(status) {
                             myApp.hideIndicator();
                             if (msg.status == 0) {
                                 if (msg.vote_count == 1) {
-                                    mainView.router.loadPage('voting_result.html');
-                                    myApp.alert('Vote ended successfully!');
+                                    var roster_id = msg.roster_id;
+                                    myApp.showIndicator();
+                                    $$.ajax({
+                                        type: "POST",
+                                        url: ENVYP_API_URL + "update_vote_count.php",
+                                        data: "roster_id=" + roster_id,
+                                        dataType: "json",
+                                        success: function(msg, string, jqXHR) {
+                                            myApp.hideIndicator();
+                                            if (msg.status == 0) {
+                                                mainView.router.loadPage('voting_result.html');
+                                                myApp.alert('Vote ended successfully!');
+                                            }
+                                        },
+                                        error: function(msg, string, jqXHR) {
+                                            myApp.hideIndicator();
+                                            myApp.alert(ERROR_ALERT);
+                                        }
+                                    });
                                 } else {
                                     myApp.confirm('Oops! There was a tie, would you like to reset the voting for the top rosters?', function () {
                                           myApp.showIndicator();
@@ -2602,6 +2638,8 @@ function endVoteConfirmation(status) {
                                         });  
                                     });
                                 }
+                            } else {
+                                myApp.alert(msg.msg);
                             }
                         },
                         error: function(msg, string, jqXHR) {
@@ -2936,7 +2974,7 @@ myApp.onPageInit('tournament-edit', function(page) {
     edit_longitude = page.query.longitude;
     edit_latitude = page.query.latitude;
 
-    $$("#edit-tournament-image").attr("data-src", (page.query.image_url == '' || page.query.image_url == null ? "img/camera-flat.png" : page.query.image_url));
+    $$("#edit-tournament-image").attr("data-src", (page.query.image_url == '' || page.query.image_url == null ? "img/envp-icon-ldpi.png" : page.query.image_url));
     $$("#edit-tournament-image").addClass('lazy lazy-fadein');
     myApp.initImagesLazyLoad(page.container);
 
@@ -4466,7 +4504,7 @@ function clearTournamentDetails() {
     $$('#txt-opponent-name').val('');
     $$('#txt-tournament-location').val('');
     $$('#txt-tournament-description').val('');
-    $$('#tournament-image').attr('src', 'img/camera-flat.png');
+    $$('#tournament-image').attr('src', 'img/envp-icon-ldpi.png');
     imgfile = '';
 }
 
