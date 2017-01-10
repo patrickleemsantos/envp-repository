@@ -4257,7 +4257,7 @@ function getTeamPassword(team_id, team_admin, team_name, team_password, team_ima
             if (response.status == true) {
                 // myApp.prompt('Please enter a password', function(data) {
                     myApp.modalPassword('Please enter a password', function (password) {
-                        if (data == team_password) {
+                        if (password == team_password) {
                             localStorage.setItem('currentAccountIsTeamAdmin', response.is_admin);
                             mainView.router.loadPage('team_management.html?team_id=' + team_id + '&team_name=' + team_name + '&team_admin=' + team_admin + '&team_image=' + team_image + '&team_password=' + team_password);
                         } else {
