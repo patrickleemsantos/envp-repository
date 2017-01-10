@@ -977,7 +977,7 @@ myApp.onPageInit('team-list', function(page) {
                             team_admin: field.team_admin,
                             team_name: field.team_name,
                             team_password: field.team_password,
-                            team_image: field.team_image,
+                            team_image: (field.team_image == '' || field.team_image == null ? "img/envp-icon-ldpi.png" : field.team_image),
                             created_by: field.first_name + ' ' + field.last_name
                         });
                     }
@@ -993,7 +993,7 @@ myApp.onPageInit('team-list', function(page) {
                         return found;
                     },
                     template: '<li>' +
-                        '<a href="#" onclick="getTeamPassword({{team_id}},{{team_admin}},\'{{team_name}}\',\'{{team_password}}\',\'{{team_image}}\')" class="item-link item-content">' +
+                        '<a href="#" onclick="getTeamPassword({{team_id}},{{team_admin}},\'{{team_name}}\',\'{{team_password}}\',\'{{team_image}}\',2)" class="item-link item-content">' +
                         '<div class="item-media"><img data-src="{{team_image}}" class="lazy lazy-fadein img-circle" style="width:44px; height:44px;"/></div>' +
                         '<div class="item-inner">' +
                         '<div class="item-title-row">' +
@@ -1060,7 +1060,7 @@ myApp.onPageInit('my-team-list', function(page) {
                         return found;
                     },
                     template: '<li>' +
-                        '<a href="#" onclick="getTeamPassword({{team_id}},{{team_admin}},\'{{team_name}}\',\'{{team_password}}\',\'{{team_image}}\')" class="item-link item-content">' +
+                        '<a href="#" onclick="getTeamPassword({{team_id}},{{team_admin}},\'{{team_name}}\',\'{{team_password}}\',\'{{team_image}}\',1)" class="item-link item-content">' +
                         '<div class="item-media"><img data-src="{{team_image}}" class="lazy lazy-fadein img-circle" style="width:44px; height:44px;"/></div>' +
                         '<div class="item-inner">' +
                         '<div class="item-title-row">' +
@@ -1210,6 +1210,14 @@ myApp.onPageInit('team-management', function(page) {
 
     $$('#close-right-panel').on('click', function() {
         myApp.closePanel('right');
+    });
+
+    $$('#btn-team-manage-back').on('click', function() {
+        if (localStorage.getItem('backTournament') == 1) {
+            mainView.router.loadPage('my_team_list.html');
+        } else if (localStorage.getItem('backTournament') == 2) {
+            mainView.router.loadPage('team_list.html');
+        }
     });
 });
 
@@ -4251,7 +4259,7 @@ function fail(error) {
     myApp.alert("An error has occurred with error code " + error.code + ", please try again.");
 }
 
-function getTeamPassword(team_id, team_admin, team_name, team_password, team_image) {
+function getTeamPassword(team_id, team_admin, team_name, team_password, team_image, backTournament) {
     if (team_admin != localStorage.getItem('account_id')) {
         isAccountInvited(team_id, function(response) {
             if (response.status == true) {
@@ -4272,6 +4280,7 @@ function getTeamPassword(team_id, team_admin, team_name, team_password, team_ima
     } else {
         mainView.router.loadPage('team_management.html?team_id=' + team_id + '&team_name=' + team_name + '&team_admin=' + team_admin + '&team_image=' + team_image + '&team_password=' + team_password);
     }
+    localStorage.setItem('backTournament', backTournament);
 }
 
 function isAccountInvited(team_id, callback) {
