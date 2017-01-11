@@ -4702,16 +4702,19 @@ function onBackKeyDown() {
 
         if (mainView.activePage.name == 'choose-sports' || mainView.activePage.name == 'main') {
             if ($$('body').hasClass('with-panel-left-cover')) {
-                alert('left');
                 myApp.closePanel('left');
             } else if ($$('body').hasClass('with-panel-right-cover')) {
-                alert('right');
                 myApp.closePanel('right');
             } else {
-                myApp.confirm('Do you want to Exit?', 'Exit App', function() {
-                    navigator.app.clearHistory();
-                    navigator.app.exitApp();
-                });
+                if ($('.popup.modal-in').length > 0) {
+                    alert('modal-in');
+                    myApp.closeModal('.popup');
+                } else {
+                    myApp.confirm('Do you want to Exit?', 'Exit App', function() {
+                        navigator.app.clearHistory();
+                        navigator.app.exitApp();
+                    });
+                }
             }
         } else {
             if ($$('.popup.popup-login').length > 0) {
@@ -4723,15 +4726,18 @@ function onBackKeyDown() {
             } else if ($$('.photo-browser').length > 0) {
                 $$('.photo-browser .photo-browser-close-link, .photo-browser .close-popup').trigger('click');
             } else if ($$('body').hasClass('with-panel-left-cover')) {
-                alert('left');
                 myApp.closePanel('left');
             } else if ($$('body').hasClass('with-panel-right-cover')) { 
-                alert('right');
                 myApp.closePanel('right');
             } else {
-                myApp.closeModal();
-                var view = myApp.getCurrentView();
-                view.router.back();
+                if ($('.popup.modal-in').length > 0) {
+                    alert('modal-in');
+                    myApp.closeModal('.popup');
+                } else {
+                    myApp.closeModal();
+                    var view = myApp.getCurrentView();
+                    view.router.back();
+                }
             }
         }
     } catch (err) {
