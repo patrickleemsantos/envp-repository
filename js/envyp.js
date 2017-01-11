@@ -4715,9 +4715,15 @@ function onBackKeyDown() {
             } else if ($$('.photo-browser').length > 0) {
                 $$('.photo-browser .photo-browser-close-link, .photo-browser .close-popup').trigger('click');
             } else {
-                myApp.closeModal();
-                var view = myApp.getCurrentView();
-                view.router.back();
+                if ($$('body').hasClass('with-panel-left-cover')) {
+                    myApp.closePanel('left');
+                } else if ($$('body').hasClass('with-panel-left-cover')) { 
+                    myApp.closePanel('right');
+                } else {
+                    myApp.closeModal();
+                    var view = myApp.getCurrentView();
+                    view.router.back();
+                } 
             }
         }
     } catch (err) {
