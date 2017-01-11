@@ -4704,7 +4704,7 @@ function onBackKeyDown() {
             if ($$('body').hasClass('with-panel-left-cover')) {
                 alert('left');
                 myApp.closePanel('left');
-            } else if () {
+            } else if ($$('body').hasClass('with-panel-right-cover')) {
                 alert('right');
                 myApp.closePanel('right');
             } else {
@@ -4725,7 +4725,7 @@ function onBackKeyDown() {
             } else if ($$('body').hasClass('with-panel-left-cover')) {
                 alert('left');
                 myApp.closePanel('left');
-            } else if ($$('body').hasClass('with-panel-left-cover')) { 
+            } else if ($$('body').hasClass('with-panel-right-cover')) { 
                 alert('right');
                 myApp.closePanel('right');
             } else {
