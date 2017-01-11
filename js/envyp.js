@@ -4705,16 +4705,13 @@ function onBackKeyDown() {
                 myApp.closePanel('left');
             } else if ($$('body').hasClass('with-panel-right-cover')) {
                 myApp.closePanel('right');
+            } else if ($$('body').hasClass('modal-overlay-visible')) { 
+                myApp.closeModal();
             } else {
-                if ($$('.popup.modal-in').length > 0) {
-                    alert('modal-in');
-                    myApp.closeModal('.popup');
-                } else {
-                    myApp.confirm('Do you want to Exit?', 'Exit App', function() {
-                        navigator.app.clearHistory();
-                        navigator.app.exitApp();
-                    });
-                }
+                myApp.confirm('Do you want to Exit?', 'Exit App', function() {
+                    navigator.app.clearHistory();
+                    navigator.app.exitApp();
+                });
             }
         } else {
             if ($$('.popup.popup-login').length > 0) {
@@ -4729,23 +4726,12 @@ function onBackKeyDown() {
                 myApp.closePanel('left');
             } else if ($$('body').hasClass('with-panel-right-cover')) { 
                 myApp.closePanel('right');
-            } else if($$('.popup').length && $$('.popup .view')[0].mainView) {
-                if($$('.popup .view')[0].mainView.history.length>1) {
-                  view.router.back();
-                } else {
-                  myApp.closeModal('.popup');
-                }
-            } else if($$('.popup').length) {
-                myApp.closeModal('.popup'); 
-            } else {
-                // if ($$('.popup.modal-in').length > 0) {
-                //     alert('modal-in');
-                //     myApp.closeModal('.popup');
-                // } else {
-                    // myApp.closeModal();
-                    var view = myApp.getCurrentView();
-                    view.router.back();
-                // }
+            } else if ($$('body').hasClass('modal-overlay-visible')) { 
+                myApp.closeModal();
+            }  else {
+                myApp.closeModal();
+                var view = myApp.getCurrentView();
+                view.router.back();
             }
         }
     } catch (err) {
