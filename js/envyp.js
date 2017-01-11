@@ -4,8 +4,7 @@ var myApp = new Framework7({
     preloadPreviousPage: false,
     fastClicks: true,
     pushState: true,
-    swipePanel: 'left',
-    swipePanel: 'right'
+    swipePanel: 'left'
 });
 
 var $$ = Dom7;
