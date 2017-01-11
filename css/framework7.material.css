@@ -4780,7 +4780,9 @@ html.with-statusbar-overlay .popup.tablet-fullscreen {
 }
 body.with-panel-left-cover .panel,
 body.with-panel-right-cover .panel {
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+  box-shadow: none;
+  overflow: visible;
+  /*box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);*/
 }
 body.with-panel-left-cover .views,
 body.with-panel-right-cover .views {
