@@ -4701,10 +4701,18 @@ function onBackKeyDown() {
         // }
 
         if (mainView.activePage.name == 'choose-sports' || mainView.activePage.name == 'main') {
-            myApp.confirm('Do you want to Exit?', 'Exit App', function() {
-                navigator.app.clearHistory();
-                navigator.app.exitApp();
-            });
+            if ($$('body').hasClass('with-panel-left-cover')) {
+                alert('left');
+                myApp.closePanel('left');
+            } else if () {
+                alert('right');
+                myApp.closePanel('right');
+            } else {
+                myApp.confirm('Do you want to Exit?', 'Exit App', function() {
+                    navigator.app.clearHistory();
+                    navigator.app.exitApp();
+                });
+            }
         } else {
             if ($$('.popup.popup-login').length > 0) {
                 return false;
@@ -4714,16 +4722,16 @@ function onBackKeyDown() {
                 $$('.searchbar.searchbar-active')[0].f7Searchbar.disable();
             } else if ($$('.photo-browser').length > 0) {
                 $$('.photo-browser .photo-browser-close-link, .photo-browser .close-popup').trigger('click');
+            } else if ($$('body').hasClass('with-panel-left-cover')) {
+                alert('left');
+                myApp.closePanel('left');
+            } else if ($$('body').hasClass('with-panel-left-cover')) { 
+                alert('right');
+                myApp.closePanel('right');
             } else {
-                if ($$('body').hasClass('with-panel-left-cover')) {
-                    myApp.closePanel('left');
-                } else if ($$('body').hasClass('with-panel-left-cover')) { 
-                    myApp.closePanel('right');
-                } else {
-                    myApp.closeModal();
-                    var view = myApp.getCurrentView();
-                    view.router.back();
-                } 
+                myApp.closeModal();
+                var view = myApp.getCurrentView();
+                view.router.back();
             }
         }
     } catch (err) {
