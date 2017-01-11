@@ -4705,7 +4705,7 @@ function onBackKeyDown() {
                 myApp.closePanel('left');
             } else if ($$('body').hasClass('with-panel-right-cover')) {
                 myApp.closePanel('right');
-            } else if ($$('body').hasClass('modal-overlay-visible')) { 
+            } else if ($$('div').hasClass('modal-overlay-visible')) { 
                 myApp.closeModal();
             } else {
                 myApp.confirm('Do you want to Exit?', 'Exit App', function() {
@@ -4726,7 +4726,7 @@ function onBackKeyDown() {
                 myApp.closePanel('left');
             } else if ($$('body').hasClass('with-panel-right-cover')) { 
                 myApp.closePanel('right');
-            } else if ($$('body').hasClass('modal-overlay-visible')) { 
+            } else if ($$('div').hasClass('modal-overlay-visible')) { 
                 myApp.closeModal();
             }  else {
                 myApp.closeModal();
