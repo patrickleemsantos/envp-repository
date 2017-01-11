@@ -4729,15 +4729,23 @@ function onBackKeyDown() {
                 myApp.closePanel('left');
             } else if ($$('body').hasClass('with-panel-right-cover')) { 
                 myApp.closePanel('right');
-            } else {
-                if ($$('.popup.modal-in').length > 0) {
-                    alert('modal-in');
-                    myApp.closeModal('.popup');
+            } else if($$('.popup').length && $$('.popup .view')[0].mainView) {
+                if($$('.popup .view')[0].mainView.history.length>1) {
+                  view.router.back();
                 } else {
-                    myApp.closeModal();
+                  myApp.closeModal('.popup');
+                }
+            } else if($$('.popup').length) {
+                myApp.closeModal('.popup'); 
+            } else {
+                // if ($$('.popup.modal-in').length > 0) {
+                //     alert('modal-in');
+                //     myApp.closeModal('.popup');
+                // } else {
+                    // myApp.closeModal();
                     var view = myApp.getCurrentView();
                     view.router.back();
-                }
+                // }
             }
         }
     } catch (err) {
