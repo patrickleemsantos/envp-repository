@@ -4706,7 +4706,7 @@ function onBackKeyDown() {
             } else if ($$('body').hasClass('with-panel-right-cover')) {
                 myApp.closePanel('right');
             } else {
-                if ($('.popup.modal-in').length > 0) {
+                if ($$('.popup.modal-in').length > 0) {
                     alert('modal-in');
                     myApp.closeModal('.popup');
                 } else {
@@ -4730,7 +4730,7 @@ function onBackKeyDown() {
             } else if ($$('body').hasClass('with-panel-right-cover')) { 
                 myApp.closePanel('right');
             } else {
-                if ($('.popup.modal-in').length > 0) {
+                if ($$('.popup.modal-in').length > 0) {
                     alert('modal-in');
                     myApp.closeModal('.popup');
                 } else {
