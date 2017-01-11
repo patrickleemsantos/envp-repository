@@ -4333,13 +4333,25 @@ function getParticipantList() {
                         '</li>');
                 } else {
                     var account_image = (field.image_url == '' || field.image_url == null ? "img/profile.jpg" : field.image_url);
+                    // $("#list-view-participants").append('<li>' +
+                    //     '<div class="item-content">' +
+                    //     '<div class="item-media"><img src="' + account_image + '" class="img-circle" style="width:44px; height:44px;"/></div>' +
+                    //     '<div class="item-inner">' +
+                    //     '<div class="item-title-row">' +
+                    //     '<div class="item-title">' + field.first_name + ' ' + field.last_name + '</div>' +
+                    //     '<div class="item-after"><a href="#" onClick="removeParticipant(' + field.account_id + ');" class="link icon-only link-remove-participant"><i class="fa fa-times" aria-hidden="true"></i></a></div>' +
+                    //     '</div>' +
+                    //     '<div class="item-subtitle">' + field.account_description + '</div>' +
+                    //     '</div>' +
+                    //     '</div>' +
+                    //     '</li>');
                     $("#list-view-participants").append('<li>' +
                         '<div class="item-content">' +
                         '<div class="item-media"><img src="' + account_image + '" class="img-circle" style="width:44px; height:44px;"/></div>' +
                         '<div class="item-inner">' +
                         '<div class="item-title-row">' +
                         '<div class="item-title">' + field.first_name + ' ' + field.last_name + '</div>' +
-                        '<div class="item-after"><a href="#" onClick="removeParticipant(' + field.account_id + ');" class="link icon-only link-remove-participant"><i class="fa fa-times" aria-hidden="true"></i></a></div>' +
+                        '<div class="item-after"><i onClick="removeParticipant(' + field.account_id + ');" class="fa fa-times link-remove-participant" aria-hidden="true"></i></div>' +
                         '</div>' +
                         '<div class="item-subtitle">' + field.account_description + '</div>' +
                         '</div>' +
@@ -4392,13 +4404,25 @@ function getTeamAdministratorList() {
                         '</li>');
                 } else {
                     var account_image = (field.image_url == '' || field.image_url == null ? "img/profile.jpg" : field.image_url);
+                    // $("#list-view-administrator").append('<li>' +
+                    //     '<div class="item-content">' +
+                    //     '<div class="item-media"><img src="' + account_image + '" class="img-circle" style="width:44px; height:44px;"/></div>' +
+                    //     '<div class="item-inner">' +
+                    //     '<div class="item-title-row">' +
+                    //     '<div class="item-title">' + field.first_name + ' ' + field.last_name + '</div>' +
+                    //     '<div class="item-after"><a href="#" onClick="removeAsAdministrator(' + field.account_id + ');" class="link icon-only link-remove-administrator"><i class="fa fa-times" aria-hidden="true"></i></a></div>' +
+                    //     '</div>' +
+                    //     '<div class="item-subtitle">' + field.account_description + '</div>' +
+                    //     '</div>' +
+                    //     '</div>' +
+                    //     '</li>');
                     $("#list-view-administrator").append('<li>' +
                         '<div class="item-content">' +
                         '<div class="item-media"><img src="' + account_image + '" class="img-circle" style="width:44px; height:44px;"/></div>' +
                         '<div class="item-inner">' +
                         '<div class="item-title-row">' +
                         '<div class="item-title">' + field.first_name + ' ' + field.last_name + '</div>' +
-                        '<div class="item-after"><a href="#" onClick="removeAsAdministrator(' + field.account_id + ');" class="link icon-only link-remove-administrator"><i class="fa fa-times" aria-hidden="true"></i></a></div>' +
+                        '<div class="item-after"><i onClick="removeAsAdministrator(' + field.account_id + ');" class="fa fa-times link-remove-administrator" aria-hidden="true"></i></div>' +
                         '</div>' +
                         '<div class="item-subtitle">' + field.account_description + '</div>' +
                         '</div>' +
