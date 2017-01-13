@@ -9,7 +9,7 @@
 		<!-- <gap:platform name="ios" /> -->
 	</gap:platforms>
 	
-	<icon src="img/envp-icon.png" />
+	<icon src="img/envp-icon-152-152.png" />
 	<icon src="img/envp-icon-ldpi.png" gap:platform="android" gap:qualifier="ldpi" />
 	<icon src="img/envp-icon-mdpi.png" gap:platform="android" gap:qualifier="mdpi" />
 	<icon src="img/envp-icon-hdpi.png" gap:platform="android" gap:qualifier="hdpi" />
