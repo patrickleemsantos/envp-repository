@@ -1297,7 +1297,7 @@ myApp.onPageInit('fine-detail-list', function(page) {
     if (checkInternetConnection() == true) {
         var items = [];
         myApp.showIndicator();
-        $.getJSON(ENVYP_API_URL + "get_roster_fine_details_list.php?roster_id=" + page.query.roster_id, function(result) {
+        $.getJSON(ENVYP_API_URL + "get_roster_fine_details_list.php?roster_id=" + page.query.roster_id + "&time_id=" + localStorage.getItem('time_id') + "&currency_id=" + localStorage.getItem('currency_id'), function(result) {
                 $.each(result, function(i, field) {
                     if (field.status == 'empty') {
                         myApp.alert('No roster fines yet :(');
@@ -1562,6 +1562,7 @@ myApp.onPageInit('roster-detail', function(page) {
         $('#lbl-roster-det-redcard').append('red card');
         $('#lbl-roster-det-votes').append('votes');
         $('#lbl-roster-det-mvp').append('mvp');
+        $('#lbl-roster-games-played').append('games');
     } else if (localStorage.getItem('selectedSportID') == 2 || localStorage.getItem('selectedSportID') == 5) {
         $('#li-roster-det-yellowcard').hide();
         $('#li-roster-det-redcard').hide();
@@ -1570,6 +1571,7 @@ myApp.onPageInit('roster-detail', function(page) {
         $('#lbl-roster-det-fouls').append('fouls/minutes');
         $('#lbl-roster-det-votes').append('votes');
         $('#lbl-roster-det-mvp').append('mvp');
+        $('#lbl-roster-games-played').append('games');
     } else if (localStorage.getItem('selectedSportID') == 1 || localStorage.getItem('selectedSportID') == 6) {
         $('#li-roster-det-yellowcard').hide();
         $('#li-roster-det-redcard').hide();
@@ -1578,6 +1580,7 @@ myApp.onPageInit('roster-detail', function(page) {
         $('#lbl-roster-det-fouls').append('fouls');
         $('#lbl-roster-det-votes').append('votes');
         $('#lbl-roster-det-mvp').append('mvp');
+        $('#lbl-roster-games-played').append('games');
     }
 
     if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
@@ -1601,6 +1604,7 @@ myApp.onPageInit('roster-detail', function(page) {
                 $('#roster-redcard').prepend(field.redcard);
                 $('#roster-votes').prepend(field.votes);
                 $('#roster-mvp').prepend(field.mvp_count);
+                $('#roster-games-played').prepend(field.played);
             });
             myApp.hideIndicator();
         })
@@ -2816,11 +2820,11 @@ function shareMVPOnTwitter(points, assists, fouls, yellowcard, redcard, votes) {
         var roster_image = localStorage.getItem('mvp_roster_image');
 
         if (localStorage.getItem('selectedSportID') == 3 || localStorage.getItem('selectedSportID') == 4) {
-            description = "Congratualtions! You are MV! Tillykke! Du er kampens spiller! \n" + team_name + " vs " + opponent_name + "\n" + roster_name + "\nvotes: " + votes + "\ngoals/mål: " + points + "\nassists: " + assists + "\nyellow card: " + yellowcard + "\nred card: " + redcard + "\n";
+            description = "Congratualtions! You are MVP! Tillykke! Du er kampens spiller! \n" + team_name + " vs " + opponent_name + "\n" + roster_name + "\nvotes: " + votes + "\ngoals/mål: " + points + "\nassists: " + assists + "\nyellow card: " + yellowcard + "\nred card: " + redcard + "\n";
         } else if (localStorage.getItem('selectedSportID') == 2 || localStorage.getItem('selectedSportID') == 5) {
-            description = "Congratualtions! You are MV! Tillykke! Du er kampens spiller! \n" + team_name + " vs " + opponent_name + "\n" + roster_name + "\nvotes: " + votes + "\ngoals/mål: " + points + "\nassists: " + assists + "\nfouls: " + fouls + "\n";
+            description = "Congratualtions! You are MVP! Tillykke! Du er kampens spiller! \n" + team_name + " vs " + opponent_name + "\n" + roster_name + "\nvotes: " + votes + "\ngoals/mål: " + points + "\nassists: " + assists + "\nfouls: " + fouls + "\n";
         } else if (localStorage.getItem('selectedSportID') == 1 || localStorage.getItem('selectedSportID') == 6) {
-            description = "Congratualtions! You are MV! Tillykke! Du er kampens spiller! \n" + team_name + " vs " + opponent_name + "\n" + roster_name + "\nvotes: " + votes + "\npoints: " + points + "\nassists: " + assists + "\nfouls: " + fouls + "\n";
+            description = "Congratualtions! You are MVP! Tillykke! Du er kampens spiller! \n" + team_name + " vs " + opponent_name + "\n" + roster_name + "\nvotes: " + votes + "\npoints: " + points + "\nassists: " + assists + "\nfouls: " + fouls + "\n";
         }
 
         window.plugins.socialsharing.shareViaTwitter(description,
@@ -2869,7 +2873,7 @@ function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) 
     facebookConnectPlugin.showDialog({
         method: "feed",
         href: "http://envp.dk",
-        caption: "Congratualtions! You are MV! Tillykke! Du er kampens spiller! \n" + team_name + " vs " + opponent_name,
+        caption: "Congratualtions! You are MVP! Tillykke! Du er kampens spiller! \n" + team_name + " vs " + opponent_name,
         description: description,
         picture: image_url,
         share_feedWeb: true
