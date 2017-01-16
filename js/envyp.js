@@ -2362,7 +2362,7 @@ myApp.onPageInit('tournament-detail', function(page) {
     // Preload fine list
     $("#fine_list").empty();
     myApp.showIndicator();
-    $.getJSON(ENVYP_API_URL + "get_roster_fine.php?tournament_id=" + localStorage.getItem('selectedTournamentId'), function(result) {
+    $.getJSON(ENVYP_API_URL + "get_roster_fine.php?tournament_id=" + localStorage.getItem('selectedTournamentId') + "&currency_id=" + localStorage.getItem('currency_id'), function(result) {
             $.each(result, function(i, field) {
                 if (field.status == 'empty') {
                     $("#fine_list").append('<li><center><p>No fine</p><center></li>');
