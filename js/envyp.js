@@ -1148,6 +1148,9 @@ myApp.onPageInit('team-stats', function(page) {
                 fpg = field.fpg
                 yellowcard = field.yellowcard
                 redcard = field.redcard
+                win = field.win;
+                lose = field.lose;
+                draw = field.draw;
             });
 
             $('#team-games').prepend(total_games);
@@ -1157,6 +1160,7 @@ myApp.onPageInit('team-stats', function(page) {
             $('#team-fpg').prepend(fpg);
             $('#team-yellowcard').prepend(yellowcard);
             $('#team-redcard').prepend(redcard);
+            $('#team-win-lose').prepend('W ' + win + ' - L ' + lose + ' - D ' + draw);
 
             myApp.hideIndicator();
         })
