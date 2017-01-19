@@ -4582,16 +4582,16 @@ function validateEmail(sEmail) {
 
 function checkInternetConnection() {
     try {
-        if (DEBUG == false) {
+        // if (DEBUG == false) {
             var state = navigator.connection.type;
             if (state == 'none') {
                 return false;
             } else {
                 return true;
             }
-        } else {
-            return true;
-        }
+        // } else {
+        //     return true;
+        // }
     } catch (err) {
         return true;
     }
