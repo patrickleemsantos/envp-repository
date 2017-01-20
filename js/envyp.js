@@ -811,6 +811,7 @@ myApp.onPageInit('team-add', function(page) {
                         myApp.hideIndicator();
                         if (msg.status == '0') {
                             clearTeamDetails();
+                            localStorage.setItem('currentAccountIsTeamAdmin', 1);
                             mainView.router.loadPage('team_management.html?team_id=' + msg.team_id + '&team_name=' + team_name + '&team_password=' + team_password);
                         }
                         myApp.alert(msg.message);
