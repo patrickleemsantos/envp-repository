@@ -978,7 +978,7 @@ myApp.onPageInit('team-list', function(page) {
                             team_admin: field.team_admin,
                             team_name: field.team_name,
                             team_password: field.team_password,
-                            team_image: (field.team_image == '' || field.team_image == null ? "img/envp-icon-ldpi.png" : field.team_image),
+                            team_image: (field.team_image == '' || field.team_image == null ? "img/envp-icon-e.png" : field.team_image),
                             created_by: field.first_name + ' ' + field.last_name
                         });
                     }
@@ -2042,7 +2042,7 @@ myApp.onPageInit('tournament-list', function(page) {
                     if (field.status == 'empty') {
                         myApp.alert('No tournament yet :(');
                     } else {
-                        var tournament_image = (field.image_url == '' || field.image_url == null ? "img/envp-icon-ldpi.png" : field.image_url);
+                        var tournament_image = (field.image_url == '' || field.image_url == null ? "img/envp-icon-e.png" : field.image_url);
                         items.push({
                             tournament_id: field.tournament_id,
                             opponent: field.opponent,
@@ -3001,7 +3001,7 @@ myApp.onPageInit('tournament-edit', function(page) {
     edit_longitude = page.query.longitude;
     edit_latitude = page.query.latitude;
 
-    $$("#edit-tournament-image").attr("data-src", (page.query.image_url == '' || page.query.image_url == null ? "img/envp-icon-ldpi.png" : page.query.image_url));
+    $$("#edit-tournament-image").attr("data-src", (page.query.image_url == '' || page.query.image_url == null ? "img/envp-icon-e.png" : page.query.image_url));
     $$("#edit-tournament-image").addClass('lazy lazy-fadein');
     myApp.initImagesLazyLoad(page.container);
 
@@ -4527,7 +4527,7 @@ function clearTeamDetails() {
     $$('#txt-team-name').val('');
     $$('#txt-team-description').val('');
     $$('#txt-team-password').val('');
-    $$('#team-image').attr('src', 'img/envp-icon.png');
+    $$('#team-image').attr('src', 'img/envp-icon-e.png');
     imgfile = '';
 }
 
@@ -4535,7 +4535,7 @@ function clearEditTeamDetails() {
     $$('#txt-team-edit-name').val('');
     $$('#txt-team-edit-description').val('');
     $$('#txt-team-edit-password').val('');
-    $$('#team-edit-image').attr('src', 'img/envp-icon.png');
+    $$('#team-edit-image').attr('src', 'img/envp-icon-e.png');
     imgfile = '';
 }
 
@@ -4558,7 +4558,7 @@ function clearTournamentDetails() {
     $$('#txt-opponent-name').val('');
     $$('#txt-tournament-location').val('');
     $$('#txt-tournament-description').val('');
-    $$('#tournament-image').attr('src', 'img/envp-icon-ldpi.png');
+    $$('#tournament-image').attr('src', 'img/envp-icon-e.png');
     imgfile = '';
 }
 
