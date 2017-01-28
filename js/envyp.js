@@ -2940,7 +2940,6 @@ function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) 
             href: "http://envp.dk",
             caption: "Congratualtions! You are MVP! Tillykke! Du er kampens spiller! \n" + team_name + " vs " + opponent_name,
             description: description,
-            picture: image_url,
             share_feedWeb: true
         }, function(response) {
             console.log(response);
