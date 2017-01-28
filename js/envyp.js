@@ -2934,7 +2934,7 @@ function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) 
         image_url = localStorage.getItem('mvp_image_url');
     }
 
-    if (image_url != '') {
+    // if (image_url != '') {
         facebookConnectPlugin.showDialog({
             method: "feed",
             href: "http://envp.dk",
@@ -2949,10 +2949,10 @@ function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) 
             console.log(response);
             myApp.closeModal('.popover');
         });
-    } else {
-        myApp.alert('Please take a picture of the MVP!');
-        myApp.closeModal('.popover');
-    }
+    // } else {
+    //     myApp.alert('Please take a picture of the MVP!');
+    //     myApp.closeModal('.popover');
+    // }
 }
 
 function shareMVPOnInstagram(points, assists, fouls, yellowcard, redcard, votes, roster_image) {
