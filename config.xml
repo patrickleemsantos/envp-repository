@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="com.envp.dk" version="1.2" versionCode="1">
+<widget 
+	xmlns="http://www.w3.org/ns/widgets" 
+	xmlns:gap="http://phonegap.com/ns/1.0" 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	id="com.envp.dk" 
+	version="1.2" 
+	versionCode="1">
 
 	<name>Envp</name>
 	<description>Envyp</description>
@@ -119,5 +125,9 @@
 	<!-- <gap:plugin name="pushbots-cordova-plugin" source="npm" /> -->
 	<!-- <plugin name="pushbots-cordova-plugin" spec="1.4.1" />	 -->
 	<!-- <gap:plugin name="pushbots-cordova-plugin" spec="^1.4.0" source="npm" /> -->
+
+	<gap:config-file platform="android" parent="/manifest">
+	     <application android:debuggable="true" />
+	</gap:config-file>
 
 </widget>

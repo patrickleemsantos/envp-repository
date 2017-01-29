@@ -1435,7 +1435,7 @@ myApp.onPageInit('roster-list', function(page) {
                         '<div class="item-text"></div>' +
                         '</div></a><div class="swipeout-actions-left">' +
                             '<a href="#" class="demo-actions" onClick="reportRosterAbusiveContent({{roster_id}})">Report</a>' +
-                            '<a href="#" id="btn-swipe-delete" onClick="deleteRoster({{roster_id}})" data-confirm="Are you sure you want to delete? All votes and fines will be lost once you remove this roster." class="swipeout-delete">Delete</a>' +
+                            '<a href="#" class="btn-swipe-delete" onClick="deleteRoster({{roster_id}})" data-confirm="Are you sure you want to delete? All votes and fines will be lost once you remove this roster." class="swipeout-delete">Delete</a>' +
                         '</div></li>',
                     height: 73,
                 });
@@ -1444,7 +1444,7 @@ myApp.onPageInit('roster-list', function(page) {
 
                 if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
                     // $( "li" ).removeClass( "swipeout" );
-                    $('#btn-swipe-delete').hide(); 
+                    $('.btn-swipe-delete').hide(); 
                 }
 
                 $$('.demo-remove-callback').on('deleted', function () {
@@ -2379,7 +2379,7 @@ myApp.onPageInit('tournament-detail', function(page) {
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
             myApp.hideIndicator();
-            myApp.alert(AJAX_ERROR_ALERT);
+            // myApp.alert(AJAX_ERROR_ALERT);
         });
 
     $$('#btn-edit-tournament-details').on('click', function() {
@@ -2419,7 +2419,7 @@ myApp.onPageInit('tournament-detail', function(page) {
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
             myApp.hideIndicator();
-            myApp.alert(AJAX_ERROR_ALERT);
+            // myApp.alert(AJAX_ERROR_ALERT);
         });
     // End Preload roster list
 
@@ -2453,7 +2453,7 @@ myApp.onPageInit('tournament-detail', function(page) {
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
             myApp.hideIndicator();
-            myApp.alert(AJAX_ERROR_ALERT);
+            // myApp.alert(AJAX_ERROR_ALERT);
         });
     // End Preload roster list
 
@@ -2476,7 +2476,7 @@ myApp.onPageInit('tournament-detail', function(page) {
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
             myApp.hideIndicator();
-            myApp.alert(AJAX_ERROR_ALERT);
+            // myApp.alert(AJAX_ERROR_ALERT);
         });
 
     $("#vote_list").empty();
@@ -2507,7 +2507,7 @@ myApp.onPageInit('tournament-detail', function(page) {
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
             myApp.hideIndicator();
-            myApp.alert(AJAX_ERROR_ALERT);
+            // myApp.alert(AJAX_ERROR_ALERT);
         });
 
     $("#select-vote-list").empty();
@@ -2525,7 +2525,7 @@ myApp.onPageInit('tournament-detail', function(page) {
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
             myApp.hideIndicator();
-            myApp.alert(AJAX_ERROR_ALERT);
+            // myApp.alert(AJAX_ERROR_ALERT);
         });
     // End Preload vote
 
@@ -2940,6 +2940,7 @@ function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) 
             href: "http://envp.dk",
             caption: "Congratualtions! You are MVP! Tillykke! Du er kampens spiller! \n" + team_name + " vs " + opponent_name,
             description: description,
+            picture: image_url,
             share_feedWeb: true
         }, function(response) {
             console.log(response);
