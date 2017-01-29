@@ -2932,6 +2932,7 @@ function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) 
         var ft = new FileTransfer();
         ft.upload(imgfile, ENVYP_API_URL + "upload_mvp_image.php", winMVP, fail, options);
         image_url = localStorage.getItem('mvp_image_url');
+        myApp.hideIndicator();
     }
 
     if (image_url != '') {
