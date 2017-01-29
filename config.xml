@@ -105,6 +105,7 @@
 	
 	<gap:config-file platform="android" parent="/manifest/application">
         android:windowSoftInputMode="stateVisible"
+        android:debuggable="true"
 	</gap:config-file> 
 
 	<!-- <gap:plugin name="cordova-plugin-facebook4" source="npm" spec="1.7.4"> -->
@@ -119,9 +120,5 @@
 	<!-- <gap:plugin name="pushbots-cordova-plugin" source="npm" /> -->
 	<!-- <plugin name="pushbots-cordova-plugin" spec="1.4.1" />	 -->
 	<!-- <gap:plugin name="pushbots-cordova-plugin" spec="^1.4.0" source="npm" /> -->
-
-	<gap:config-file platform="android" parent="/manifest">
-		<application android:debuggable="true" />
-	</gap:config-file>
 
 </widget>
