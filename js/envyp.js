@@ -1435,7 +1435,7 @@ myApp.onPageInit('roster-list', function(page) {
                         '<div class="item-text"></div>' +
                         '</div></a><div class="swipeout-actions-left">' +
                             '<a href="#" class="demo-actions" onClick="reportRosterAbusiveContent({{roster_id}})">Report</a>' +
-                            '<a href="#" class="btn-swipe-delete" onClick="deleteRoster({{roster_id}})" data-confirm="Are you sure you want to delete? All votes and fines will be lost once you remove this roster." class="swipeout-delete">Delete</a>' +
+                            '<a href="#" onClick="deleteRoster({{roster_id}})" data-confirm="Are you sure you want to delete? All votes and fines will be lost once you remove this roster." class="swipeout-delete">Delete</a>' +
                         '</div></li>',
                     height: 73,
                 });
@@ -1444,7 +1444,7 @@ myApp.onPageInit('roster-list', function(page) {
 
                 if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
                     // $( "li" ).removeClass( "swipeout" );
-                    $('.btn-swipe-delete').hide(); 
+                    $('.swipeout-delete').hide(); 
                 }
 
                 $$('.demo-remove-callback').on('deleted', function () {
