@@ -2934,8 +2934,6 @@ function shareMVPOnFacebook(points, assists, fouls, yellowcard, redcard, votes) 
         image_url = localStorage.getItem('mvp_image_url');
     }
 
-    console.log('image_url: ' + image_url);
-
     if (image_url != '') {
         facebookConnectPlugin.showDialog({
             method: "feed",
