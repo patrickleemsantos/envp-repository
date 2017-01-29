@@ -2833,7 +2833,7 @@ myApp.onPageInit('voting-result', function(page) {
             '<div class="popover-inner">' +
             '<div class="list-block">' +
             '<ul>' +
-            '<li><a id="btn-fb-share href="#" onClick="shareMVPOn ok(' + points + ',' + assists + ',' + fouls + ',' + yellowcard + ',' + redcard + ',' + votes + ');" class="item-link list-button"><img src="img/icon-fb-share.png" style="width:20px; height:20px" /> Facebook</li>' +
+            '<li><a id="btn-fb-share href="#" onClick="shareMVPOnFacebook(' + points + ',' + assists + ',' + fouls + ',' + yellowcard + ',' + redcard + ',' + votes + ');" class="item-link list-button"><img src="img/icon-fb-share.png" style="width:20px; height:20px" /> Facebook</li>' +
             '<li><a id="btn-instagram-share" href="#" onClick="shareMVPOnInstagram(' + points + ',' + assists + ',' + fouls + ',' + yellowcard + ',' + redcard + ',' + votes + ');" class="item-link list-button"><img src="img/icon-instagram-share.png" style="width:20px; height:20px" /> Instagram</li>'+
             '<li><a id="btn-twitter-share" href="#" onclick="shareMVPOnTwitter(' + points + ',' + assists + ',' + fouls + ',' + yellowcard + ',' + redcard + ',' + votes + ');" class="item-link list-button"><img src="img/icon-twitter-share.png" style="width:20px; height:20px" /> Twitter</li>'+
             '</ul>' +
