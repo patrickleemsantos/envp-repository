@@ -1006,7 +1006,7 @@ myApp.onPageInit('team-list', function(page) {
                         '</a><div class="swipeout-actions-left">' +
                             '<a href="#" class="demo-actions" onClick="reportTeamAbusiveContent({{team_id}})">Report</a>' +
                         '</div></li>',
-                    height: 73,
+                    height: 75,
                 });
                 myApp.initImagesLazyLoad(page.container);
                 myApp.hideIndicator();
@@ -1275,7 +1275,7 @@ myApp.onPageInit('fines-list', function(page) {
                         '<div class="item-subtitle">{{roster_position}}</div>' +
                         '<div class="item-text"></div>' +
                         '</div></a></li>',
-                    height: 73,
+                    height: 75,
                 });
                 myApp.initImagesLazyLoad(page.container);
                 myApp.hideIndicator();
@@ -1437,7 +1437,7 @@ myApp.onPageInit('roster-list', function(page) {
                             '<a href="#" class="demo-actions" onClick="reportRosterAbusiveContent({{roster_id}})">Report</a>' +
                             '<a href="#" onClick="deleteRoster({{roster_id}})" data-confirm="Are you sure you want to delete? All votes and fines will be lost once you remove this roster." class="swipeout-delete">Delete</a>' +
                         '</div></li>',
-                    height: 73,
+                    height: 75,
                 });
                 myApp.initImagesLazyLoad(page.container);
                 myApp.hideIndicator();
