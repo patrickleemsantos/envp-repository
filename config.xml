@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="com.envp.dk" version="1.2" versionCode="4">
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="com.envp.dk" version="1.4" versionCode="4">
 
 	<name>Envp</name>
 	<description>Envyp</description>
 	<author>Patrick Santos</author>
 	<gap:platforms>
-		<gap:platform name="android" />
-		<!-- <gap:platform name="ios" /> -->
+		<gap:platform name="ios" />
 	</gap:platforms>
 	
 	<icon src="img/envp-icon-512-512.png" />
