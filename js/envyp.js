@@ -469,7 +469,7 @@ myApp.onPageInit('inbox-list', function(page) {
                         '</div>' +
                         '</a>' +
                         '</li>',
-                    height: 73,
+                    height: 75,
                 });
                 myApp.initImagesLazyLoad(page.container);
                 myApp.hideIndicator();
