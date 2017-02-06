@@ -2214,7 +2214,7 @@ myApp.onPageInit('tournament-detail', function(page) {
     if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
         $('#btn-edit-tournament-details').hide();
         $('#btn-edit-team-stats').hide();
-        $('#btn-submit-vote').hide();
+        // $('#btn-submit-vote').hide();
         $('#div-add-tournament-roster').hide();
         $('#div-add-tournament-fine').hide();
     }
