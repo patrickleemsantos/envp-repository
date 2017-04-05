@@ -1008,6 +1008,7 @@ myApp.onPageInit('team-list', function(page) {
                         '</div></li>',
                     height: 75,
                 });
+
                 myApp.initImagesLazyLoad(page.container);
                 myApp.hideIndicator();
             })
@@ -1198,6 +1199,7 @@ myApp.onPageInit('team-management', function(page) {
 
     if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
         $('#btn-edit-team-detail').hide();
+        $('#btn-team-delete').hide();
     }
 
     $('#header-team-name').append(localStorage.getItem('selectedTeamName'));
@@ -1226,6 +1228,24 @@ myApp.onPageInit('team-management', function(page) {
         } else if (localStorage.getItem('backTournament') == 2) {
             mainView.router.loadPage('team_list.html');
         }
+    });
+
+    $$('#btn-team-delete').on('click', function() {
+        myApp.confirm('Are you sure you want to delete this team?', function () {
+            $$.ajax({
+                type: "POST",
+                url: ENVYP_API_URL + "delete_team.php",
+                data: "team_id=" + localStorage.getItem('selectedTeamID'),
+                dataType: "json",
+                success: function(msg, string, jqXHR) {
+                    myApp.alert(msg.message);
+                    mainView.router.loadPage('team_list.html');
+                },
+                error: function(msg, string, jqXHR) {
+                    myApp.alert(ERROR_ALERT);
+                }
+            });
+        });
     });
 });
 
