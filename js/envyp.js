@@ -1494,6 +1494,10 @@ myApp.onPageInit('roster-list', function(page) {
     });
 });
 
+function deleteTournament(tournament_id) {
+    localStorage.setItem('selectedTournamentID', tournament_id);
+}
+
 function deleteRoster(roster_id) {
     localStorage.setItem('selectedRosterID', roster_id);
 }
@@ -2138,7 +2142,7 @@ myApp.onPageInit('tournament-list', function(page) {
                         }
                         return found;
                     },
-                    template: '<li class="swipeout">' +
+                    template: '<li class="swipeout demo-remove-callback">' +
                         '<a href="tournament_detail.html?tournament_id={{tournament_id}}" class="item-link item-content swipeout-content">' +
                         '<div class="item-media"><img data-src="{{tournament_image}}" style="width:44px; height:44px;" class="img-circle lazy lazy-fadein"/></div>' +
                         '<div class="item-inner">' +
@@ -2149,11 +2153,30 @@ myApp.onPageInit('tournament-list', function(page) {
                         '</div>' +
                         '</a><div class="swipeout-actions-left">' +
                             '<a href="#" class="demo-actions" onClick="reportTournamentAbusiveContent({{tournament_id}})">Report</a>' +
+                            '<a href="#" onClick="deleteTournament({{tournament_id}})" data-confirm="Are you sure you want to delete? All statistics, votes and fines will be lost once you remove this tournament." class="swipeout-delete">Delete</a>' +
                         '</div></li>',
                     height: 76,
                 });
                 myApp.initImagesLazyLoad(page.container);
                 myApp.hideIndicator();
+
+                if ((localStorage.getItem('currentTeamAdmin') != localStorage.getItem('account_id')) && localStorage.getItem('currentAccountIsTeamAdmin') == 0) {
+                    $('.swipeout-delete').hide(); 
+                }
+
+                $$('.demo-remove-callback').on('deleted', function () {
+                    $$.ajax({
+                        type: "POST",
+                        url: ENVYP_API_URL + "delete_tournament.php",
+                        data: "tournament_id=" + localStorage.getItem('selectedTournamentID'),
+                        dataType: "json",
+                        success: function(msg, string, jqXHR) {
+                        },
+                        error: function(msg, string, jqXHR) {
+                            // myApp.alert(ERROR_ALERT);
+                        }
+                    });
+                });
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
                 myApp.hideIndicator();
