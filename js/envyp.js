@@ -371,12 +371,12 @@ myApp.onPageInit('signup', function(page) {
                 myApp.alert("character ivalid");
                 $$('#btn-signup').removeAttr("disabled");
                 return false;
-            // }
+            }
 
-            // if ($('#chkbox-terms').is(':checked') == false) {
-            //     myApp.alert("Please agree with the terms and conditions");
-            //     $$('#btn-signup').removeAttr("disabled");
-            //     return false;
+            if ($('#chkbox-terms').is(':checked') == false) {
+                myApp.alert("Please agree with the terms and conditions");
+                $$('#btn-signup').removeAttr("disabled");
+                return false;
             } else {
                 myApp.showIndicator();
                 $$.ajax({
